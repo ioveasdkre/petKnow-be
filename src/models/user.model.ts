@@ -7,20 +7,22 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 
 const UserSchema = new mongoose.Schema({
-	username: {
-		type: String,
-		required: 'username is required',
-	},
-	email: {
-		type: String,
-		unique: 'email already exists',
-		// match: [ /. +\@. +\.. + /, 'Please give a valid email address'],
-	},
-  hashed_password: {
+  name: {
+    type: String,
+    required: 'username is required',
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    // unique: 'email already exists',
+    // match: [ /. +\@. +\.. + /, 'Please give a valid email address'],
+  },
+  password: {
     type: String,
     required: true,
   },
-  salt: String
+  salt: String,
 });
 
 UserSchema.statics.generateSalt = function () {
@@ -37,7 +39,7 @@ UserSchema.statics.generateHash = function (password: string, salt: string) {
   }
 };
 
-UserSchema.virtual("password")
+UserSchema.virtual("passwordvir")
   .set(function (password: string) {
     // set password as virtual field
     // @ts-ignore
