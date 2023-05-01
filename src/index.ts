@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import { itemsRouter } from './router/items.router';
 import { authRouter } from './router/auth.router';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import dotenv from 'dotenv';
 dotenv.config()
@@ -26,11 +27,12 @@ app.use(
     origin: ['http://localhost:3000', 'http://localhost:8080'],
   }),
 );
+app.use(cookieParser());
 
 app.use(helmet());
 app.use(express.json());
-// app.use('/items', itemsRouter);
-app.use('/api', itemsRouter);
+app.use('/items', itemsRouter);
+// app.use('/api', itemsRouter);
 app.use('/api', authRouter);
 
 let todos: string[] = ['todo 1', 'todo 2'];
