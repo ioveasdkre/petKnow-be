@@ -32,13 +32,16 @@ npm install -g yarn
 
 使用下列命令啟動開發伺服器：
 
-```
-yarn dev
-yarn nodemon
-```
+    yarn dev
 
-### 使用 Swagger 自動生成 API 文件
+若需要使用 nodemon 監聽檔案變化自動重啟伺服器，可使用以下命令：
+
+    yarn nodemon
+
+## 使用 Swagger 自動生成 API 文件
 
 使用以下命令使用 Swagger 將 YAML 或 JSON 文件轉換為 OpenAPI 文件並自動生成 API 文件：
 
     yarn swagger
+
+API 文件會被生成在 /api-docs 路徑下，可在瀏覽器中打開該路徑以查看 API 文件。
