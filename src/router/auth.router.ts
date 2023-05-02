@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import User from '../models/user.model';
+import {User} from '../models/user.model';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -52,21 +52,26 @@ authRouter.post('/login', async (req, res) => {
   //  res.send(user);
 });
 
+interface JwtPayload {
+  _id: string;
+}
+
 authRouter.get('/user', async (req, res) => {
   try {
-		console.log('user: ');
     const cookie = req.cookies['jwt'];
-		console.log('cookie: ', cookie);
-    const claims = jwt.verify(cookie, 'secret');
+    const claims = jwt.verify(cookie, 'secret') as JwtPayload;
     if (!claims) {
       return res.status(401).send({
         message: 'Unauthenticated',
       });
     }
-		console.log('claims: ', claims);
     const user = await User.findOne({ _id: claims._id });
-		console.log('user: ', user);
-		// filter out password, don't send it.
+    // console.log('claims: ', claims);
+    // console.log('user: ', user);
+    // filter out password, don't send it.
+    if (null == user) {
+      throw 'user not found';
+    }
     const { password, ...data } = await user.toJSON();
     res.send(data);
   } catch (error) {

@@ -3,8 +3,8 @@
 // https://github.com/ioveasdkre/HexschoolOperation/blob/main/NodejsEnterpriseClass/day40-tasks/day25/userModel.ts
 
 
-const mongoose = require('mongoose');
-const crypto = require('crypto');
+import mongoose, { ConnectOptions } from 'mongoose';
+import crypto from 'crypto';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -54,5 +54,5 @@ UserSchema.virtual("passwordvir")
     return this._password;
   });
 
-module.exports = mongoose.model('User', UserSchema);
-
+// module.exports = mongoose.model('User', UserSchema);
+export const User = mongoose.model('User', UserSchema);

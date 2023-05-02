@@ -2,19 +2,18 @@
 // 1. https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/
 
 import * as dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import helmet from 'helmet';
 import { itemsRouter } from './router/items.router';
 import { authRouter } from './router/auth.router';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
-dotenv.config()
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+} as ConnectOptions);
 
 
 dotenv.config();
