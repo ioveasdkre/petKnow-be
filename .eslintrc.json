@@ -1,8 +1,16 @@
 {
   "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:node/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -14,16 +22,11 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "@typescript-eslint/strict-boolean-expressions": [
-      2,
-      {
-        "allowString": false,
-        "allowNumber": false
-      }
-    ]
+    "prettier/prettier": "error",
+    "no-console": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "ignorePatterns": [
-    "src/**/*.test.ts",
-    "src/frontend/generated/*"
+    "**/*.test.ts"
   ]
 }
