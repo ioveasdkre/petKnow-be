@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from '../swagger_output.json';
+import { handle404Error, handleErrors } from './middlewares/errors.middleware';
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -40,6 +41,10 @@ app.get('/', function (req, res) {
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(handle404Error);
+
+app.use(handleErrors);
 
 const port = process.env.PORT ?? 8000;
 app.listen(port, () => console.log('Server started on port 8000'));
