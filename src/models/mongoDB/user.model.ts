@@ -2,7 +2,7 @@
 // https://buddy.works/tutorials/testing-with-jest-password-authentication-in-mongoose-model
 // https://github.com/ioveasdkre/HexschoolOperation/blob/main/NodejsEnterpriseClass/day40-tasks/day25/userModel.ts
 
-import mongoose, { ConnectOptions } from 'mongoose';
+import mongoose from 'mongoose';
 import crypto from 'crypto';
 
 const UserSchema = new mongoose.Schema({

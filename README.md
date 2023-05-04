@@ -36,7 +36,7 @@ npm install -g yarn
 
 若需要使用 nodemon 監聽檔案變化自動重啟伺服器，可使用以下命令：
 
-    yarn nodemon
+    yarn mon
 
 ## 使用 Swagger 自動生成 API 文件
 

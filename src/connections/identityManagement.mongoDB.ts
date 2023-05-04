@@ -38,16 +38,8 @@ const PasswordResetRecord = IDM.model<IPasswordResetRecord>(
   'PasswordResetRecord',
   passwordResetRecordSchema,
 );
-<<<<<<< Updated upstream
-export const ThirdPartyAuth = IDM.model<IThirdPartyAuth>('ThirdPartyAuth', thirdPartyAuthSchema);
-export const TokenRecord = IDM.model<ITokenRecord>('Authentication', tokenRecordSchema);
-export const User = IDM.model<IUser>('User', userSchema);
-
-export { IDM };
-=======
 const ThirdPartyAuth = IDM.model<IThirdPartyAuth>('ThirdPartyAuth', thirdPartyAuthSchema);
 const TokenRecord = IDM.model<ITokenRecord>('Authentication', tokenRecordSchema);
 const User = IDM.model<IUser>('User', userSchema);
 
-export { IDM, LoginRecord, PasswordResetRecord, ThirdPartyAuth, TokenRecord, User };
->>>>>>> Stashed changes
+export { LoginRecord, PasswordResetRecord, ThirdPartyAuth, TokenRecord, User };
