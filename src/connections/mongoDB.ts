@@ -25,4 +25,4 @@ MongoDB.on('error', err => {
 
 const User = MongoDB.model('User', UserSchema);
 
-export { MongoDB, User };
+export { User };
