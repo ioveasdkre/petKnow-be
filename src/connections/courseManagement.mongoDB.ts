@@ -21,5 +21,3 @@ CMG.once('open', () => {
 CMG.on('error', err => {
   console.error('CMG MongoDB connection error:', err);
 });
-
-export { CMG };
