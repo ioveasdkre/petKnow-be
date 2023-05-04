@@ -10,12 +10,8 @@ import { itemsRouter } from './router/items.router';
 import { authRouter } from './router/auth.router';
 import swaggerSpec from '../swagger_output.json';
 import { handle404Error, handleErrors } from './middlewares/errors.middleware';
-import { CMG, IDM } from './connections/index';
 
 export const app = express();
-
-CMG;
-IDM;
 
 app.use(
   cors({
@@ -41,4 +37,4 @@ app.use(handle404Error);
 
 app.use(handleErrors);
 
-module.exports = app;
+export default app;
