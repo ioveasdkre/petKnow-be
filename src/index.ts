@@ -13,12 +13,18 @@ import { handle404Error, handleErrors } from './middlewares/errors.middleware';
 
 export const app = express();
 
+const allowedOrigins =
+  process.env.ENV === 'prod'
+    ? ['https://petknow.netlify.app']
+    : ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5173'];
+
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5173', 'https://petknow.netlify.app'],
+    origin: allowedOrigins,
   }),
 );
+
 app.use(cookieParser());
 
 app.use(helmet());
