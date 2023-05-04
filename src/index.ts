@@ -16,7 +16,7 @@ export const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://localhost:8080'],
+    origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5173', 'https://petknow.netlify.app'],
   }),
 );
 app.use(cookieParser());
@@ -27,7 +27,7 @@ app.use('/items', itemsRouter);
 // app.use('/api', itemsRouter);
 app.use('/api', authRouter);
 
-app.get('/', function (req, res) {
+app.get('/', function (_req, res) {
   res.json('PetKnow');
 });
 
