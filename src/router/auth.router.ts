@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { User } from '../connections/mongoDB';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -82,7 +82,7 @@ authRouter.get('/user', async (req, res) => {
   // res.send(user)
 });
 
-authRouter.post('/logout', (req, res) => {
+authRouter.post('/logout', (_req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });
   res.send({
     message: 'success',
@@ -100,7 +100,7 @@ const mockUser = [
   },
 ];
 
-authRouter.get('/', (req, res) => {
+authRouter.get('/', (_req, res) => {
   return res.status(200).send(`login`);
 });
 

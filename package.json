@@ -7,9 +7,8 @@
 		"test:unit": "jest --coverage",
 		"coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
 		"start": "npx ts-node src/bin/www.ts",
-		"mon": "nodemon src/bin/www.ts",
+		"mon": "npx nodemon src/bin/www.ts",
 		"dev": "ts-node-dev --respawn --pretty --transpile-only src/bin/www.ts",
-		"nodemon": "npx nodemon src/bin/www.ts",
 		"swagger": "npx ts-node src/config/swagger.ts"
 	},
 	"repository": {

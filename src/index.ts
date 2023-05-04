@@ -27,7 +27,7 @@ app.use('/items', itemsRouter);
 // app.use('/api', itemsRouter);
 app.use('/api', authRouter);
 
-app.get('/', function (req, res) {
+app.get('/', function (_req, res) {
   res.json('PetKnow');
 });
 
