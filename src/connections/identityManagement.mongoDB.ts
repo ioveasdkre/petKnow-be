@@ -41,3 +41,5 @@ export const PasswordResetRecord = IDM.model<IPasswordResetRecord>(
 export const ThirdPartyAuth = IDM.model<IThirdPartyAuth>('ThirdPartyAuth', thirdPartyAuthSchema);
 export const TokenRecord = IDM.model<ITokenRecord>('Authentication', tokenRecordSchema);
 export const User = IDM.model<IUser>('User', userSchema);
+
+export { IDM };
