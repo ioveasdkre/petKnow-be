@@ -1,4 +1,4 @@
-import { createConnection, ConnectOptions, model } from 'mongoose';
+import { createConnection, ConnectOptions } from 'mongoose';
 import { loadEnv } from '../config/loadEnv';
 import { ILoginRecord, loginRecordSchema } from '../models/identity_management/loginRecord.model';
 import {
@@ -33,13 +33,21 @@ IDM.on('error', err => {
   console.error('IDM MongoDB connection error:', err);
 });
 
-export const LoginRecord = IDM.model<ILoginRecord>('LoginRecord', loginRecordSchema);
-export const PasswordResetRecord = IDM.model<IPasswordResetRecord>(
+const LoginRecord = IDM.model<ILoginRecord>('LoginRecord', loginRecordSchema);
+const PasswordResetRecord = IDM.model<IPasswordResetRecord>(
   'PasswordResetRecord',
   passwordResetRecordSchema,
 );
+<<<<<<< Updated upstream
 export const ThirdPartyAuth = IDM.model<IThirdPartyAuth>('ThirdPartyAuth', thirdPartyAuthSchema);
 export const TokenRecord = IDM.model<ITokenRecord>('Authentication', tokenRecordSchema);
 export const User = IDM.model<IUser>('User', userSchema);
 
 export { IDM };
+=======
+const ThirdPartyAuth = IDM.model<IThirdPartyAuth>('ThirdPartyAuth', thirdPartyAuthSchema);
+const TokenRecord = IDM.model<ITokenRecord>('Authentication', tokenRecordSchema);
+const User = IDM.model<IUser>('User', userSchema);
+
+export { IDM, LoginRecord, PasswordResetRecord, ThirdPartyAuth, TokenRecord, User };
+>>>>>>> Stashed changes

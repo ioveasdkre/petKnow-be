@@ -2,7 +2,6 @@
 // https://buddy.works/tutorials/testing-with-jest-password-authentication-in-mongoose-model
 // https://github.com/ioveasdkre/HexschoolOperation/blob/main/NodejsEnterpriseClass/day40-tasks/day25/userModel.ts
 
-
 import mongoose, { ConnectOptions } from 'mongoose';
 import crypto from 'crypto';
 
@@ -26,20 +25,20 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.statics.generateSalt = function () {
-	return Math.round(new Date().valueOf() * Math.random()) + '';
+  return Math.round(new Date().valueOf() * Math.random()) + '';
 };
 
 UserSchema.statics.generateHash = function (password: string, salt: string) {
   try {
-    const hmac = crypto.createHmac("sha1", salt);
+    const hmac = crypto.createHmac('sha1', salt);
     hmac.update(password);
-    return hmac.digest("hex");
+    return hmac.digest('hex');
   } catch (err) {
     return err;
   }
 };
 
-UserSchema.virtual("passwordvir")
+UserSchema.virtual('passwordvir')
   .set(function (password: string) {
     // set password as virtual field
     // @ts-ignore
@@ -55,4 +54,4 @@ UserSchema.virtual("passwordvir")
   });
 
 // module.exports = mongoose.model('User', UserSchema);
-export const User = mongoose.model('User', UserSchema);
+export { UserSchema };

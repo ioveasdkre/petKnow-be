@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from "express";
-import { Item, Items } from '../models/items.interface';
+import { Item, Items } from '../models/mongoDB/items.interface';
 import * as ItemService from '../models/items.service';
 
 class ItemController {
