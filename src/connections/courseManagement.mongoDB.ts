@@ -1,5 +1,6 @@
 import { createConnection, ConnectOptions } from 'mongoose';
 import { loadEnv } from '../config/loadEnv';
+import { courseSchema } from '../models/courseManagement/courseHierarchy.model';
 
 loadEnv();
 
@@ -21,3 +22,7 @@ CMG.once('open', () => {
 CMG.on('error', err => {
   console.error('CMG MongoDB connection error:', err);
 });
+
+const Course = CMG.model('Course', courseSchema);
+
+export { Course };

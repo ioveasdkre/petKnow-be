@@ -1,16 +1,16 @@
 import { createConnection, ConnectOptions } from 'mongoose';
 import { loadEnv } from '../config/loadEnv';
-import { ILoginRecord, loginRecordSchema } from '../models/identity_management/loginRecord.model';
+import { ILoginRecord, loginRecordSchema } from '../models/identityManagement/loginRecord.model';
 import {
   IPasswordResetRecord,
   passwordResetRecordSchema,
-} from '../models/identity_management/passwordResetRecord.model';
+} from '../models/identityManagement/passwordResetRecord.model';
 import {
   IThirdPartyAuth,
   thirdPartyAuthSchema,
-} from '../models/identity_management/thirdPartyAuth.model';
-import { ITokenRecord, tokenRecordSchema } from '../models/identity_management/tokenRecord.model';
-import { IUser, userSchema } from '../models/identity_management/user.model';
+} from '../models/identityManagement/thirdPartyAuth.model';
+import { ITokenRecord, tokenRecordSchema } from '../models/identityManagement/tokenRecord.model';
+import { IUser, userSchema } from '../models/identityManagement/user.model';
 
 loadEnv();
 
