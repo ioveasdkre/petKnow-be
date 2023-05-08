@@ -4,8 +4,9 @@ const subchapterSchema = new Schema({
   _id: {
     type: String,
     index: true,
+    required: [true, '請填寫必填欄位'],
   },
-  subchapter_order: {
+  subchapterOrder: {
     type: Number,
     integer: true,
     required: [true, '第幾子章節未填寫'],
@@ -41,8 +42,9 @@ const subchapterSchema = new Schema({
 const chapterSchema = new Schema({
   _id: {
     type: String,
+    required: [true, '請填寫必填欄位'],
   },
-  chapter_order: {
+  chapterOrder: {
     type: Number,
     integer: true,
     required: [true, '第幾章節未填寫'],
@@ -68,7 +70,7 @@ const chapterSchema = new Schema({
 });
 
 export const courseSchema = new Schema({
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: [true, '請填寫必填欄位'],
@@ -99,7 +101,7 @@ export const courseSchema = new Schema({
     maxlength: 500,
     required: [true, '簡介未填寫'],
   },
-  escription: {
+  description: {
     type: String,
     maxlength: 5000,
     required: [true, '詳細介紹未填寫'],
