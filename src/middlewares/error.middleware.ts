@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { handleResponse } from '../helpers/handle.error';
+import { HttpStatusCode } from '../enums/handle.enum';
+import { handleResponse } from '../helpers/handle.helper';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -8,7 +9,7 @@ interface ErrorWithStatusCode extends Error {
 }
 
 const handle404Error = (_req: Request, res: Response) => {
-  handleResponse(res, 404, 'error', '無此頁面資訊');
+  handleResponse(res, HttpStatusCode.NotFound, '無此頁面資訊');
 };
 
 const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
@@ -18,9 +19,7 @@ const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
       message: err.message,
     });
   } else {
-    console.error('出現重大錯誤', err);
-    console.error(err?.stack);
-    handleResponse(res, 500, 'error', '系統錯誤，請聯絡系統管理員');
+    handleResponse(res, HttpStatusCode.NotFound, '系統錯誤，請聯絡系統管理員');
   }
 };
 

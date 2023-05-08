@@ -9,7 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import { itemsRouter } from './router/items.router';
 import { authRouter } from './router/auth.router';
 import swaggerSpec from '../swagger_output.json';
-import { handle404Error, handleErrors } from './middlewares/errors.middleware';
+import { handle404Error, handleErrors } from './middlewares/error.middleware';
 
 export const app = express();
 
