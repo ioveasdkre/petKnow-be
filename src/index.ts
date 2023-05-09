@@ -2,10 +2,11 @@
 // 1. https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/
 
 import express from 'express';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
+import { setSecurityHeaders } from './config/contentSecurityPolicy';
 import { itemsRouter, homeRouter, authRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
 import {
@@ -20,7 +21,16 @@ export const app = express();
 const allowedOrigins =
   process.env.ENV === 'prod'
     ? ['https://petknow.netlify.app']
-    : ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5173'];
+    : [
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:8080',
+        'http://127.0.0.1:5173',
+        'http://localhost:3000',
+        'http://localhost:8080',
+        'http://localhost:5173',
+      ];
+
+app.use(setSecurityHeaders);
 
 app.use(
   cors({
@@ -31,7 +41,7 @@ app.use(
 
 app.use(cookieParser());
 
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json());
 app.use(homeRouter);
 app.use('/items', itemsRouter);
@@ -49,9 +59,9 @@ app.use(handle404Error);
 app.use(handleErrors);
 
 // 補捉程式錯誤
-process.on("uncaughtException", handleUncaughtException);
+process.on('uncaughtException', handleUncaughtException);
 
 // 補捉未處理的 catch
-process.on("unhandledRejection", handleUnhandledRejection);
+process.on('unhandledRejection', handleUnhandledRejection);
 
 export default app;

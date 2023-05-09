@@ -23,6 +23,6 @@ CMG.on('error', err => {
   console.error('CMG MongoDB connection error:', err);
 });
 
-const Course = CMG.model('Course', courseSchema);
+const CourseHierarchy = CMG.model('CourseHierarchy', courseSchema);
 
-export { Course };
+export { CourseHierarchy };
