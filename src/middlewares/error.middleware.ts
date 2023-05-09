@@ -50,4 +50,32 @@ const handleErrors = (
   resErrorProd(err, res);
 };
 
-export { handle404Error, handleErrors, ErrorWithStatusCode };
+// 補捉程式錯誤
+function handleUncaughtException(
+  err: ErrorWithStatusCode,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  handleErrors(err, req, res, next);
+  process.exit(1);
+}
+
+// 補捉未處理的 catch
+function handleUnhandledRejection(
+  err: ErrorWithStatusCode,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  handleErrors(err, req, res, next);
+  process.exit(1);
+}
+
+export {
+  handle404Error,
+  handleErrors,
+  ErrorWithStatusCode,
+  handleUncaughtException,
+  handleUnhandledRejection,
+};

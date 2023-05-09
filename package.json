@@ -6,9 +6,11 @@
 	"scripts": {
 		"test:unit": "jest --coverage",
 		"coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+		"dev": "ts-node-dev --respawn --pretty --transpile-only src/bin/www.ts",
 		"start": "npx ts-node src/bin/www.ts",
 		"mon": "npx nodemon src/bin/www.ts",
-		"dev": "ts-node-dev --respawn --pretty --transpile-only src/bin/www.ts",
+		"mon:dev": "npx cross-env NODE_ENV=dev nodemon src/bin/www.ts",
+		"mon:prod": "npx cross-env NODE_ENV=prod nodemon src/bin/www.ts",
 		"swagger": "npx ts-node src/config/swagger.ts"
 	},
 	"repository": {
@@ -49,6 +51,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.59.1",
 		"@typescript-eslint/parser": "^5.59.1",
 		"coveralls": "^3.1.1",
+		"cross-env": "^7.0.3",
 		"eslint": "^8.39.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",

@@ -28,7 +28,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "prod"
       }
     }
   ]
