@@ -4,9 +4,10 @@ const subchapterSchema = new Schema({
   _id: {
     type: String,
     index: true,
+    unique: true,
     required: [true, '請填寫必填欄位'],
   },
-  subchapterOrder: {
+  sequence: {
     type: Number,
     integer: true,
     required: [true, '第幾子章節未填寫'],
@@ -42,9 +43,10 @@ const subchapterSchema = new Schema({
 const chapterSchema = new Schema({
   _id: {
     type: String,
+    unique: true,
     required: [true, '請填寫必填欄位'],
   },
-  chapterOrder: {
+  sequence: {
     type: Number,
     integer: true,
     required: [true, '第幾章節未填寫'],

@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { Course } from '../connections/courseManagement.mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
-import { handleResponse, missingFieldErrorMessage } from '../helpers/handle.helper';
-import { isValidObjectId } from '../utils/mongoose.util';
+import { handleResponse } from '../helpers/handle.helper';
 
 class HomeController {
   public static async getPosts(_req: Request, res: Response): Promise<void> {
@@ -16,18 +15,7 @@ class HomeController {
   public static async createPost(req: Request, res: Response) {
     const data = req.body;
 
-    if (!isValidObjectId(data.userId))
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
-
-    if (data.content === undefined)
-      return handleResponse(res, HttpStatusCode.OK, missingFieldErrorMessage('content'));
-
-    const newCourse = await Course.create({
-      content: data.content,
-      image: data.image,
-      likes: data.likes,
-      user: data.userId,
-    });
+    const newCourse = await Course.create(data);
 
     if (!newCourse) return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
 

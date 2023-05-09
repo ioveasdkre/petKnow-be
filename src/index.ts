@@ -6,10 +6,14 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import { itemsRouter } from './router/items.router';
-import { authRouter } from './router/auth.router';
+import { itemsRouter, homeRouter, authRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
-import { handle404Error, handleErrors } from './middlewares/error.middleware';
+import {
+  handle404Error,
+  handleErrors,
+  handleUncaughtException,
+  handleUnhandledRejection,
+} from './middlewares/error.middleware';
 
 export const app = express();
 
@@ -29,6 +33,7 @@ app.use(cookieParser());
 
 app.use(helmet());
 app.use(express.json());
+app.use(homeRouter);
 app.use('/items', itemsRouter);
 // app.use('/api', itemsRouter);
 app.use('/api', authRouter);
@@ -42,5 +47,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(handle404Error);
 
 app.use(handleErrors);
+
+// 補捉程式錯誤
+process.on("uncaughtException", handleUncaughtException);
+
+// 補捉未處理的 catch
+process.on("unhandledRejection", handleUnhandledRejection);
 
 export default app;

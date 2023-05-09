@@ -1,8 +1,9 @@
 import express, { Router } from 'express';
 import { HomeController } from '../controllers/home.controller';
+import { handleErrorAsync } from '../middlewares/handle.middleware';
 
-const HomeRouter: Router = express.Router();
+const homeRouter: Router = express.Router();
 
-HomeRouter.route('/posts').get(HomeController.getPosts);
+homeRouter.route('/v1/home').post(handleErrorAsync(HomeController.createPost));
 
-export { HomeRouter };
+export { homeRouter };
