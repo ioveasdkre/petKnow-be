@@ -39,7 +39,7 @@ const handleErrors = (
   _next: NextFunction,
 ) => {
   err.statusCode = err.statusCode || 500;
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.ENV === 'dev') {
     return resErrorDev(err, res);
   } else if (err.name === 'ValidationError') {
     err.message = '資料欄位未填寫正確，請重新輸入！';

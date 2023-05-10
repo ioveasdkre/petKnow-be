@@ -9,8 +9,8 @@
 		"dev": "ts-node-dev --respawn --pretty --transpile-only src/bin/www.ts",
 		"start": "npx ts-node src/bin/www.ts",
 		"mon": "npx nodemon src/bin/www.ts",
-		"mon:dev": "npx cross-env NODE_ENV=dev nodemon src/bin/www.ts",
-		"mon:prod": "npx cross-env NODE_ENV=prod nodemon src/bin/www.ts",
+		"mon:dev": "npx cross-env ENV=dev nodemon src/bin/www.ts",
+		"mon:prod": "npx cross-env ENV=prod nodemon src/bin/www.ts",
 		"swagger": "npx ts-node src/config/swagger.ts"
 	},
 	"repository": {
