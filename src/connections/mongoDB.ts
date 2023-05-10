@@ -1,8 +1,5 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { loadEnv } from '../config/loadEnv';
 import { UserSchema } from '../models/mongoDB/user.model';
-
-loadEnv();
 
 if (!process.env.MONGODB_URI) {
   throw new Error('IDM Database connection string not found in environment variables.');

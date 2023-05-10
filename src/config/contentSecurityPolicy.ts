@@ -1,7 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
+import cors from 'cors';
 
 function setSecurityHeaders(_req: Request, _res: Response, next: NextFunction) {
+  const allowedOrigins =
+    process.env.ENV === 'prod'
+      ? ['https://petknow.netlify.app']
+      : [
+          'http://localhost:3000',
+          'http://localhost:8080',
+          'http://localhost:5173',
+        ];
+
   helmet({
     xFrameOptions: { action: 'deny' },
     contentSecurityPolicy: {
@@ -28,6 +38,11 @@ function setSecurityHeaders(_req: Request, _res: Response, next: NextFunction) {
         'worker-src': 'none',
       },
     },
+  });
+
+  cors({
+    credentials: true,
+    origin: allowedOrigins,
   });
 
   next();

@@ -1,8 +1,5 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { loadEnv } from '../config/loadEnv';
 import { courseSchema } from '../models/courseManagement/courseHierarchy.model';
-
-loadEnv();
 
 if (!process.env.CMG_URI) {
   throw new Error('CMG Database connection string not found in environment variables.');

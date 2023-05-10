@@ -1,5 +1,4 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { loadEnv } from '../config/loadEnv';
 import { ILoginRecord, loginRecordSchema } from '../models/identityManagement/loginRecord.model';
 import {
   IPasswordResetRecord,
@@ -11,8 +10,6 @@ import {
 } from '../models/identityManagement/thirdPartyAuth.model';
 import { ITokenRecord, tokenRecordSchema } from '../models/identityManagement/tokenRecord.model';
 import { IUser, userSchema } from '../models/identityManagement/user.model';
-
-loadEnv();
 
 if (!process.env.IDM_URI) {
   throw new Error('IDM Database connection string not found in environment variables.');

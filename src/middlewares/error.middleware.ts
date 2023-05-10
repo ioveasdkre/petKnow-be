@@ -19,7 +19,7 @@ const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
       message: err.message,
     });
   } else {
-    handleResponse(res, HttpStatusCode.NotFound, '系統錯誤，請聯絡系統管理員');
+    handleResponse(res, HttpStatusCode.InternalServerError, '系統錯誤，請聯絡系統管理員');
   }
 };
 

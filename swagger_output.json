@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
+    "title": "寵知 API",
     "version": "1.0.0",
-    "description": "API documentation"
+    "description": "API 文件"
   },
   "host": "localhost:3000",
   "basePath": "/",
@@ -143,7 +143,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "課程彙總資料",
+            "description": "成功取得課程彙總資料",
             "schema": {
               "type": "object",
               "properties": {
@@ -318,6 +318,29 @@
                 "name": "main"
               }
             }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請聯絡系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
@@ -337,7 +360,7 @@
               "properties": {
                 "user": {
                   "type": "string",
-                  "example": "6459b6cdaea0942f035f2e37"
+                  "example": "645a39c19ea91c0447216cc6"
                 },
                 "tagsNames": {
                   "type": "array",
@@ -481,7 +504,77 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增資料成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "失敗",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請聯絡系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/vime": {

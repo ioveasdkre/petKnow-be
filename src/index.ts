@@ -2,9 +2,8 @@
 // 1. https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/
 
 import express from 'express';
-// import helmet from 'helmet';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
 import { itemsRouter, homeRouter, authRouter } from './router/index';
@@ -18,34 +17,17 @@ import {
 
 export const app = express();
 
-const allowedOrigins =
-  process.env.ENV === 'prod'
-    ? ['https://petknow.netlify.app']
-    : [
-        'http://127.0.0.1:3000',
-        'http://127.0.0.1:8080',
-        'http://127.0.0.1:5173',
-        'http://localhost:3000',
-        'http://localhost:8080',
-        'http://localhost:5173',
-      ];
-
 app.use(setSecurityHeaders);
 
-app.use(
-  cors({
-    credentials: true,
-    origin: allowedOrigins,
-  }),
-);
+if (process.env.ENV === 'dev') {
+  app.use(morgan('dev'));
+}
 
 app.use(cookieParser());
 
-// app.use(helmet());
 app.use(express.json());
 app.use(homeRouter);
 app.use('/items', itemsRouter);
-// app.use('/api', itemsRouter);
 app.use('/api', authRouter);
 
 app.get('/', function (_req, res) {

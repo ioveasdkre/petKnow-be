@@ -9,7 +9,7 @@ class HomeController {
      * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
      * #swagger.description = "取得全部課程彙總資料"
      * #swagger.responses[200] = {
-          description: "課程彙總資料",
+          description: "成功取得課程彙總資料",
           schema: {
             "statusCode": 200,
             "isSuccess": true,
@@ -98,11 +98,20 @@ class HomeController {
             ]
           }
         }
+        * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統錯誤，請聯絡系統管理員"
+          }
+        }
       */
     try {
       const CourseHierarchys = await CourseHierarchy.find();
 
-      if (!CourseHierarchys) return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
+      if (CourseHierarchys.length === 0)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, CourseHierarchys);
     } catch (err) {
@@ -198,15 +207,40 @@ class HomeController {
               }
             ]
           }
-       }
+        }
+      * #swagger.responses[200] = {
+          description: "成功",
+          schema:{
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "新增資料成功"
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "失敗",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "錯誤的請求"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統錯誤，請聯絡系統管理員"
+          }
+        }
       */
     try {
       const data = req.body;
 
-      const newCourseHierarchy = await CourseHierarchy.create(data);
+      if (!data.user) {
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      }
 
-      if (!newCourseHierarchy)
-        return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateFailure);
+      await CourseHierarchy.create(data);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
     } catch (err) {
