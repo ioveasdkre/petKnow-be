@@ -134,7 +134,7 @@
         }
       }
     },
-    "/v1/home": {
+    "/v1/test": {
       "get": {
         "tags": [
           "CourseHierarchy - 課程彙總資料"

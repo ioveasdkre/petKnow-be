@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
-import { itemsRouter, homeRouter, authRouter } from './router/index';
+import { itemsRouter, fakeInformationRouter, authRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
 import {
   handle404Error,
@@ -26,7 +26,7 @@ if (process.env.ENV === 'dev') {
 app.use(cookieParser());
 
 app.use(express.json());
-app.use(homeRouter);
+app.use(fakeInformationRouter);
 app.use('/items', itemsRouter);
 app.use('/api', authRouter);
 

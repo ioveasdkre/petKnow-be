@@ -3,8 +3,9 @@ import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 
-class HomeController {
+class FakeInformationController {
   public static async getAllCoures(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
      * #swagger.description = "取得全部課程彙總資料"
@@ -107,6 +108,7 @@ class HomeController {
           }
         }
       */
+    //#endregion [ swagger說明文件 ]
     try {
       const CourseHierarchys = await CourseHierarchy.find();
 
@@ -120,6 +122,7 @@ class HomeController {
   }
 
   public static async createCoures(req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
      * #swagger.description = "新增一筆課程彙總資料"
@@ -233,6 +236,7 @@ class HomeController {
           }
         }
       */
+    //#endregion [ swagger說明文件 ]
     try {
       const data = req.body;
 
@@ -249,4 +253,4 @@ class HomeController {
   }
 }
 
-export { HomeController };
+export { FakeInformationController };
