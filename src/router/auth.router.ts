@@ -47,7 +47,10 @@ authRouter.post('/login', async (req, res) => {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
-  res.send('success');
+  res.send({
+    ...user.toJSON(),
+    token
+  });
   // res.send(token);
   //  res.send(user);
 });
