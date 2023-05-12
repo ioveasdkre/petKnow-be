@@ -5,7 +5,7 @@ const fakeInformationRouter: Router = express.Router();
 
 fakeInformationRouter
   .route('/v1/test')
-  .get(FakeInformationController.getAllCoures)
-  .post(FakeInformationController.createCoures);
+  .get(FakeInformationController.getAllCourseHierarchys)
+  .post(FakeInformationController.createCourseHierarchys);
 
 export { fakeInformationRouter };

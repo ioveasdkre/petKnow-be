@@ -1,10 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
+import { Types } from 'mongoose';
 import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
+import { ISubchapter, IChapter, ICourse } from '../models/courseManagement/courseHierarchy.model';
+import { courseHierarchys } from '../../__tests__/courseHierarchyData.test';
+
+function generateRandomInt(max: number) {
+  if (max !== 0) return Math.floor(Math.random() * max);
+  return Math.random();
+}
+
+function getRandomDate(start: string | number, end: string | number) {
+  const startDate = new Date(start).getTime();
+  const endDate = new Date(end).getTime();
+  const randomTimestamp = startDate + Math.random() * (endDate - startDate);
+  const randomDate = new Date(randomTimestamp);
+
+  const year = randomDate.getFullYear();
+  const month = String(randomDate.getMonth() + 1).padStart(2, '0');
+  const day = String(randomDate.getDate()).padStart(2, '0');
+
+  return `${year}/${month}/${day}`;
+}
+
+function getDiscountDateScope() {
+  return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 30 * 86400000];
+}
 
 class FakeInformationController {
-  public static async getAllCoures(_req: Request, res: Response, next: NextFunction) {
+  //
+  public static async getAllCourseHierarchys(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
@@ -35,7 +61,7 @@ class FakeInformationController {
                 "totalNumber": 55,
                 "isFree": false,
                 "isPublished": false,
-                "discountData": "2023-04-30T16:00:00.000Z",
+                "discountDate": "2023-04-30T16:00:00.000Z",
                 "shelfDate": "2023-05-30T16:00:00.000Z",
                 "createdAt": "2022-12-31T16:00:00.000Z",
                 "updatedAt": "2023-05-07T16:00:00.000Z",
@@ -121,7 +147,7 @@ class FakeInformationController {
     }
   }
 
-  public static async createCoures(req: Request, res: Response, next: NextFunction) {
+  public static async createCourseHierarchys(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
@@ -149,7 +175,7 @@ class FakeInformationController {
             "totalNumber": 55,
             "is_free": false,
             "is_published": true,
-            "discountData": "2023/05/01",
+            "discountDate": "2023/05/01",
             "shelfDate": "2023/05/31",
             "createdAt": "2023/01/01",
             "updatedAt": "2023/05/08",
@@ -247,6 +273,65 @@ class FakeInformationController {
       await CourseHierarchy.create(data);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async generateData(_req: Request, res: Response, next: NextFunction) {
+    try {
+      const { users, dogCovers, catCovers, dogAndCatCovers, fileName, dagData, catData, petData } =
+        courseHierarchys;
+      const userLength = users.length;
+      const dogLength = dogCovers.length;
+      const catLength = catCovers.length;
+      const dogAndCatLength = dogAndCatCovers.length;
+      const fileNameLength = fileName.length;
+
+      for (let i = 0; i < dagData.length; i++) {
+        let tageName;
+        const dagDataIndex = dagData[i];
+
+        for (let j = 0; j < dagDataIndex.length; j++) {
+          let discountPrice;
+          let discountData;
+
+          const dagDataIndexJ = dagDataIndex[j];
+
+          const userIndex = generateRandomInt(userLength);
+          const dogIndex = generateRandomInt(dogLength);
+
+          const userId = new Types.ObjectId(users[userIndex]);
+          const cover = dogCovers[dogIndex];
+          const shortDescription =
+            '犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程';
+          const description =
+            '本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 .....   查看更多立即購課';
+          const level = generateRandomInt(4);
+          const price = generateRandomInt(10000);
+          const enrollmentCount = generateRandomInt(100000);
+          const totalTime = generateRandomInt(600000);
+          const totalNumber = generateRandomInt(100);
+          const isFree = !!generateRandomInt(2);
+          const isPopular = 0 === generateRandomInt(10);
+          const createdAt = getRandomDate('2022/01/01', '2023/05/31');
+          const updateAt = getRandomDate(createdAt, '2023/05/31');
+          const shelfDate = getRandomDate(createdAt, '2023/05/31');
+
+          const isDiscount = !!generateRandomInt(2);
+
+          if (j === 0) {
+            tageName = dagDataIndexJ.tag;
+          }
+          if (isDiscount) {
+            discountPrice = price * generateRandomInt(0);
+            const [startDate, endDate] = getDiscountDateScope();
+            discountData = getRandomDate(startDate, endDate);
+          }
+        }
+      }
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, "CourseHierarchys");
     } catch (err) {
       next(err);
     }

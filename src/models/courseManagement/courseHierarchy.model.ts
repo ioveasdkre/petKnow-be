@@ -1,6 +1,48 @@
 import { Schema } from 'mongoose';
 
-const subchapterSchema = new Schema({
+interface ISubchapter {
+  _id: string;
+  sequence: number;
+  title: string;
+  content: string;
+  fileName: string;
+  fileType: string;
+  time: number;
+}
+
+interface IChapter {
+  _id: string;
+  sequence: number;
+  title: string;
+  totalTime: number;
+  totalNumber: number;
+  subchapters: ISubchapter[];
+}
+
+interface ICourse {
+  user: Schema.Types.ObjectId;
+  tagsNames: string[];
+  cover: string;
+  promoVideo: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  level: number;
+  price: number;
+  discountPrice: number;
+  enrollmentCount: number;
+  totalTime: number;
+  totalNumber: number;
+  isFree: boolean;
+  isPublished: boolean;
+  discountDate: Date;
+  shelfDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  chapters: IChapter[];
+}
+
+const subchapterSchema = new Schema<ISubchapter>({
   _id: {
     type: String,
     index: true,
@@ -40,7 +82,7 @@ const subchapterSchema = new Schema({
   },
 });
 
-const chapterSchema = new Schema({
+const chapterSchema = new Schema<IChapter>({
   _id: {
     type: String,
     unique: true,
@@ -71,7 +113,7 @@ const chapterSchema = new Schema({
   subchapters: [subchapterSchema],
 });
 
-export const courseSchema = new Schema(
+const courseSchema = new Schema<ICourse>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -91,7 +133,7 @@ export const courseSchema = new Schema(
     promoVideo: {
       type: String,
       maxlength: 255,
-      required: [true, '宣傳影片未上傳'],
+      default: null,
     },
     title: {
       type: String,
@@ -147,7 +189,7 @@ export const courseSchema = new Schema(
       default: false,
       required: [true, '是否上架未填寫'],
     },
-    discountData: {
+    discountDate: {
       type: Date,
       default: null,
     },
@@ -167,3 +209,5 @@ export const courseSchema = new Schema(
   },
   { versionKey: false },
 );
+
+export { courseSchema, ISubchapter, IChapter, ICourse };
