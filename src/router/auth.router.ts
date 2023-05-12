@@ -8,24 +8,30 @@ export const authRouter = express.Router();
 authRouter.post('/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    console.log('req.body: ', req.body);
+    console.log('req.body._value: ', req.body._value);
+    console.log('req.body._value.password: ', req.body._value.password);
+    const hashedPassword = await bcrypt.hash(req.body._value.password, salt);
 
     const user = new User({
-      name: req.body.name,
-      email: req.body.email,
+      name: req.body._value.name,
+      email: req.body._value.email,
       password: hashedPassword,
     });
 
     const result = await user.save();
     const { password, ...data } = await result.toJSON();
-
-    res.send(data);
+    const ret = { status: 200, ...data}
+    res.send(ret);
   } catch (error) {
-    console.log('Register Error:', error);
+    console.log('Register Error:', error );
+    const ret = { status: 400, error: error['code'] }
+    res.send(ret);
   }
 });
 
 authRouter.post('/login', async (req, res) => {
+  console.log('req.body: ', req.body);
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
