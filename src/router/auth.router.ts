@@ -9,13 +9,13 @@ authRouter.post('/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
     console.log('req.body: ', req.body);
-    console.log('req.body._value: ', req.body._value);
-    console.log('req.body._value.password: ', req.body._value.password);
-    const hashedPassword = await bcrypt.hash(req.body._value.password, salt);
+    // console.log('req.body._value: ', req.body._value);
+    // console.log('req.body._value.password: ', req.body._value.password);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new User({
-      name: req.body._value.name,
-      email: req.body._value.email,
+      name: req.body.name,
+      email: req.body.email,
       password: hashedPassword,
     });
 

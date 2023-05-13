@@ -31,7 +31,7 @@ app.use(helmet());
 app.use(express.json());
 app.use('/items', itemsRouter);
 // app.use('/api', itemsRouter);
-app.use('/api', authRouter);
+app.use('/v1', authRouter);
 
 app.get('/', function (_req, res) {
   res.json('PetKnow');
