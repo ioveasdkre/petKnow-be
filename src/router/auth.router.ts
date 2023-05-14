@@ -47,17 +47,29 @@ authRouter.post('/login', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    console.log('User not found');
-    return res.status(404).send({
-      message: 'User not found',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 404,
+      "message": "User not found",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(404).send(msg);
   }
 
   if (!(await bcrypt.compare(req.body.password, user.password))) {
-    console.log('Invalid credentials');
-    return res.status(400).send({
-      message: 'Invalid credentials',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 400,
+      "message": "Invalid credentials",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(400).send(msg);
   }
 
   const token = jwt.sign({ _id: user._id }, 'secret');
