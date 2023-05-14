@@ -20,8 +20,16 @@ authRouter.post('/register', async (req, res) => {
     });
 
     const result = await user.save();
-    const { password, ...data } = await result.toJSON();
-    const ret = { status: 200, ...data}
+    const { _id, password, ...data } = result.toJSON();
+    
+    const ret = { 
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      "data" : {
+        ...data,
+      }
+    }
     res.send(ret);
   } catch (error) {
     console.log('Register Error:', error );
@@ -54,7 +62,7 @@ authRouter.post('/login', async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
 
-  const { __v, _id, password, ...data } = user.toJSON();
+  const { _id, password, ...data } = user.toJSON();
 
   res.send({
     "success": true,
