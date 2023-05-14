@@ -16,11 +16,11 @@ const MongoDB = createConnection(DB, {
 } as ConnectOptions);
 
 MongoDB.once('open', () => {
-  console.log('MongoDB MongoDB connected!');
+  console.log('MongoDB connected!');
 });
 
 MongoDB.on('error', err => {
-  console.error('MongoDB MongoDB connection error:', err);
+  console.error('MongoDB connection error:', err);
 });
 
 const User = MongoDB.model('User', UserSchema);
