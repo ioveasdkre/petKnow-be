@@ -33,7 +33,11 @@ authRouter.post('/register', async (req, res) => {
     res.send(ret);
   } catch (error) {
     console.log('Register Error:', error );
-    const ret = { status: 400 }
+    const ret = { 
+      "success": false,
+      "statusCode": 400, 
+      "message": "Failure",
+    }
     res.send(ret);
   }
 });
