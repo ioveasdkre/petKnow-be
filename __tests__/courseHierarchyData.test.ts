@@ -8900,36 +8900,18 @@ const dogAndCatCovers = [
   'z/cat-dog-siberian-kitten-golden-retriever-together-dark-brown-background-93797966.jpg',
 ];
 
-const fileName: string[] = [
+const fileNames: string[] = [
   '807306477?h=c67a24399e&app_id=122963',
   '807306201?h=7231d9a2da&app_id=122963',
   '192191?h=be09c77984&app_id=122963',
 ];
 
-const users: string[] = [
-  '6459b6cdaea0942f035f2e37',
-  '645da375783894a60c3c1a02',
-  '645da378783894a60c3c1a04',
-  '645da37b783894a60c3c1a06',
-  '645da37d783894a60c3c1a08',
-  '645da380783894a60c3c1a0a',
-  '645da383783894a60c3c1a0c',
-];
-
 const courseHierarchys = {
-  users,
   dogCovers,
   catCovers,
   dogAndCatCovers,
-  fileName,
-  dagData: [
-    dogTrainings,
-    dogBreeding,
-    dogBreed,
-    dogGames,
-    dogHealthCheckTips,
-    dogEating,
-  ],
+  fileNames,
+  dagData: [dogTrainings, dogBreeding, dogBreed, dogGames, dogHealthCheckTips, dogEating],
   catData: [
     catRecipes,
     catBehaviorTrainings,

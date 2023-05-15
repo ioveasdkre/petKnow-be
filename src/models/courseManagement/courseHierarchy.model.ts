@@ -1,12 +1,12 @@
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 interface ISubchapter {
   _id: string;
   sequence: number;
   title: string;
-  content: string;
+  content?: string;
   fileName: string;
-  fileType: string;
+  fileType: number;
   time: number;
 }
 
@@ -20,10 +20,10 @@ interface IChapter {
 }
 
 interface ICourse {
-  user: Schema.Types.ObjectId;
-  tagsNames: string[];
+  user: Types.ObjectId;
+  tagNames: string[];
   cover: string;
-  promoVideo: string;
+  promoVideo?: string;
   title: string;
   shortDescription: string;
   description: string;
@@ -34,9 +34,10 @@ interface ICourse {
   totalTime: number;
   totalNumber: number;
   isFree: boolean;
+  isPopular: boolean;
   isPublished: boolean;
-  discountDate: Date;
-  shelfDate: Date;
+  discountDate?: Date;
+  shelfDate?: Date;
   createdAt: Date;
   updatedAt: Date;
   chapters: IChapter[];
@@ -70,7 +71,7 @@ const subchapterSchema = new Schema<ISubchapter>({
     required: [true, '請填寫必填欄位'],
   },
   fileType: {
-    type: String,
+    type: Number,
     maxlength: 255,
     enum: [0, 1],
     required: [true, '未上傳檔案'],
@@ -121,7 +122,7 @@ const courseSchema = new Schema<ICourse>(
       required: [true, '請填寫必填欄位'],
       index: true,
     },
-    tagsNames: {
+    tagNames: {
       type: [String],
       default: [],
     },
@@ -181,6 +182,10 @@ const courseSchema = new Schema<ICourse>(
       default: 0,
     },
     isFree: {
+      type: Boolean,
+      default: false,
+    },
+    isPopular: {
       type: Boolean,
       default: false,
     },
