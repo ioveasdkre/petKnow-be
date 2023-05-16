@@ -1,7 +1,5 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { loadEnv } from '../config/loadEnv';
-
-loadEnv();
+import { courseSchema } from '../models/courseManagement/courseHierarchy.model';
 
 if (!process.env.CMG_URI) {
   throw new Error('CMG Database connection string not found in environment variables.');
@@ -21,3 +19,7 @@ CMG.once('open', () => {
 CMG.on('error', err => {
   console.error('CMG MongoDB connection error:', err);
 });
+
+const CourseHierarchy = CMG.model('CourseHierarchy', courseSchema);
+
+export { CourseHierarchy };

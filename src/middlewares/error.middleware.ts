@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { handleResponse } from '../helpers/handle.error';
+import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
+import { handleResponse } from '../helpers/handle.helper';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -8,7 +9,7 @@ interface ErrorWithStatusCode extends Error {
 }
 
 const handle404Error = (_req: Request, res: Response) => {
-  handleResponse(res, 404, 'error', '無此頁面資訊');
+  handleResponse(res, HttpStatusCode.NotFound, HttpMessage.NoPage);
 };
 
 const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
@@ -18,9 +19,7 @@ const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
       message: err.message,
     });
   } else {
-    console.error('出現重大錯誤', err);
-    console.error(err?.stack);
-    handleResponse(res, 500, 'error', '系統錯誤，請聯絡系統管理員');
+    handleResponse(res, HttpStatusCode.InternalServerError, HttpMessage.SystemError);
   }
 };
 
@@ -40,7 +39,7 @@ const handleErrors = (
   _next: NextFunction,
 ) => {
   err.statusCode = err.statusCode || 500;
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.ENV === 'dev') {
     return resErrorDev(err, res);
   } else if (err.name === 'ValidationError') {
     err.message = '資料欄位未填寫正確，請重新輸入！';
@@ -51,4 +50,32 @@ const handleErrors = (
   resErrorProd(err, res);
 };
 
-export { handle404Error, handleErrors, ErrorWithStatusCode };
+// 補捉程式錯誤
+function handleUncaughtException(
+  err: ErrorWithStatusCode,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  handleErrors(err, req, res, next);
+  process.exit(1);
+}
+
+// 補捉未處理的 catch
+function handleUnhandledRejection(
+  err: ErrorWithStatusCode,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  handleErrors(err, req, res, next);
+  process.exit(1);
+}
+
+export {
+  handle404Error,
+  handleErrors,
+  ErrorWithStatusCode,
+  handleUncaughtException,
+  handleUnhandledRejection,
+};

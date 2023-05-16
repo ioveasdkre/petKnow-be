@@ -1,13 +1,19 @@
 import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
+import { localEnv } from '../config/env';
+
+localEnv();
+
+const localPost = process.env.PORT ?? 8000;
+const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:${localPost}`;
 
 const options: Options = {
   info: {
-    title: 'My API',
+    title: '寵知 API',
     version: '1.0.0',
-    description: 'API documentation',
+    description: 'API 文件',
   },
-  host: 'localhost:3000',
+  host: host,
   schemes: ['http', 'https'],
   securityDefinitions: {
     apiKeyAuth: {
