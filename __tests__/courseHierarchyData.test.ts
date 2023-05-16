@@ -8880,7 +8880,7 @@ const catCovers: string[] = [
   'z/cat-looking-mirror-seeing-reflection-lion-isolated-white-59832435.jpg',
 ];
 
-const dogAndCatCovers = [
+const petCovers = [
   'z/cat-dog-sleeping-puppy-kitten-sleep-together-taking-nap-home-pets-animal-care-love-friendship-domestic-animals-156181857.jpg',
   'z/dog-cat-11133177.jpg',
   'z/dog-cat-christmas-web-banner-cute-wearing-santa-claus-hats-tree-room-text-white-background-132155128.jpg',
@@ -8909,7 +8909,7 @@ const fileNames: string[] = [
 const courseHierarchys = {
   dogCovers,
   catCovers,
-  dogAndCatCovers,
+  petCovers,
   fileNames,
   dagData: [dogTrainings, dogBreeding, dogBreed, dogGames, dogHealthCheckTips, dogEating],
   catData: [
@@ -8942,4 +8942,4 @@ const courseHierarchys = {
   ],
 };
 
-export { courseHierarchys };
+export { courseHierarchys, courseHierarchyType };

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { HttpStatusCode } from '../enums/handle.enum';
+import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 
 interface ErrorWithStatusCode extends Error {
@@ -9,7 +9,7 @@ interface ErrorWithStatusCode extends Error {
 }
 
 const handle404Error = (_req: Request, res: Response) => {
-  handleResponse(res, HttpStatusCode.NotFound, '無此頁面資訊');
+  handleResponse(res, HttpStatusCode.NotFound, HttpMessage.NoPage);
 };
 
 const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
@@ -19,7 +19,7 @@ const resErrorProd = (err: ErrorWithStatusCode, res: Response) => {
       message: err.message,
     });
   } else {
-    handleResponse(res, HttpStatusCode.InternalServerError, '系統錯誤，請聯絡系統管理員');
+    handleResponse(res, HttpStatusCode.InternalServerError, HttpMessage.SystemError);
   }
 };
 

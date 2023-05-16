@@ -6,16 +6,20 @@ enum HttpStatusCode {
 }
 
 enum HttpMessage {
-  RetrieveSuccess = '取得資料成功',
-  RetrieveFailure = '取得資料失敗',
-  CreateSuccess = '新增資料成功',
-  CreateFailure = '新增資料失敗',
-  ModifySuccess = '修改資料成功',
-  ModifyFailure = '修改資料失敗',
-  DeleteSuccess = '刪除資料成功',
-  DeleteFailure = '刪除資料失敗',
-  NotFound = '找不到資料',
-  BadRequest = '錯誤的請求',
+  RetrieveSuccess = 'Retrieve Success',
+  RetrieveFailure = 'Retrieve Failure',
+  CreateSuccess = 'Create Success',
+  CreateFailure = 'Create Failure',
+  ModifySuccess = 'Modify Success',
+  ModifyFailure = 'Modify Failure',
+  DeleteSuccess = 'Delete Success',
+  DeleteFailure = 'Delete Failure',
+  NotFound = 'Not Found',
+  BadRequest = 'Bad Request',
+  Success = 'Success',
+  Failure = 'Failure',
+  SystemError = 'System error, please contact the system administrator',
+  NoPage = 'No information on this page',
 }
 
 export { HttpStatusCode, HttpMessage };

@@ -2,14 +2,17 @@ import express, { Router } from 'express';
 import { FakeInformationController } from '../controllers/fakeInformation.controller';
 
 const fakeInformationRouter: Router = express.Router();
+const fakeInformationController = new FakeInformationController();
 
 fakeInformationRouter
   .route('/test/CourseHierarchy')
-  .get(FakeInformationController.getAllCourseHierarchys)
-  .post(FakeInformationController.createCourseHierarchys);
+  .get(fakeInformationController.getAllCourseHierarchys)
+  .post(fakeInformationController.createCourseHierarchys);
 
-fakeInformationRouter.route('/test/CourseHierarchy/insertMany').get(FakeInformationController.generateData);
+fakeInformationRouter
+  .route('/test/CourseHierarchy/insertMany')
+  .get(fakeInformationController.generateData);
 
-fakeInformationRouter.route('/test/User').get(FakeInformationController.getAllUserId);
+fakeInformationRouter.route('/test/User').get(fakeInformationController.getAllUserId);
 
 export { fakeInformationRouter };
