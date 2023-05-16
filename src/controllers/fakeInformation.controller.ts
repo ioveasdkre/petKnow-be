@@ -4,8 +4,13 @@ import { User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { FakeInformationService } from '../services/fakeInformation.service';
-
 class FakeInformationController {
+  private service: FakeInformationService;
+
+  constructor(service: FakeInformationService) {
+    this.service = service;
+  }
+
   //#region getAllUser [ 取得全部使用者的 _id 資料 ]
   /** 取得全部使用者的 _id 資料 */
   public async getAllUserId(_req: Request, res: Response, next: NextFunction) {
@@ -279,11 +284,11 @@ class FakeInformationController {
   /** 取得全部課程彙總資料 */
   public async generateData(_req: Request, res: Response, next: NextFunction) {
     try {
-      const fakeInformationService = new FakeInformationService;
-      const state = await fakeInformationService.GenerateManyData();
+      const state = await this.service.GenerateManyData();
 
-      if (state) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Failure);
+      if (!state) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Failure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
     } catch (err) {
       next(err);
     }

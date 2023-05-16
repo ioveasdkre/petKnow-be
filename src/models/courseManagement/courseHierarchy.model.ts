@@ -29,7 +29,7 @@ interface ICourse {
   description: string;
   level: number;
   price: number;
-  discountPrice: number;
+  discountPrice?: number;
   enrollmentCount: number;
   totalTime: number;
   totalNumber: number;

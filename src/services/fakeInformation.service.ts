@@ -67,7 +67,7 @@ class FakeInformationService {
       const dataIndex = data[i];
 
       for (let j = 0; j < dataIndex.length; j++) {
-        let discountPrice = 0;
+        let discountPrice;
         let discountDate;
 
         const courseHierarchy = dataIndex[j];
@@ -88,18 +88,18 @@ class FakeInformationService {
         const enrollmentCount = this.generateRandomInt(100000);
         const totalTime = this.generateRandomInt(600000);
         const totalNumber = this.generateRandomInt(100);
-        const isFree = !!this.generateRandomInt(2);
+        const isFree = this.generateRandomInt(10) === 0 ? true : false;
         const isPopular = 0 === this.generateRandomInt(10);
-        const isPublished = !!this.generateRandomInt(2);
+        const isPublished = this.generateRandomInt(10) > 0 ? true : false;
         const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
         const shelfDate = this.getRandomDate(createdAt, '2023/05/31');
         const updatedAt = this.getRandomDate(createdAt, '2023/05/31');
         const chapterArr: IChapter[] = [];
 
-        const isDiscount = !!this.generateRandomInt(2);
+        const isDiscount = this.generateRandomInt(10) < 3 ? true : false;
 
         if (isDiscount) {
-          discountPrice = price * this.generateRandomInt(0);
+          discountPrice = Math.trunc(price * this.generateRandomInt(0));
           const [startDate, endDate] = this.getDiscountDateScope();
           discountDate = this.getRandomDate(startDate, endDate);
         }
@@ -184,19 +184,17 @@ class FakeInformationService {
 
     const deleteCourseHierarchy = await CourseHierarchy.deleteMany();
 
-    if (deleteCourseHierarchy.acknowledged) {
-      newData.push(...this.GenerateRandomData(users, dagData, dogCovers, fileNames, 0));
-      newData.push(...this.GenerateRandomData(users, catData, catCovers, fileNames, 1));
-      newData.push(...this.GenerateRandomData(users, petData, petCovers, fileNames, 2));
+    if (!deleteCourseHierarchy.acknowledged) return false;
 
-      const result = await CourseHierarchy.insertMany(newData);
+    newData.push(...this.GenerateRandomData(users, dagData, dogCovers, fileNames, 0));
+    newData.push(...this.GenerateRandomData(users, catData, catCovers, fileNames, 1));
+    newData.push(...this.GenerateRandomData(users, petData, petCovers, fileNames, 2));
 
-      if (result.length > 0) {
-        return true;
-      }
-    }
+    const result = await CourseHierarchy.insertMany(newData);
 
-    return false;
+    if (!(result.length > 0)) return false;
+
+    return true;
   }
 }
 
