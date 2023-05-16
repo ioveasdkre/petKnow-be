@@ -13,7 +13,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {
-        "NODE_ENV": "dev"
+        "ENV": "dev"
       }
     },
     {
@@ -28,7 +28,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {
-        "NODE_ENV": "production"
+        "ENV": "prod"
       }
     }
   ]

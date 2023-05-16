@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
+    "title": "寵知 API",
     "version": "1.0.0",
-    "description": "API documentation"
+    "description": "API 文件"
   },
   "host": "localhost:3000",
   "basePath": "/",
@@ -130,6 +130,449 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/test": {
+      "get": {
+        "tags": [
+          "CourseHierarchy - 課程彙總資料"
+        ],
+        "description": "取得全部課程彙總資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功取得課程彙總資料",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "取得資料成功"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "645a3a689ea91c0447216cc9"
+                      },
+                      "user": {
+                        "type": "string",
+                        "example": "645a39c19ea91c0447216cc6"
+                      },
+                      "tagsNames": {
+                        "type": "array",
+                        "example": [
+                          "貓咪食譜"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "cover": {
+                        "type": "string",
+                        "example": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA"
+                      },
+                      "promoVideo": {
+                        "type": "string",
+                        "example": "https://example.com/videos/promo_video.mp4"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "成為寵物訓練達人:寵物訓練入門基礎課程"
+                      },
+                      "shortDescription": {
+                        "type": "string",
+                        "example": "犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                      },
+                      "level": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "price": {
+                        "type": "number",
+                        "example": 2500
+                      },
+                      "discountPrice": {
+                        "type": "number",
+                        "example": 1000
+                      },
+                      "enrollmentCount": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "totalTime": {
+                        "type": "number",
+                        "example": 43200
+                      },
+                      "totalNumber": {
+                        "type": "number",
+                        "example": 55
+                      },
+                      "isFree": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "isPublished": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "discountData": {
+                        "type": "string",
+                        "example": "2023-04-30T16:00:00.000Z"
+                      },
+                      "shelfDate": {
+                        "type": "string",
+                        "example": "2023-05-30T16:00:00.000Z"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2022-12-31T16:00:00.000Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2023-05-07T16:00:00.000Z"
+                      },
+                      "chapters": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "6459b6cdaea0942f035f2e37-B001"
+                            },
+                            "sequence": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "title": {
+                              "type": "string",
+                              "example": "在開始之前"
+                            },
+                            "totalTime": {
+                              "type": "number",
+                              "example": 3600
+                            },
+                            "totalNumber": {
+                              "type": "number",
+                              "example": 5
+                            },
+                            "subchapters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string",
+                                    "example": "6459b6cdaea0942f035f2e37-BB002"
+                                  },
+                                  "sequence": {
+                                    "type": "number",
+                                    "example": 2
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "example": "環境探索引導"
+                                  },
+                                  "content": {},
+                                  "fileName": {
+                                    "type": "string",
+                                    "example": "https://example.com/videos/promo_video.mp4"
+                                  },
+                                  "fileType": {
+                                    "type": "string",
+                                    "example": "0"
+                                  },
+                                  "time": {
+                                    "type": "number",
+                                    "example": 600
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請聯絡系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CourseHierarchy - 課程彙總資料"
+        ],
+        "description": "新增一筆課程彙總資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "example": "645a39c19ea91c0447216cc6"
+                },
+                "tagsNames": {
+                  "type": "array",
+                  "example": [
+                    "貓咪食譜"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "cover": {
+                  "type": "string",
+                  "example": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA"
+                },
+                "promoVideo": {
+                  "type": "string",
+                  "example": "https://example.com/videos/promo_video.mp4"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "成為寵物訓練達人:寵物訓練入門基礎課程"
+                },
+                "shortDescription": {
+                  "type": "string",
+                  "example": "犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                },
+                "level": {
+                  "type": "number",
+                  "example": 0
+                },
+                "price": {
+                  "type": "number",
+                  "example": 2500
+                },
+                "discountPrice": {
+                  "type": "number",
+                  "example": 1000
+                },
+                "enrollmentCount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "totalTime": {
+                  "type": "number",
+                  "example": 43200
+                },
+                "totalNumber": {
+                  "type": "number",
+                  "example": 55
+                },
+                "is_free": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "is_published": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "discountData": {
+                  "type": "string",
+                  "example": "2023/05/01"
+                },
+                "shelfDate": {
+                  "type": "string",
+                  "example": "2023/05/31"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2023/01/01"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2023/05/08"
+                },
+                "chapters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6459b6cdaea0942f035f2e37-B001"
+                      },
+                      "sequence": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "在開始之前"
+                      },
+                      "totalTime": {
+                        "type": "number",
+                        "example": 3600
+                      },
+                      "totalNumber": {
+                        "type": "number",
+                        "example": 5
+                      },
+                      "subchapters": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "6459b6cdaea0942f035f2e37-BB002"
+                            },
+                            "sequence": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "title": {
+                              "type": "string",
+                              "example": "環境探索引導"
+                            },
+                            "content": {},
+                            "fileName": {
+                              "type": "string",
+                              "example": "https://example.com/videos/promo_video.mp4"
+                            },
+                            "fileType": {
+                              "type": "number",
+                              "example": 0
+                            },
+                            "time": {
+                              "type": "number",
+                              "example": 600
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增資料成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "失敗",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統錯誤，請聯絡系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
