@@ -97,30 +97,88 @@ interface JwtPayload {
   _id: string;
 }
 
-authRouter.get('/user', async (req, res) => {
+authRouter.get('/user/show', async (req, res) => {
   try {
-    const cookie = req.cookies['jwt'];
-    const claims = jwt.verify(cookie, 'secret') as JwtPayload;
+    // const cookie = req.cookies['jwt'];
+    // console.log('cookie: ', cookie);
+    let auth = req.get('authorization') || " " as string
+    const myArray = auth.split(" ");
+    auth = myArray[1];
+    // console.log('auth: ', auth);
+
+    const claims = jwt.verify(auth, 'secret') as JwtPayload;
     if (!claims) {
-      return res.status(401).send({
-        message: 'Unauthenticated',
-      });
+      throw new Error('Unauthenticated');
     }
     const user = await User.findOne({ _id: claims._id });
-    // console.log('claims: ', claims);
+    if (null == user) {
+      throw new Error('user not found');
+    }
     // console.log('user: ', user);
     // filter out password, don't send it.
-    if (null == user) {
-      throw 'user not found';
+    const { password, ...data } = user.toJSON();
+    let ret = {
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      "data" : {
+        data,
+      }
     }
-    const { password, ...data } = await user.toJSON();
-    res.send(data);
+    res.send(ret);
+  } catch (error) {
+    console.log('error msg: ', error)
+    let ret = {
+      "success": false,
+      "statusCode": 401,
+      "message": "Failure",
+      error,
+    }
+    return res.status(401).send(ret);
+  }
+  // res.send(user)
+});
+
+authRouter.post('/user/update', async (req, res) => {
+  try {
+    console.log('body: ', req.body)
+    let auth = req.get('authorization') || " " as string
+    const myArray = auth.split(" ");
+    auth = myArray[1];
+    // console.log('auth: ', auth);
+
+    const claims = jwt.verify(auth, 'secret') as JwtPayload;
+    if (!claims) {
+      throw new Error('Unauthenticated');
+    }
+
+    const filter = { _id: claims._id };
+    console.log('filter: ', filter);
+    // can't update email, will cause duplicate key error.
+    // const { email, ...update } = req.body;
+    const { ...update } = req.body;
+    console.log('update: ', update);
+    const user = await User.findOneAndUpdate(filter,
+      update);
+    console.log('user: ', user);
+    if (null == user) {
+      throw new Error('user not found');
+    }
+    
+    // filter out password, don't send it.
+    const { password, ...data } = user.toJSON();
+    let ret = {
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      data
+    }
+    res.send(ret);
   } catch (error) {
     return res.status(401).send({
       message: error,
     });
   }
-  // res.send(user)
 });
 
 authRouter.post('/logout', (_req, res) => {
