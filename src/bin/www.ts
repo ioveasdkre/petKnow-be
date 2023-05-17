@@ -1,7 +1,7 @@
 import http from 'http';
-import { localEnv } from '@src/config/env';
+import { localEnv } from '../config/env';
 localEnv();
-import { app } from '@src/index';
+import { app } from '../index';
 
 const server = http.createServer(app);
 const port = process.env.PORT ?? 8000;

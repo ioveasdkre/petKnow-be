@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
-import { CourseHierarchy } from '@src/connections/courseManagement.mongoDB';
-import { User } from '@src/connections/mongoDB';
-import { ISubchapter, IChapter, ICourse } from '@src/models/courseManagement/courseHierarchy.model';
-import { courseHierarchys, courseHierarchyType } from '@__tests__/courseHierarchyData.test';
+import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
+import { User } from '../connections/mongoDB';
+import { ISubchapter, IChapter, ICourse } from '../models/courseManagement/courseHierarchy.model';
+import { courseHierarchys, courseHierarchyType } from '../../__tests__/courseHierarchyData.test';
 
 class FakeInformationService {
   private generateRandomInt(max: number) {

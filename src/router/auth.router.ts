@@ -1,5 +1,5 @@
 import express from 'express';
-import { User } from '@src/connections/mongoDB';
+import { User } from '../connections/mongoDB';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

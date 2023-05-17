@@ -134,16 +134,16 @@
         }
       }
     },
-    "/test/CourseHierarchy": {
+    "/v1/fakeInformation/all": {
       "get": {
         "tags": [
-          "CourseHierarchy - 課程彙總資料"
+          "FakeInformation - 課程彙總資料"
         ],
         "description": "取得全部課程彙總資料",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "成功取得課程彙總資料",
+            "description": "成功",
             "schema": {
               "type": "object",
               "properties": {
@@ -199,7 +199,7 @@
                       },
                       "description": {
                         "type": "string",
-                        "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                        "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 @src@src. 查看更多立即購課"
                       },
                       "level": {
                         "type": "number",
@@ -343,10 +343,69 @@
             }
           }
         }
-      },
+      }
+    },
+    "/v1/fakeInformation/generateData": {
+      "get": {
+        "tags": [
+          "FakeInformation - 課程彙總資料"
+        ],
+        "description": "產生假資料至課程彙總資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/add": {
       "post": {
         "tags": [
-          "CourseHierarchy - 課程彙總資料"
+          "FakeInformation - 課程彙總資料"
         ],
         "description": "新增一筆課程彙總資料",
         "parameters": [
@@ -389,7 +448,7 @@
                 },
                 "description": {
                   "type": "string",
-                  "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                  "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 @src@src. 查看更多立即購課"
                 },
                 "level": {
                   "type": "number",
@@ -577,18 +636,70 @@
         }
       }
     },
-    "/test/CourseHierarchy/insertMany": {
+    "/v1/fakeInformation/getAllUserId": {
       "get": {
-        "description": "",
+        "tags": [
+          "FakeInformation - 課程彙總資料"
+        ],
+        "description": "產生假資料至課程彙總資料",
         "parameters": [],
-        "responses": {}
-      }
-    },
-    "/test/User": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [
+                    "6462f6e51d25094b3e5b94ca"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/vime": {

@@ -1,20 +1,45 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseHierarchy } from '@src/connections/courseManagement.mongoDB';
-import { User } from '@src/connections/mongoDB';
-import { HttpStatusCode, HttpMessage } from '@src/enums/handle.enum';
-import { handleResponse } from '@src/helpers/handle.helper';
-import { FakeInformationService } from '@src/services/fakeInformation.service';
+import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
+import { User } from '../connections/mongoDB';
+import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
+import { handleResponse } from '../helpers/handle.helper';
+import { FakeInformationService } from '../services/fakeInformation.service';
 
 class FakeInformationController {
   //#region getAllUser [ 取得全部使用者的 _id 資料 ]
   /** 取得全部使用者的 _id 資料 */
   public static async getAllUserId(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.description = "產生假資料至課程彙總資料"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success",
+            "data": [
+              "6462f6e51d25094b3e5b94ca"
+            ]
+          }
+        }
+        * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
     try {
       const Users = await User.distinct('_id');
 
       if (Users.length === 0) return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, Users);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, Users);
     } catch (err) {
       next(err);
     }
@@ -26,10 +51,10 @@ class FakeInformationController {
   public static async getAllCourseHierarchys(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
      * #swagger.description = "取得全部課程彙總資料"
      * #swagger.responses[200] = {
-          description: "成功取得課程彙總資料",
+          description: "成功",
           schema: {
             "statusCode": 200,
             "isSuccess": true,
@@ -129,12 +154,12 @@ class FakeInformationController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const CourseHierarchys = await CourseHierarchy.find();
+      const courseHierarchys = await CourseHierarchy.find();
 
-      if (CourseHierarchys.length === 0)
+      if (courseHierarchys.length === 0)
         return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, CourseHierarchys);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, courseHierarchys);
     } catch (err) {
       next(err);
     }
@@ -146,7 +171,7 @@ class FakeInformationController {
   public static async createCourseHierarchys(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["CourseHierarchy - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
      * #swagger.description = "新增一筆課程彙總資料"
      * #swagger.parameters["body"] = {
           description: "資料格式",
@@ -278,6 +303,28 @@ class FakeInformationController {
   //#region generateData [ 產生假資料至課程彙總資料 ]
   /** 取得全部課程彙總資料 */
   public static async generateData(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.description = "產生假資料至課程彙總資料"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success"
+          }
+        }
+        * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
     try {
       const service = new FakeInformationService();
       const state = await service.GenerateManyData();

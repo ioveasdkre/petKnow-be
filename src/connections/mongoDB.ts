@@ -1,5 +1,5 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { UserSchema } from '@src/models/mongoDB/user.model';
+import { UserSchema } from '../models/mongoDB/user.model';
 
 if (!process.env.MONGODB_URI) {
   throw new Error('IDM Database connection string not found in environment variables.');
