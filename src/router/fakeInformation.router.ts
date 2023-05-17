@@ -1,10 +1,7 @@
 import express, { Router } from 'express';
-import { FakeInformationController } from '../controllers/fakeInformation.controller';
-import { FakeInformationService } from '../services/fakeInformation.service';
+import { FakeInformationController as controller } from '@src/controllers/fakeInformation.controller';
 
 const router: Router = express.Router();
-const service = new FakeInformationService();
-const controller = new FakeInformationController(service);
 
 router
   .route('/test/CourseHierarchy')

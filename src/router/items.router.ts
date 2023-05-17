@@ -3,10 +3,10 @@
  */
 
 import express, { Request, Response } from 'express';
-import * as ItemService from '../models/items.service';
-import { BaseItem, Item } from '../models/mongoDB/items.interface';
+import * as ItemService from '@src/models/items.service';
+import { BaseItem, Item } from '@src/models/mongoDB/items.interface';
 
-import ItemController from '../controllers/items-controller';
+import ItemController from '@src/controllers/items-controller';
 
 
 /**

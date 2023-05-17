@@ -134,7 +134,7 @@
         }
       }
     },
-    "/v1/test": {
+    "/test/CourseHierarchy": {
       "get": {
         "tags": [
           "CourseHierarchy - 課程彙總資料"
@@ -157,7 +157,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "取得資料成功"
+                  "example": "Success"
                 },
                 "data": {
                   "type": "array",
@@ -233,7 +233,7 @@
                         "type": "boolean",
                         "example": false
                       },
-                      "discountData": {
+                      "discountDate": {
                         "type": "string",
                         "example": "2023-04-30T16:00:00.000Z"
                       },
@@ -334,7 +334,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "系統錯誤，請聯絡系統管理員"
+                  "example": "System error, please contact the system administrator"
                 }
               },
               "xml": {
@@ -423,7 +423,7 @@
                   "type": "boolean",
                   "example": true
                 },
-                "discountData": {
+                "discountDate": {
                   "type": "string",
                   "example": "2023/05/01"
                 },
@@ -520,7 +520,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "新增資料成功"
+                  "example": "Success"
                 }
               },
               "xml": {
@@ -529,7 +529,7 @@
             }
           },
           "400": {
-            "description": "失敗",
+            "description": "錯誤的請求",
             "schema": {
               "type": "object",
               "properties": {
@@ -543,7 +543,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "錯誤的請求"
+                  "example": "Bad Request"
                 }
               },
               "xml": {
@@ -566,7 +566,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "系統錯誤，請聯絡系統管理員"
+                  "example": "System error, please contact the system administrator"
                 }
               },
               "xml": {
@@ -575,6 +575,20 @@
             }
           }
         }
+      }
+    },
+    "/test/CourseHierarchy/insertMany": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/test/User": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
       }
     },
     "/vime": {

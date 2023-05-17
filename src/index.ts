@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
 import { itemsRouter, fakeInformationRouter, authRouter } from './router/index';
-import swaggerSpec from '../swagger_output.json';
+import swaggerSpec from '@base/swagger_output.json';
 import {
   handle404Error,
   handleErrors,

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
-import { handleResponse } from '../helpers/handle.helper';
+import { HttpStatusCode, HttpMessage } from '@src/enums/handle.enum';
+import { handleResponse } from '@src/helpers/handle.helper';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;

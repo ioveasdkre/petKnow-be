@@ -14,11 +14,17 @@
     "noUnusedLocals": true, // 檢查未使用的區域變數
     "noUnusedParameters": true, // 檢查函數中未使用的參數
     "noFallthroughCasesInSwitch": true, // 檢查switch語句中的case語句是否有漏掉break或return等跳出語句，以避免潛在的錯誤。
-    "skipLibCheck": true // 不會檢查引入的函式庫檔案
+    "skipLibCheck": true, // 不會檢查引入的函式庫檔案
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@__tests__/*": ["__tests__/*"],
+      "@base/*": ["./*"]
+    }
   },
   "ts-node": {
     "files": true
   },
-  "include": ["src", "src/user.model.js"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
