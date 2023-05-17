@@ -8,6 +8,9 @@ export const authRouter = express.Router();
 authRouter.post('/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
+    console.log('req.body: ', req.body);
+    // console.log('req.body._value: ', req.body._value);
+    // console.log('req.body._value.password: ', req.body._value.password);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new User({
@@ -17,29 +20,56 @@ authRouter.post('/register', async (req, res) => {
     });
 
     const result = await user.save();
-    const { password, ...data } = await result.toJSON();
-
-    res.send(data);
+    const { _id, password, ...data } = result.toJSON();
+    
+    const ret = { 
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      "data" : {
+        ...data,
+      }
+    }
+    res.send(ret);
   } catch (error) {
-    console.log('Register Error:', error);
+    console.log('Register Error:', error );
+    const ret = { 
+      "success": false,
+      "statusCode": 400, 
+      "message": "Failure",
+    }
+    res.send(ret);
   }
 });
 
 authRouter.post('/login', async (req, res) => {
+  console.log('req.body: ', req.body);
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    console.log('User not found');
-    return res.status(404).send({
-      message: 'User not found',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 404,
+      "message": "User not found",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(404).send(msg);
   }
 
   if (!(await bcrypt.compare(req.body.password, user.password))) {
-    console.log('Invalid credentials');
-    return res.status(400).send({
-      message: 'Invalid credentials',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 400,
+      "message": "Invalid credentials",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(400).send(msg);
   }
 
   const token = jwt.sign({ _id: user._id }, 'secret');
@@ -47,7 +77,18 @@ authRouter.post('/login', async (req, res) => {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
-  res.send('success');
+
+  const { _id, password, ...data } = user.toJSON();
+
+  res.send({
+    "success": true,
+    "statusCode": 200,
+    "message": "Success",
+    "data" : {
+      ...data,
+      token
+    }
+  });
   // res.send(token);
   //  res.send(user);
 });

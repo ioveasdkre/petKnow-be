@@ -28,7 +28,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(fakeInformationRouter);
 app.use('/items', itemsRouter);
-app.use('/api', authRouter);
+// app.use('/api', itemsRouter);
+app.use('/v1', authRouter);
 
 app.get('/', function (_req, res) {
   res.json('PetKnow');
