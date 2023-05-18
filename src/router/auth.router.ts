@@ -4,10 +4,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const authRouter = express.Router();
+const secret = 'secret'
 
 authRouter.post('/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(10);
+    console.log('req.body: ', req.body);
+    // console.log('req.body._value: ', req.body._value);
+    // console.log('req.body._value.password: ', req.body._value.password);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new User({
@@ -17,37 +21,75 @@ authRouter.post('/register', async (req, res) => {
     });
 
     const result = await user.save();
-    const { password, ...data } = await result.toJSON();
-
-    res.send(data);
+    const { _id, password, ...data } = result.toJSON();
+    
+    const ret = { 
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      "data" : {
+        ...data,
+      }
+    }
+    res.send(ret);
   } catch (error) {
-    console.log('Register Error:', error);
+    console.log('Register Error:', error );
+    const ret = { 
+      "success": false,
+      "statusCode": 400, 
+      "message": "Failure",
+    }
+    res.send(ret);
   }
 });
 
 authRouter.post('/login', async (req, res) => {
+  console.log('req.body: ', req.body);
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    console.log('User not found');
-    return res.status(404).send({
-      message: 'User not found',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 404,
+      "message": "User not found",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(404).send(msg);
   }
 
   if (!(await bcrypt.compare(req.body.password, user.password))) {
-    console.log('Invalid credentials');
-    return res.status(400).send({
-      message: 'Invalid credentials',
-    });
+    const msg = {
+      "success": false,
+      "statusCode": 400,
+      "message": "Invalid credentials",
+      "data": {
+        "email": req.body.email
+      }
+    }
+    console.log(msg);
+    return res.status(400).send(msg);
   }
 
-  const token = jwt.sign({ _id: user._id }, 'secret');
+  const token = jwt.sign({ _id: user._id }, secret);
   res.cookie('jwt', token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
-  res.send('success');
+
+  const { _id, password, ...data } = user.toJSON();
+
+  res.send({
+    "success": true,
+    "statusCode": 200,
+    "message": "Success",
+    "data" : {
+      ...data,
+      token
+    }
+  });
   // res.send(token);
   //  res.send(user);
 });
@@ -56,30 +98,88 @@ interface JwtPayload {
   _id: string;
 }
 
-authRouter.get('/user', async (req, res) => {
+authRouter.get('/user/show', async (req, res) => {
   try {
-    const cookie = req.cookies['jwt'];
-    const claims = jwt.verify(cookie, 'secret') as JwtPayload;
+    // const cookie = req.cookies['jwt'];
+    // console.log('cookie: ', cookie);
+    let auth = req.get('authorization') || " " as string
+    const myArray = auth.split(" ");
+    auth = myArray[1];
+    // console.log('auth: ', auth);
+
+    const claims = jwt.verify(auth, secret) as JwtPayload;
     if (!claims) {
-      return res.status(401).send({
-        message: 'Unauthenticated',
-      });
+      throw new Error('Unauthenticated');
     }
     const user = await User.findOne({ _id: claims._id });
-    // console.log('claims: ', claims);
+    if (null == user) {
+      throw new Error('user not found');
+    }
     // console.log('user: ', user);
     // filter out password, don't send it.
-    if (null == user) {
-      throw 'user not found';
+    const { password, ...data } = user.toJSON();
+    let ret = {
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      "data" : {
+        data,
+      }
     }
+    res.send(ret);
+  } catch (error) {
+    console.log('error msg: ', error)
+    let ret = {
+      "success": false,
+      "statusCode": 401,
+      "message": "Failure",
+      error,
+    }
+    return res.status(401).send(ret);
+  }
+  // res.send(user)
+});
+
+authRouter.put('/user/update', async (req, res) => {
+  try {
+    console.log('body: ', req.body)
+    let auth = req.get('authorization') || " " as string
+    const myArray = auth.split(" ");
+    auth = myArray[1];
+    // console.log('auth: ', auth);
+
+    const claims = jwt.verify(auth, secret) as JwtPayload;
+    if (!claims) {
+      throw new Error('Unauthenticated');
+    }
+
+    const filter = { _id: claims._id };
+    console.log('filter: ', filter);
+    // can't update email, will cause duplicate key error.
+    const { email, ...update } = req.body;
+    // const { ...update } = req.body;
+    console.log('update: ', update);
+    const user = await User.findOneAndUpdate(filter,
+      update, {returnOriginal: false} );
+    console.log('user: ', user);
+    if (null == user) {
+      throw new Error('user not found');
+    }
+    
+    // filter out password, don't send it.
     const { password, ...data } = await user.toJSON();
-    res.send(data);
+    let ret = {
+      "success": true,
+      "statusCode": 200,
+      "message": "Success",
+      data
+    }
+    res.send(ret);
   } catch (error) {
     return res.status(401).send({
       message: error,
     });
   }
-  // res.send(user)
 });
 
 authRouter.post('/logout', (_req, res) => {

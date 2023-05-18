@@ -8,7 +8,7 @@ import crypto from 'crypto';
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: 'username is required',
+    required: 'name is required',
   },
   email: {
     type: String,
@@ -20,6 +20,12 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  nickname: {
+    type: String,
+  },
+  bio: {
+    type: String,
   },
   salt: String,
 });
