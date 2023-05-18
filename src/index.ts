@@ -1,38 +1,50 @@
-// ref: 
+// ref:
 // 1. https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/
 
-import * as dotenv from 'dotenv';
 import express from 'express';
-import helmet from 'helmet';
-import { itemsRouter } from './router/items.router';
-import { authRouter } from './router/auth.router';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import { setSecurityHeaders } from './config/contentSecurityPolicy';
+import { itemsRouter, fakeInformationRouter, authRouter } from './router/index';
+import swaggerSpec from '../swagger_output.json';
+import {
+  handle404Error,
+  handleErrors,
+  handleUncaughtException,
+  handleUnhandledRejection,
+} from './middlewares/error.middleware';
 
-dotenv.config();
+export const app = express();
 
-const app = express();
-app.use(helmet());
+app.use(setSecurityHeaders);
+
+if (process.env.ENV === 'dev') {
+  app.use(morgan('dev'));
+}
+
+app.use(cookieParser());
+
 app.use(express.json());
+app.use(fakeInformationRouter);
 app.use('/items', itemsRouter);
-app.use('/auth', authRouter);
+// app.use('/api', itemsRouter);
+app.use('/v1', authRouter);
 
-let todos: string[] = ['todo 1', 'todo 2'];
-
-app.get('/', function (req, res) {
-	res.json('PetKnow');
+app.get('/', function (_req, res) {
+  res.json('PetKnow');
 });
 
-// 取得所有 todo
-app.get('/todos', (req, res) => {
-	res.json(todos);
-});
-// app.post('/add', (req, res) => {
-// 	console.log('req.body: ', req.body);
-// 	res.json(req.body);
-// });
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const port = process.env.PORT || 8000;
-app.listen(port, () => console.log('Server started on port 8000'));
+app.use(handle404Error);
 
-module.exports = app;
+app.use(handleErrors);
 
+// 補捉程式錯誤
+process.on('uncaughtException', handleUncaughtException);
 
+// 補捉未處理的 catch
+process.on('unhandledRejection', handleUnhandledRejection);
+
+export default app;

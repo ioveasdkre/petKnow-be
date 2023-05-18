@@ -1,0 +1,162 @@
+[
+  {
+    "user": "6459b6cdaea0942f035f2e37",
+    "tagNames": [
+      "貓咪食譜"
+    ],
+    "cover": "https://images.unsplash.com/photo-1616668983570-a971956d8928?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1886&q=80",
+    "promoVideo": "https://example.com/videos/promo_video.mp4",
+    "title": "成為寵物訓練達人:寵物訓練入門基礎課程",
+    "shortDescription": "犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程",
+    "description": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 .....   查看更多立即購課",
+    "level": 0,
+    "price": 2500,
+    "discountPrice": 1000,
+    "enrollmentCount": 0,
+    "totalTime": 43200,
+    "totalNumber": 55,
+    "isFree": false,
+    "isPopular": false,
+    "isPublished": true,
+    "discountDate": "2023/05/01",
+    "shelfDate": "2023/05/31",
+    "createdAt": "2023/01/01",
+    "updatedAt": "2023/05/08",
+    "chapters": [
+      {
+        "_id": "6459b6cdaea0942f035f2e37-A001",
+        "sequence": 1,
+        "title": "在開始之前",
+        "totalTime": 3600,
+        "totalNumber": 5,
+        "subchapters": [
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA001",
+            "sequence": 1,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          },
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA002",
+            "sequence": 2,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          }
+        ]
+      },
+      {
+        "_id": "6459b6cdaea0942f035f2e37-A001",
+        "sequence": 1,
+        "title": "在開始之前",
+        "totalTime": 3600,
+        "totalNumber": 5,
+        "subchapters": [
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA003",
+            "sequence": 1,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          },
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA004",
+            "sequence": 2,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "user": "6459b6cdaea0942f035f2e37",
+    "tagNames": [
+      "貓咪食譜"
+    ],
+    "cover": "https://images.unsplash.com/photo-1616668983570-a971956d8928?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1886&q=80",
+    "promoVideo": "https://example.com/videos/promo_video.mp4",
+    "title": "成為寵物訓練達人:寵物訓練入門基礎課程",
+    "shortDescription": "犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程",
+    "description": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 .....   查看更多立即購課",
+    "level": 0,
+    "price": 2500,
+    "discountPrice": 1000,
+    "enrollmentCount": 0,
+    "totalTime": 43200,
+    "totalNumber": 55,
+    "isFree": false,
+    "isPopular": false,
+    "isPublished": true,
+    "discountDate": "2023/05/01",
+    "shelfDate": "2023/05/31",
+    "createdAt": "2023/01/01",
+    "updatedAt": "2023/05/08",
+    "chapters": [
+      {
+        "_id": "6459b6cdaea0942f035f2e37-A001",
+        "sequence": 1,
+        "title": "在開始之前",
+        "totalTime": 3600,
+        "totalNumber": 5,
+        "subchapters": [
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA001",
+            "sequence": 1,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          },
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA002",
+            "sequence": 2,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          }
+        ]
+      },
+      {
+        "_id": "6459b6cdaea0942f035f2e37-A001",
+        "sequence": 1,
+        "title": "在開始之前",
+        "totalTime": 3600,
+        "totalNumber": 5,
+        "subchapters": [
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA003",
+            "sequence": 1,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          },
+          {
+            "_id": "6459b6cdaea0942f035f2e37-AA004",
+            "sequence": 2,
+            "title": "環境探索引導",
+            "content": null,
+            "fileName": "https://example.com/videos/promo_video.mp4",
+            "fileType": 0,
+            "time": 600
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,8 +1,24 @@
 {
-	"extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist", //輸出路徑
+    "target": "es6", //指定編譯生成的JS版本
+    "module": "commonjs", //指定生成哪種模組
+    "resolveJsonModule": true, //可import導入 json 文件
+    "removeComments": true, // ts to js 時移除所有註解
+    "noEmitOnError": true, // 程式碼中存在任何類型檢查錯誤，編譯器將不會生成任何 JavaScript 文件
+    "allowSyntheticDefaultImports": true, // 允許導入沒有預設匯出的模組，並在需要時自動生成一個預設匯出。
+    "strict": true, //啟用所有嚴格類型檢查選項
+    "esModuleInterop": true, //兼容模組導入的方式
+    "forceConsistentCasingInFileNames": true, //確保檔案的大小寫一致
+    "noUnusedLocals": true, // 檢查未使用的區域變數
+    "noUnusedParameters": true, // 檢查函數中未使用的參數
+    "noFallthroughCasesInSwitch": true, // 檢查switch語句中的case語句是否有漏掉break或return等跳出語句，以避免潛在的錯誤。
+    "skipLibCheck": true // 不會檢查引入的函式庫檔案
+  },
+  "ts-node": {
+    "files": true
   },
   "include": ["src", "src/user.model.js"],
-	"exclude": ["node_modules"]
+  "exclude": ["node_modules"]
 }
