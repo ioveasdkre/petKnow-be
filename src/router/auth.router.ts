@@ -140,7 +140,7 @@ authRouter.get('/user/show', async (req, res) => {
   // res.send(user)
 });
 
-authRouter.post('/user/update', async (req, res) => {
+authRouter.put('/user/update', async (req, res) => {
   try {
     console.log('body: ', req.body)
     let auth = req.get('authorization') || " " as string
