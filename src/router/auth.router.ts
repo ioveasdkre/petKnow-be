@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const authRouter = express.Router();
+const secret = 'secret'
 
 authRouter.post('/register', async (req, res) => {
   try {
@@ -72,10 +73,10 @@ authRouter.post('/login', async (req, res) => {
     return res.status(400).send(msg);
   }
 
-  const token = jwt.sign({ _id: user._id }, 'secret');
+  const token = jwt.sign({ _id: user._id }, secret);
   res.cookie('jwt', token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
   const { _id, password, ...data } = user.toJSON();
@@ -106,7 +107,7 @@ authRouter.get('/user/show', async (req, res) => {
     auth = myArray[1];
     // console.log('auth: ', auth);
 
-    const claims = jwt.verify(auth, 'secret') as JwtPayload;
+    const claims = jwt.verify(auth, secret) as JwtPayload;
     if (!claims) {
       throw new Error('Unauthenticated');
     }
@@ -147,7 +148,7 @@ authRouter.post('/user/update', async (req, res) => {
     auth = myArray[1];
     // console.log('auth: ', auth);
 
-    const claims = jwt.verify(auth, 'secret') as JwtPayload;
+    const claims = jwt.verify(auth, secret) as JwtPayload;
     if (!claims) {
       throw new Error('Unauthenticated');
     }
@@ -155,18 +156,18 @@ authRouter.post('/user/update', async (req, res) => {
     const filter = { _id: claims._id };
     console.log('filter: ', filter);
     // can't update email, will cause duplicate key error.
-    // const { email, ...update } = req.body;
-    const { ...update } = req.body;
+    const { email, ...update } = req.body;
+    // const { ...update } = req.body;
     console.log('update: ', update);
     const user = await User.findOneAndUpdate(filter,
-      update);
+      update, {returnOriginal: false} );
     console.log('user: ', user);
     if (null == user) {
       throw new Error('user not found');
     }
     
     // filter out password, don't send it.
-    const { password, ...data } = user.toJSON();
+    const { password, ...data } = await user.toJSON();
     let ret = {
       "success": true,
       "statusCode": 200,
