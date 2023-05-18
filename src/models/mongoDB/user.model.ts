@@ -21,6 +21,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  nickname: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
   salt: String,
 });
 
