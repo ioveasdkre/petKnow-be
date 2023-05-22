@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
+import { CourseHierarchy } from '../connections/mongoDB';
 import { User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
@@ -8,10 +8,10 @@ import { FakeInformationService } from '../services/fakeInformation.service';
 class FakeInformationController {
   //#region getAllUser [ 取得全部使用者的 _id 資料 ]
   /** 取得全部使用者的 _id 資料 */
-  public static async getAllUserId(_req: Request, res: Response, next: NextFunction) {
+  static async getAllUserId(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
      * #swagger.description = "產生假資料至課程彙總資料"
      * #swagger.responses[200] = {
           description: "成功",
@@ -48,10 +48,10 @@ class FakeInformationController {
 
   //#region getAllCourseHierarchys [ 取得全部課程彙總資料 ]
   /** 取得全部課程彙總資料 */
-  public static async getAllCourseHierarchys(_req: Request, res: Response, next: NextFunction) {
+  static async getAllCourseHierarchys(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
      * #swagger.description = "取得全部課程彙總資料"
      * #swagger.responses[200] = {
           description: "成功",
@@ -168,10 +168,10 @@ class FakeInformationController {
 
   //#region createCourseHierarchys [ 新增一筆課程彙總資料 ]
   /** 取得全部課程彙總資料 */
-  public static async createCourseHierarchys(req: Request, res: Response, next: NextFunction) {
+  static async createCourseHierarchys(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
      * #swagger.description = "新增一筆課程彙總資料"
      * #swagger.parameters["body"] = {
           description: "資料格式",
@@ -302,10 +302,10 @@ class FakeInformationController {
 
   //#region generateData [ 產生假資料至課程彙總資料 ]
   /** 取得全部課程彙總資料 */
-  public static async generateData(_req: Request, res: Response, next: NextFunction) {
+  static async generateData(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["FakeInformation - 課程彙總資料"]
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
      * #swagger.description = "產生假資料至課程彙總資料"
      * #swagger.responses[200] = {
           description: "成功",

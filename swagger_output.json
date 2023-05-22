@@ -83,10 +83,40 @@
         }
       }
     },
-    "/user": {
+    "/user/show": {
       "get": {
         "description": "",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/update": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "update": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -137,7 +167,7 @@
     "/v1/fakeInformation/all": {
       "get": {
         "tags": [
-          "FakeInformation - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "取得全部課程彙總資料",
         "parameters": [],
@@ -348,7 +378,7 @@
     "/v1/fakeInformation/generateData": {
       "get": {
         "tags": [
-          "FakeInformation - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "產生假資料至課程彙總資料",
         "parameters": [],
@@ -405,7 +435,7 @@
     "/v1/fakeInformation/add": {
       "post": {
         "tags": [
-          "FakeInformation - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "新增一筆課程彙總資料",
         "parameters": [
@@ -639,10 +669,99 @@
     "/v1/fakeInformation/getAllUserId": {
       "get": {
         "tags": [
-          "FakeInformation - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "產生假資料至課程彙總資料",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [
+                    "6462f6e51d25094b3e5b94ca"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/goldFlow/Card": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "產生假資料至課程彙總資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "coursesIds": {
+                  "type": "array",
+                  "example": [
+                    "646b2513c4b5bbda59089273",
+                    "646b2513c4b5bbda59089274",
+                    "646b2513c4b5bbda59089275"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",

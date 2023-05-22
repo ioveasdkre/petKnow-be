@@ -1,11 +1,9 @@
 import { Response } from 'express';
-import { headers } from './headers';
 
 function handleResponse<T>(res: Response, statusCode: number, message: string, data?: T) {
   const isSuccess = statusCode === 200;
 
   res.status(statusCode);
-  res.set(headers);
 
   if (data) {
     res.json({

@@ -1,4 +1,5 @@
 import { createConnection, ConnectOptions } from 'mongoose';
+import { courseSchema } from '../models/mongoDB/courseHierarchy.model';
 import { UserSchema } from '../models/mongoDB/user.model';
 
 if (!process.env.MONGODB_URI) {
@@ -20,6 +21,7 @@ MongoDB.on('error', err => {
   console.error('MongoDB connection error:', err);
 });
 
+const CourseHierarchy = MongoDB.model('CourseHierarchy', courseSchema);
 const User = MongoDB.model('User', UserSchema);
 
-export { User };
+export { User, CourseHierarchy };
