@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  // "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist", //輸出路徑
     "target": "es6", //指定編譯生成的JS版本
@@ -14,11 +14,11 @@
     "noUnusedLocals": true, // 檢查未使用的區域變數
     "noUnusedParameters": true, // 檢查函數中未使用的參數
     "noFallthroughCasesInSwitch": true, // 檢查switch語句中的case語句是否有漏掉break或return等跳出語句，以避免潛在的錯誤。
-    "skipLibCheck": true // 不會檢查引入的函式庫檔案
+    "skipLibCheck": true, // 不會檢查引入的函式庫檔案
   },
   "ts-node": {
     "files": true
   },
-  "include": ["src", "src/user.model.js"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

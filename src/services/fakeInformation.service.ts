@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
-import { CourseHierarchy } from '../connections/courseManagement.mongoDB';
+import { CourseHierarchy } from '../connections/mongoDB';
 import { User } from '../connections/mongoDB';
-import { ISubchapter, IChapter, ICourse } from '../models/courseManagement/courseHierarchy.model';
+import { ISubchapter, IChapter, ICourse } from '../models/mongoDB/courseHierarchy.model';
 import { courseHierarchys, courseHierarchyType } from '../../__tests__/courseHierarchyData.test';
 
 class FakeInformationService {

@@ -83,10 +83,40 @@
         }
       }
     },
-    "/user": {
+    "/user/show": {
       "get": {
         "description": "",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/update": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "update": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -134,16 +164,16 @@
         }
       }
     },
-    "/v1/test": {
+    "/v1/fakeInformation/all": {
       "get": {
         "tags": [
-          "CourseHierarchy - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "取得全部課程彙總資料",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "成功取得課程彙總資料",
+            "description": "成功",
             "schema": {
               "type": "object",
               "properties": {
@@ -157,7 +187,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "取得資料成功"
+                  "example": "Success"
                 },
                 "data": {
                   "type": "array",
@@ -199,7 +229,7 @@
                       },
                       "description": {
                         "type": "string",
-                        "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                        "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 @src@src. 查看更多立即購課"
                       },
                       "level": {
                         "type": "number",
@@ -233,7 +263,7 @@
                         "type": "boolean",
                         "example": false
                       },
-                      "discountData": {
+                      "discountDate": {
                         "type": "string",
                         "example": "2023-04-30T16:00:00.000Z"
                       },
@@ -334,7 +364,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "系統錯誤，請聯絡系統管理員"
+                  "example": "System error, please contact the system administrator"
                 }
               },
               "xml": {
@@ -343,10 +373,69 @@
             }
           }
         }
-      },
+      }
+    },
+    "/v1/fakeInformation/generateData": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "產生假資料至課程彙總資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/add": {
       "post": {
         "tags": [
-          "CourseHierarchy - 課程彙總資料"
+          "FakeInformation - 假資料 API"
         ],
         "description": "新增一筆課程彙總資料",
         "parameters": [
@@ -389,7 +478,7 @@
                 },
                 "description": {
                   "type": "string",
-                  "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 ..... 查看更多立即購課"
+                  "example": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 @src@src. 查看更多立即購課"
                 },
                 "level": {
                   "type": "number",
@@ -423,7 +512,7 @@
                   "type": "boolean",
                   "example": true
                 },
-                "discountData": {
+                "discountDate": {
                   "type": "string",
                   "example": "2023/05/01"
                 },
@@ -520,7 +609,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "新增資料成功"
+                  "example": "Success"
                 }
               },
               "xml": {
@@ -529,7 +618,7 @@
             }
           },
           "400": {
-            "description": "失敗",
+            "description": "錯誤的請求",
             "schema": {
               "type": "object",
               "properties": {
@@ -543,7 +632,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "錯誤的請求"
+                  "example": "Bad Request"
                 }
               },
               "xml": {
@@ -566,7 +655,256 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "系統錯誤，請聯絡系統管理員"
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/getAllUserId": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "產生假資料至課程彙總資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [
+                    "6462f6e51d25094b3e5b94ca"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/goldFlow/Card": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "讀取購物車資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "coursesIds": {
+                  "type": "array",
+                  "example": [
+                    "646b8121b65fd84dc4ab0af5",
+                    "646b8121b65fd84dc4ab0af6",
+                    "646b8121b65fd84dc4ab0af7",
+                    "646b8121b65fd84dc4ab0b06",
+                    "646b8121b65fd84dc4ab0afd",
+                    "646b8121b65fd84dc4ab0b09",
+                    "646b8121b65fd84dc4ab0b0c"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "totalPrice": {
+                      "type": "number",
+                      "example": 28226
+                    },
+                    "shoppingCart": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646b8121b65fd84dc4ab0af6"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "高效狗狗訓練方法"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "初階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 496794
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 48
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "zihyin"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 8155
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "youMightLike": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646b8121b65fd84dc4ab0b5b"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "兔兔的健康與飼養"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-cat-11133177.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "初階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 340664
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 23
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "zihyin"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 7805
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
                 }
               },
               "xml": {

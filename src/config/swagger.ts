@@ -1,6 +1,6 @@
 import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
-import { localEnv } from '../config/env';
+import { localEnv } from './env';
 
 localEnv();
 
