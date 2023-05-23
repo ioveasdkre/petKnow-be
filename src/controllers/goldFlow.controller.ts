@@ -40,30 +40,38 @@ class GoldFlowController {
             "isSuccess": true,
             "message": "Success",
             "data": {
-              "myCard": [
+              "totalPrice": 28226,
+              "shoppingCart": [
                 {
-                  "totalPrice": 28226,
-                  "shoppingCart": [
-                    {
-                      "_id": "646b8121b65fd84dc4ab0af5",
-                      "title": "狗狗訓練入門課程",
-                      "cover": "https://thumbs.dreamstime.com$cover",
-                      "level": "中階課程",
-                      "time": 341312,
-                      "total": 93,
-                      "instructorName": "ffffff",
-                      "price": 7251,
-                      "discountPrice": null,
-                      "isFree": false
-                    }
-                  ]
+                  "_id": "646b8121b65fd84dc4ab0af5",
+                  "title": "狗狗訓練入門課程",
+                  "cover": "https://thumbs.dreamstime.comz/cute-funny-dog-stucks-her-tongue-26778597.jpg",
+                  "level": "中階課程",
+                  "time": 341312,
+                  "total": 93,
+                  "instructorName": "ffffff",
+                  "price": 7251,
+                  "discountPrice": null,
+                  "isFree": false
+                },
+                {
+                  "_id": "646b8121b65fd84dc4ab0af6",
+                  "title": "高效狗狗訓練方法",
+                  "cover": "https://thumbs.dreamstime.comz/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "level": "初階課程",
+                  "time": 496794,
+                  "total": 48,
+                  "instructorName": "zihyin",
+                  "price": 8155,
+                  "discountPrice": null,
+                  "isFree": false
                 }
               ],
               "youMightLike": [
                 {
                   "_id": "646b8121b65fd84dc4ab0b45",
                   "title": "高效寵物旅宿訓練指南",
-                  "cover": "https://thumbs.dreamstime.com$cover",
+                  "cover": "https://thumbs.dreamstime.comz/mixed-breed-cat-pug-red-bow-tie-sitting-maltese-dog-fro-front-white-background-129940127.jpg",
                   "level": "初階課程",
                   "time": 177234,
                   "total": 67,
@@ -73,14 +81,14 @@ class GoldFlowController {
                   "isFree": false
                 },
                 {
-                  "_id": "646b8121b65fd84dc4ab0b17",
-                  "title": "貓咪行為訓練指南",
-                  "cover": "https://thumbs.dreamstime.com$cover",
-                  "level": "中階課程",
-                  "time": 373782,
-                  "total": 11,
-                  "instructorName": "test",
-                  "price": 2868,
+                  "_id": "646b8121b65fd84dc4ab0b5b",
+                  "title": "兔兔的健康與飼養",
+                  "cover": "https://thumbs.dreamstime.comz/dog-cat-11133177.jpg",
+                  "level": "初階課程",
+                  "time": 340664,
+                  "total": 23,
+                  "instructorName": "zihyin",
+                  "price": 7805,
                   "discountPrice": null,
                   "isFree": false
                 }
@@ -110,7 +118,7 @@ class GoldFlowController {
       const currentDate = new Date();
       const coverURL = process.env.COVER_URL;
 
-      const courseHierarchys = await CourseHierarchy.aggregate([
+      const [courseHierarchy] = await CourseHierarchy.aggregate([
         {
           $match: {
             $and: [
@@ -156,7 +164,7 @@ class GoldFlowController {
               $push: {
                 _id: '$_id',
                 title: '$title',
-                cover: coverURL + '$cover',
+                cover: { $concat: [coverURL, '$cover'] },
                 level: {
                   $switch: {
                     branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -219,7 +227,7 @@ class GoldFlowController {
           $project: {
             _id: '$_id',
             title: '$title',
-            cover: coverURL + '$cover',
+            cover: { $concat: [coverURL, '$cover'] },
             level: {
               $switch: {
                 branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -250,12 +258,12 @@ class GoldFlowController {
         },
       ]);
 
-      if (!courseHierarchys)
+      if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.NotFound);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
-        myCard: courseHierarchys,
-        youMightLike: youMightLike,
+        ...courseHierarchy,
+        youMightLike,
       });
     } catch (err) {
       next(err);
