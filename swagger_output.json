@@ -737,7 +737,7 @@
         "tags": [
           "GoldFlow - 金流 API"
         ],
-        "description": "產生假資料至課程彙總資料",
+        "description": "讀取購物車資料",
         "parameters": [
           {
             "name": "body",
@@ -750,9 +750,13 @@
                 "coursesIds": {
                   "type": "array",
                   "example": [
-                    "646b2513c4b5bbda59089273",
-                    "646b2513c4b5bbda59089274",
-                    "646b2513c4b5bbda59089275"
+                    "646b8121b65fd84dc4ab0af5",
+                    "646b8121b65fd84dc4ab0af6",
+                    "646b8121b65fd84dc4ab0af7",
+                    "646b8121b65fd84dc4ab0b06",
+                    "646b8121b65fd84dc4ab0afd",
+                    "646b8121b65fd84dc4ab0b09",
+                    "646b8121b65fd84dc4ab0b0c"
                   ],
                   "items": {
                     "type": "string"
@@ -781,12 +785,110 @@
                   "example": "Success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [
-                    "6462f6e51d25094b3e5b94ca"
-                  ],
-                  "items": {
-                    "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "myCard": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "totalPrice": {
+                            "type": "number",
+                            "example": 28226
+                          },
+                          "shoppingCart": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "646b8121b65fd84dc4ab0af5"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "狗狗訓練入門課程"
+                                },
+                                "cover": {
+                                  "type": "string",
+                                  "example": "https://thumbs.dreamstime.com$cover"
+                                },
+                                "level": {
+                                  "type": "string",
+                                  "example": "中階課程"
+                                },
+                                "time": {
+                                  "type": "number",
+                                  "example": 341312
+                                },
+                                "total": {
+                                  "type": "number",
+                                  "example": 93
+                                },
+                                "instructorName": {
+                                  "type": "string",
+                                  "example": "ffffff"
+                                },
+                                "price": {
+                                  "type": "number",
+                                  "example": 7251
+                                },
+                                "discountPrice": {},
+                                "isFree": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "youMightLike": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646b8121b65fd84dc4ab0b17"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "貓咪行為訓練指南"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com$cover"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "中階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 373782
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 11
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "test"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 2868
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               },
