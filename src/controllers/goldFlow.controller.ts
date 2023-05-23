@@ -45,7 +45,7 @@ class GoldFlowController {
                 {
                   "_id": "646b8121b65fd84dc4ab0af5",
                   "title": "狗狗訓練入門課程",
-                  "cover": "https://thumbs.dreamstime.comz/cute-funny-dog-stucks-her-tongue-26778597.jpg",
+                  "cover": "https://thumbs.dreamstime.com/z/cute-funny-dog-stucks-her-tongue-26778597.jpg",
                   "level": "中階課程",
                   "time": 341312,
                   "total": 93,
@@ -57,7 +57,7 @@ class GoldFlowController {
                 {
                   "_id": "646b8121b65fd84dc4ab0af6",
                   "title": "高效狗狗訓練方法",
-                  "cover": "https://thumbs.dreamstime.comz/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
                   "time": 496794,
                   "total": 48,
@@ -71,7 +71,7 @@ class GoldFlowController {
                 {
                   "_id": "646b8121b65fd84dc4ab0b45",
                   "title": "高效寵物旅宿訓練指南",
-                  "cover": "https://thumbs.dreamstime.comz/mixed-breed-cat-pug-red-bow-tie-sitting-maltese-dog-fro-front-white-background-129940127.jpg",
+                  "cover": "https://thumbs.dreamstime.com/z/mixed-breed-cat-pug-red-bow-tie-sitting-maltese-dog-fro-front-white-background-129940127.jpg",
                   "level": "初階課程",
                   "time": 177234,
                   "total": 67,
@@ -83,7 +83,7 @@ class GoldFlowController {
                 {
                   "_id": "646b8121b65fd84dc4ab0b5b",
                   "title": "兔兔的健康與飼養",
-                  "cover": "https://thumbs.dreamstime.comz/dog-cat-11133177.jpg",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-cat-11133177.jpg",
                   "level": "初階課程",
                   "time": 340664,
                   "total": 23,
