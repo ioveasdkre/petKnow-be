@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
-import { apiRouter, itemsRouter, authRouter } from './router/index';
+import { apiRouter, itemsRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
 import {
   handle404Error,
@@ -30,7 +30,6 @@ app.use(express.json());
 app.use(apiRouter);
 app.use('/items', itemsRouter);
 // app.use('/api', itemsRouter);
-app.use('/v1', authRouter);
 
 app.get('/', function (_req, res) {
   res.json('PetKnow');

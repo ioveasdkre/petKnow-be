@@ -8530,7 +8530,7 @@ const dogHealthCheckTips: courseHierarchyType[] = [
 /** 寵物老化護理 */
 const petAgingCare: courseHierarchyType[] = [
   {
-    tag: ['Pet Aging Care'],
+    tag: ['寵物老化護理'],
     title: 'Pet Aging Care Guide',
     chapters: [
       {

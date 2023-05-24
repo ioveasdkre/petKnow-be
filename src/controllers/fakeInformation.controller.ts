@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseHierarchy } from '../connections/mongoDB';
-import { User } from '../connections/mongoDB';
+import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { FakeInformationService } from '../services/fakeInformation.service';
@@ -12,7 +11,7 @@ class FakeInformationController {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["FakeInformation - 假資料 API"]
-     * #swagger.description = "產生假資料至課程彙總資料"
+     * #swagger.description = "取得全部使用者的 _id 資料"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -24,7 +23,15 @@ class FakeInformationController {
             ]
           }
         }
-        * #swagger.responses[500] = {
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
           description: "伺服器發生錯誤",
           schema:{
             "statusCode": 500,
@@ -37,7 +44,8 @@ class FakeInformationController {
     try {
       const Users = await User.distinct('_id');
 
-      if (Users.length === 0) return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
+      if (Users.length === 0)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, Users);
     } catch (err) {
@@ -143,7 +151,15 @@ class FakeInformationController {
             ]
           }
         }
-        * #swagger.responses[500] = {
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
           description: "伺服器發生錯誤",
           schema:{
             "statusCode": 500,
@@ -157,7 +173,7 @@ class FakeInformationController {
       const courseHierarchys = await CourseHierarchy.find();
 
       if (courseHierarchys.length === 0)
-        return handleResponse(res, HttpStatusCode.OK, HttpMessage.NotFound);
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, courseHierarchys);
     } catch (err) {
@@ -166,8 +182,85 @@ class FakeInformationController {
   }
   //#endregion getAllCourseHierarchys [ 取得全部課程彙總資料 ]
 
+  //#region getAllCoupons [ 取得全部標籤資料 ]
+  /** 取得全部標籤資料 */
+  static async getAllCoupons(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
+     * #swagger.description = "取得全部標籤資料"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success",
+            "data": [
+              {
+                "_id": "646d8478f3bdeca0cd4c4557",
+                "tagNames": [
+                  "寵物溝通與信任建立",
+                  "寵物溝通"
+                ],
+                "couponCode": "EYg0XZk7",
+                "discountPrice": 894,
+                "isEnabled": true,
+                "startDate": "2023-03-27T12:47:24.679Z",
+                "endDate": "2023-05-03T07:42:44.990Z",
+                "createdAt": "2022-09-20T04:33:11.913Z",
+                "updatedAt": "2023-02-02T18:02:08.482Z"
+              },
+              {
+                "_id": "646d8478f3bdeca0cd4c4558",
+                "tagNames": [
+                  "貓咪食譜",
+                  "寵物健康照護",
+                  "貓咪的解悶遊戲"
+                ],
+                "couponCode": "jPO0UZ8A",
+                "discountPrice": 665,
+                "isEnabled": true,
+                "startDate": "2023-03-16T06:16:34.664Z",
+                "endDate": "2023-06-30T15:19:27.333Z",
+                "createdAt": "2022-07-15T02:54:35.417Z",
+                "updatedAt": "2022-12-21T15:00:47.966Z"
+              }
+            ]
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const platformCoupons = await PlatformCoupons.find();
+
+      if (platformCoupons.length === 0)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, platformCoupons);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion getAllCoupons [ 取得全部標籤資料 ]
+
   //#region createCourseHierarchys [ 新增一筆課程彙總資料 ]
-  /** 取得全部課程彙總資料 */
+  /** 新增一筆課程彙總資料 */
   static async createCourseHierarchys(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
@@ -271,7 +364,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 400,
             "isSuccess": false,
-            "message": "Bad Request"
+            "message": "Failure"
           }
         }
       * #swagger.responses[500] = {
@@ -288,7 +381,7 @@ class FakeInformationController {
       const data = req.body;
 
       if (!data.user) {
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
       }
 
       await CourseHierarchy.create(data);
@@ -300,9 +393,9 @@ class FakeInformationController {
   }
   //#endregion createCourseHierarchys [ 新增一筆課程彙總資料 ]
 
-  //#region generateData [ 產生假資料至課程彙總資料 ]
+  //#region generateCourseHierarchysData [ 產生假資料至課程彙總資料 ]
   /** 取得全部課程彙總資料 */
-  static async generateData(_req: Request, res: Response, next: NextFunction) {
+  static async generateCourseHierarchysData(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["FakeInformation - 假資料 API"]
@@ -315,7 +408,15 @@ class FakeInformationController {
             "message": "Success"
           }
         }
-        * #swagger.responses[500] = {
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
           description: "伺服器發生錯誤",
           schema:{
             "statusCode": 500,
@@ -329,14 +430,60 @@ class FakeInformationController {
       const service = new FakeInformationService();
       const state = await service.GenerateManyData();
 
-      if (!state) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Failure);
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion generateData [ 產生假資料至課程彙總資料 ]
+  //#endregion generateCourseHierarchysData [ 產生假資料至課程彙總資料 ]
+
+  //#region generateCouponsData [ 產生假資料至平台標籤資料表 ]
+  /** 產生假資料至平台標籤資料表 */
+  static async generateCouponsData(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
+     * #swagger.description = "產生假資料至平台標籤資料表"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success"
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const service = new FakeInformationService();
+      const state = await service.CouponManyData(10);
+
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion generateCouponsData [ 產生假資料至平台標籤資料表 ]
 }
 
 export { FakeInformationController };

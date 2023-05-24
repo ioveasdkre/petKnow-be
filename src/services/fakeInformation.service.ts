@@ -1,8 +1,9 @@
 import { Types } from 'mongoose';
-import { CourseHierarchy } from '../connections/mongoDB';
-import { User } from '../connections/mongoDB';
-import { ISubchapter, IChapter, ICourse } from '../models/mongoDB/courseHierarchy.model';
 import { courseHierarchys, courseHierarchyType } from '../../__tests__/courseHierarchyData.test';
+import { a_z, lables } from '../../__tests__/customData.test';
+import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
+import { ISubchapter, IChapter, ICourse } from '../models/mongoDB/courseHierarchy.model';
+import { IPlatformCoupons } from '../models/mongoDB/platformCoupons.model';
 
 class FakeInformationService {
   private generateRandomInt(max: number) {
@@ -23,7 +24,7 @@ class FakeInformationService {
     return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 30 * 86400000];
   }
 
-  private GenerateRandomData(
+  private generateRandomCourseHierarchy(
     users: string[],
     data: courseHierarchyType[][],
     covers: string[],
@@ -33,34 +34,6 @@ class FakeInformationService {
     const coversLength = covers.length;
     const usersLength = users.length;
     const fileNameLength = fileNames.length;
-    const a_z = [
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J',
-      'K',
-      'L',
-      'M',
-      'N',
-      'O',
-      'P',
-      'Q',
-      'R',
-      'S',
-      'T',
-      'U',
-      'V',
-      'W',
-      'X',
-      'Y',
-      'Z',
-    ];
     const newData: ICourse[] = [];
 
     for (let i = 0; i < data.length; i++) {
@@ -92,8 +65,8 @@ class FakeInformationService {
         const isPopular = 0 === this.generateRandomInt(10);
         const isPublished = this.generateRandomInt(10) > 0 ? true : false;
         const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
-        const shelfDate = this.getRandomDate(createdAt, '2023/05/31');
-        const updatedAt = this.getRandomDate(createdAt, '2023/05/31');
+        const shelfDate = this.getRandomDate(createdAt, '2023/06/31');
+        const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
         const chapterArr: IChapter[] = [];
 
         const isDiscount = this.generateRandomInt(10) < 3 ? true : false;
@@ -175,7 +148,19 @@ class FakeInformationService {
     return newData;
   }
 
-  public async GenerateManyData() {
+  private generateCouponCode(length: number) {
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var couponCode = '';
+
+    for (var i = 0; i < length; i++) {
+      var randomIndex = Math.floor(Math.random() * characters.length);
+      couponCode += characters.charAt(randomIndex);
+    }
+
+    return couponCode;
+  }
+
+  async GenerateManyData() {
     const { dogCovers, catCovers, petCovers, fileNames, dagData, catData, petData } =
       courseHierarchys;
     const newData: ICourse[] = [];
@@ -186,13 +171,60 @@ class FakeInformationService {
 
     if (!deleteCourseHierarchy.acknowledged) return false;
 
-    newData.push(...this.GenerateRandomData(users, dagData, dogCovers, fileNames, 0));
-    newData.push(...this.GenerateRandomData(users, catData, catCovers, fileNames, 1));
-    newData.push(...this.GenerateRandomData(users, petData, petCovers, fileNames, 2));
+    newData.push(...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, 0));
+    newData.push(...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, 1));
+    newData.push(...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, 2));
 
     const result = await CourseHierarchy.insertMany(newData);
 
-    if (!(result.length > 0)) return false;
+    if (result.length === 0) return false;
+
+    return true;
+  }
+
+  async CouponManyData(quantity: number) {
+    const newData: IPlatformCoupons[] = [];
+
+    const deleteplatformCoupons = await PlatformCoupons.deleteMany();
+
+    if (!deleteplatformCoupons.acknowledged) return false;
+
+    // 產生 quantity組優惠碼
+    for (let i = 0; i < quantity; i++) {
+      const tagNames: string[] = [];
+      const newLables = [...lables];
+
+      const couponCode = this.generateCouponCode(8);
+      const discountPrice = this.generateRandomInt(1000) + 1;
+      const isEnabled = this.generateRandomInt(10) !== 0 ? true : false;
+      const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
+      const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
+      const startDate = this.getRandomDate(createdAt, '2023/06/31');
+      const endDate = this.getRandomDate(createdAt, '2023/06/31');
+
+      const labelQuantity = this.generateRandomInt(3);
+
+      for (let j = 0; j <= labelQuantity; j++) {
+        const lableIndex = this.generateRandomInt(30 - j);
+        tagNames.push(newLables[lableIndex]);
+        newLables.splice(lableIndex, 1); // 移除已加入的標籤，避免重複加入
+      }
+
+      newData.push({
+        tagNames,
+        couponCode,
+        discountPrice,
+        isEnabled,
+        startDate,
+        endDate,
+        createdAt,
+        updatedAt,
+      });
+    }
+
+    const result = await PlatformCoupons.insertMany(newData);
+
+    if (result.length === 0) return false;
 
     return true;
   }

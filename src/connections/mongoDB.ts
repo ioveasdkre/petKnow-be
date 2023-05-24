@@ -1,5 +1,6 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { courseSchema } from '../models/mongoDB/courseHierarchy.model';
+import { courseSchema, ICourse } from '../models/mongoDB/courseHierarchy.model';
+import { platformCouponsSchema, IPlatformCoupons } from '../models/mongoDB/platformCoupons.model';
 import { UserSchema } from '../models/mongoDB/user.model';
 
 if (!process.env.MONGODB_URI) {
@@ -21,7 +22,8 @@ MongoDB.on('error', err => {
   console.error('MongoDB connection error:', err);
 });
 
-const CourseHierarchy = MongoDB.model('CourseHierarchy', courseSchema);
+const CourseHierarchy = MongoDB.model<ICourse>('CourseHierarchy', courseSchema);
+const PlatformCoupons = MongoDB.model<IPlatformCoupons>('PlatformCoupons', platformCouponsSchema);
 const User = MongoDB.model('User', UserSchema);
 
-export { User, CourseHierarchy };
+export { CourseHierarchy, PlatformCoupons, User };
