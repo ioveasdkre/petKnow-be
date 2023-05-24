@@ -8942,4 +8942,5 @@ const courseHierarchys = {
   ],
 };
 
+
 export { courseHierarchys, courseHierarchyType };

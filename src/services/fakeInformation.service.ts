@@ -35,6 +35,8 @@ class FakeInformationService {
     const usersLength = users.length;
     const fileNameLength = fileNames.length;
     const newData: ICourse[] = [];
+    const tagNameArr: string[] = [];
+
 
     for (let i = 0; i < data.length; i++) {
       const dataIndex = data[i];
@@ -47,6 +49,8 @@ class FakeInformationService {
 
         const userIndex = this.generateRandomInt(usersLength);
         const coverIndex = this.generateRandomInt(coversLength);
+
+        tagNameArr.push(...courseHierarchy.tag);
 
         const user = new Types.ObjectId(users[userIndex]);
         const tagNames = courseHierarchy.tag;
@@ -145,6 +149,10 @@ class FakeInformationService {
       }
     }
 
+    const test = tagNameArr.filter((item, index) => tagNameArr.indexOf(item) === index);
+
+    console.log(test);
+
     return newData;
   }
 
@@ -213,7 +221,7 @@ class FakeInformationService {
       newData.push({
         tagNames,
         couponCode,
-        discountPrice,
+        price: discountPrice,
         isEnabled,
         startDate,
         endDate,

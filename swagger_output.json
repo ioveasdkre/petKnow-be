@@ -1217,13 +1217,14 @@
                 "coursesIds": {
                   "type": "array",
                   "example": [
-                    "646b8121b65fd84dc4ab0af5",
-                    "646b8121b65fd84dc4ab0af6",
-                    "646b8121b65fd84dc4ab0af7",
-                    "646b8121b65fd84dc4ab0b06",
-                    "646b8121b65fd84dc4ab0afd",
-                    "646b8121b65fd84dc4ab0b09",
-                    "646b8121b65fd84dc4ab0b0c"
+                    "646e0e6ffa0eac0933c5a776",
+                    "646e0e6ffa0eac0933c5a778",
+                    "646e0e6ffa0eac0933c5a77e",
+                    "646e0e6ffa0eac0933c5a78c",
+                    "646e0e6ffa0eac0933c5a79b",
+                    "646e0e6ffa0eac0933c5a79c",
+                    "646e0e6ffa0eac0933c5a7ad",
+                    "646e0e6ffa0eac0933c5a7ae"
                   ],
                   "items": {
                     "type": "string"
@@ -1349,6 +1350,127 @@
                       }
                     }
                   }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/goldFlow/QueryCoupon": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "查詢單筆優惠卷",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "coursesIds": {
+                  "type": "array",
+                  "example": [
+                    "646e0e6ffa0eac0933c5a776",
+                    "646e0e6ffa0eac0933c5a778",
+                    "646e0e6ffa0eac0933c5a77e",
+                    "646e0e6ffa0eac0933c5a78c",
+                    "646e0e6ffa0eac0933c5a79b",
+                    "646e0e6ffa0eac0933c5a79c",
+                    "646e0e6ffa0eac0933c5a7ad",
+                    "646e0e6ffa0eac0933c5a7ae"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "ycks7e6q"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "number",
+                      "example": 688
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
                 }
               },
               "xml": {

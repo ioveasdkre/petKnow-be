@@ -3,7 +3,7 @@ import { Schema } from 'mongoose';
 interface IPlatformCoupons {
   tagNames: string[];
   couponCode: string;
-  discountPrice: number;
+  price: number;
   isEnabled: boolean;
   startDate?: Date;
   endDate?: Date;
@@ -23,7 +23,7 @@ const platformCouponsSchema = new Schema<IPlatformCoupons>(
       unique: true,
       required: [true, '優惠代碼未填寫'],
     },
-    discountPrice: {
+    price: {
       type: Number,
       required: [true, '優惠價格未填寫'],
     },
