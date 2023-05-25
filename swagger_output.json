@@ -20,24 +20,32 @@
     }
   },
   "paths": {
-    "/register": {
+    "/v1/register": {
       "post": {
-        "description": "",
+        "tags": [
+          "登入系統 API"
+        ],
+        "description": "註冊帳號",
         "parameters": [
           {
             "name": "body",
+            "description": "資料格式",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "password": {
-                  "example": "any"
-                },
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Benson"
                 },
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Abc123#@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Abc123#@gmail.com"
                 }
               }
             }
@@ -45,26 +53,99 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Benson"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "testfge2@gmail.com"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "success": false,
+            "statusCode": 400,
+            "message": "Failure",
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
-    "/login": {
+    "/v1/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "登入系統 API"
+        ],
+        "description": "註冊帳號",
         "parameters": [
           {
             "name": "body",
+            "description": "資料格式",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Abc123#@gmail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Abc123#@gmail.com"
                 }
               }
             }
@@ -72,18 +153,111 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Benson"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "Abc123#@gmail.com"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid credentials"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "Abc123#@gmail.com"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
-    "/user/show": {
+    "/v1/user/show": {
       "get": {
         "description": "",
         "parameters": [],
@@ -97,7 +271,7 @@
         }
       }
     },
-    "/user/update": {
+    "/v1/user/update": {
       "put": {
         "description": "",
         "parameters": [
@@ -127,7 +301,7 @@
         }
       }
     },
-    "/logout": {
+    "/v1/logout": {
       "post": {
         "description": "",
         "parameters": [],
@@ -138,33 +312,135 @@
         }
       }
     },
-    "/": {
+    "/v1/": {
       "get": {
         "description": "",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
       "post": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
           },
-          "500": {
-            "description": "Internal Server Error"
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     },
-    "/v1/fakeInformation/all": {
+    "/v1/fakeInformation/getAllUserId": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "取得全部使用者的 _id 資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [
+                    "6462f6e51d25094b3e5b94ca"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/getAllCourseHierarchys": {
       "get": {
         "tags": [
           "FakeInformation - 假資料 API"
@@ -349,14 +625,14 @@
               }
             }
           },
-          "500": {
-            "description": "伺服器發生錯誤",
+          "400": {
+            "description": "錯誤的請求",
             "schema": {
               "type": "object",
               "properties": {
                 "statusCode": {
                   "type": "number",
-                  "example": 500
+                  "example": 400
                 },
                 "isSuccess": {
                   "type": "boolean",
@@ -364,41 +640,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "System error, please contact the system administrator"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/fakeInformation/generateData": {
-      "get": {
-        "tags": [
-          "FakeInformation - 假資料 API"
-        ],
-        "description": "產生假資料至課程彙總資料",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "成功",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "statusCode": {
-                  "type": "number",
-                  "example": 200
-                },
-                "isSuccess": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Success"
+                  "example": "Failure"
                 }
               },
               "xml": {
@@ -432,7 +674,298 @@
         }
       }
     },
-    "/v1/fakeInformation/add": {
+    "/v1/fakeInformation/getAllCoupons": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "取得全部標籤資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "646d8478f3bdeca0cd4c4558"
+                      },
+                      "tagNames": {
+                        "type": "array",
+                        "example": [
+                          "貓咪食譜",
+                          "寵物健康照護",
+                          "貓咪的解悶遊戲"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "couponCode": {
+                        "type": "string",
+                        "example": "jPO0UZ8A"
+                      },
+                      "discountPrice": {
+                        "type": "number",
+                        "example": 665
+                      },
+                      "isEnabled": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "startDate": {
+                        "type": "string",
+                        "example": "2023-03-16T06:16:34.664Z"
+                      },
+                      "endDate": {
+                        "type": "string",
+                        "example": "2023-06-30T15:19:27.333Z"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2022-07-15T02:54:35.417Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2022-12-21T15:00:47.966Z"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/generateCourseHierarchysData": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "產生假資料至課程彙總資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/generateCouponsData": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "產生假資料至平台標籤資料表",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/createCourseHierarchys": {
       "post": {
         "tags": [
           "FakeInformation - 假資料 API"
@@ -632,73 +1165,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Bad Request"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "伺服器發生錯誤",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "statusCode": {
-                  "type": "number",
-                  "example": 500
-                },
-                "isSuccess": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "System error, please contact the system administrator"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/fakeInformation/getAllUserId": {
-      "get": {
-        "tags": [
-          "FakeInformation - 假資料 API"
-        ],
-        "description": "產生假資料至課程彙總資料",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "成功",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "statusCode": {
-                  "type": "number",
-                  "example": 200
-                },
-                "isSuccess": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Success"
-                },
-                "data": {
-                  "type": "array",
-                  "example": [
-                    "6462f6e51d25094b3e5b94ca"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
+                  "example": "Failure"
                 }
               },
               "xml": {
@@ -750,13 +1217,14 @@
                 "coursesIds": {
                   "type": "array",
                   "example": [
-                    "646b8121b65fd84dc4ab0af5",
-                    "646b8121b65fd84dc4ab0af6",
-                    "646b8121b65fd84dc4ab0af7",
-                    "646b8121b65fd84dc4ab0b06",
-                    "646b8121b65fd84dc4ab0afd",
-                    "646b8121b65fd84dc4ab0b09",
-                    "646b8121b65fd84dc4ab0b0c"
+                    "646e0e6ffa0eac0933c5a776",
+                    "646e0e6ffa0eac0933c5a778",
+                    "646e0e6ffa0eac0933c5a77e",
+                    "646e0e6ffa0eac0933c5a78c",
+                    "646e0e6ffa0eac0933c5a79b",
+                    "646e0e6ffa0eac0933c5a79c",
+                    "646e0e6ffa0eac0933c5a7ad",
+                    "646e0e6ffa0eac0933c5a7ae"
                   ],
                   "items": {
                     "type": "string"
@@ -911,6 +1379,153 @@
                 "name": "main"
               }
             }
+          }
+        }
+      }
+    },
+    "/v1/goldFlow/QueryCoupon": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "查詢單筆優惠卷",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "coursesIds": {
+                  "type": "array",
+                  "example": [
+                    "646e0e6ffa0eac0933c5a776",
+                    "646e0e6ffa0eac0933c5a778",
+                    "646e0e6ffa0eac0933c5a77e",
+                    "646e0e6ffa0eac0933c5a78c",
+                    "646e0e6ffa0eac0933c5a79b",
+                    "646e0e6ffa0eac0933c5a79c",
+                    "646e0e6ffa0eac0933c5a7ad",
+                    "646e0e6ffa0eac0933c5a7ae"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "ycks7e6q"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "number",
+                      "example": 688
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Failure"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

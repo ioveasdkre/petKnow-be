@@ -1,5 +1,10 @@
-type IReqCoursesIds = {
+type IPostCardRequest = {
   coursesIds: string[];
 }
 
-export { IReqCoursesIds };
+type IPostCouponRequest = {
+  coursesIds: string[];
+  couponCode: string;
+}
+
+export { IPostCardRequest, IPostCouponRequest };

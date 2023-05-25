@@ -8,5 +8,6 @@ const apiRouter = Router();
 
 apiRouter.use(fakeInformationRouter);
 apiRouter.use(goldFlowRouter);
+apiRouter.use(authRouter);
 
 export { apiRouter, itemsRouter, authRouter };

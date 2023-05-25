@@ -6,7 +6,50 @@ import jwt from 'jsonwebtoken';
 export const authRouter = express.Router();
 const secret = 'secret'
 
-authRouter.post('/register', async (req, res) => {
+authRouter.post('/v1/register', async (req, res) => {
+  //#region [ swagger說明文件 ]
+  /**
+   * #swagger.tags = ["登入系統 API"]
+   * #swagger.description = "註冊帳號"
+   * #swagger.parameters["body"] = {
+        description: "資料格式",
+        in: "body",
+        type: "object",
+        required: true,
+        schema: {
+          "name": "Benson",
+          "email": "Abc123#@gmail.com",
+          "password": "Abc123#@gmail.com",
+        }
+      }
+    * #swagger.responses[200] = {
+        description: "成功",
+        schema: {
+          "success": true,
+          "statusCode": 200,
+          "message": "Success",
+          "data": {
+            "name": "Benson",
+            "email": "testfge2@gmail.com",
+            "__v": 0
+          }
+        }
+      }
+    * #swagger.responses[400] = {
+        "success": false,
+        "statusCode": 400,
+        "message": "Failure"
+      }
+    * #swagger.responses[500] = {
+        description: "伺服器發生錯誤",
+        schema:{
+          "statusCode": 500,
+          "isSuccess": false,
+          "message": "System error, please contact the system administrator"
+        }
+      }
+    */
+  //#endregion [ swagger說明文件 ]
   try {
     const salt = await bcrypt.genSalt(10);
     console.log('req.body: ', req.body);
@@ -22,53 +65,102 @@ authRouter.post('/register', async (req, res) => {
 
     const result = await user.save();
     const { _id, password, ...data } = result.toJSON();
-    
-    const ret = { 
-      "success": true,
-      "statusCode": 200,
-      "message": "Success",
-      "data" : {
+
+    const ret = {
+      success: true,
+      statusCode: 200,
+      message: 'Success',
+      data: {
         ...data,
-      }
-    }
+      },
+    };
     res.send(ret);
   } catch (error) {
-    console.log('Register Error:', error );
-    const ret = { 
-      "success": false,
-      "statusCode": 400, 
-      "message": "Failure",
-    }
+    console.log('Register Error:', error);
+    const ret = {
+      success: false,
+      statusCode: 400,
+      message: 'Failure',
+    };
     res.send(ret);
   }
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/v1/login', async (req, res) => {
+  //#region [ swagger說明文件 ]
+  /**
+   * #swagger.tags = ["登入系統 API"]
+   * #swagger.description = "註冊帳號"
+   * #swagger.parameters["body"] = {
+        description: "資料格式",
+        in: "body",
+        type: "object",
+        required: true,
+        schema: {
+          "email": "Abc123#@gmail.com",
+          "password": "Abc123#@gmail.com"
+        }
+      }
+    * #swagger.responses[200] = {
+        description: "成功",
+        schema: {
+          "success": true,
+          "statusCode": 200,
+          "message": "Success",
+          "data": {
+            "name": "Benson",
+            "email": "Abc123#@gmail.com",
+            "__v": 0,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
+          }
+        }
+      }
+    * #swagger.responses[400] = {
+        description: "錯誤的請求",
+        schema:{
+          "success": false,
+          "statusCode": 400,
+          "message": "Invalid credentials",
+          "data": {
+            "email": "Abc123#@gmail.com"
+          }
+        }
+      }
+    * #swagger.responses[500] = {
+        description: "伺服器發生錯誤",
+        schema:{
+          "statusCode": 500,
+          "isSuccess": false,
+          "message": "System error, please contact the system administrator"
+        }
+      }
+    */
+  //#endregion [ swagger說明文件 ]
   console.log('req.body: ', req.body);
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
     const msg = {
-      "success": false,
-      "statusCode": 404,
-      "message": "User not found",
-      "data": {
-        "email": req.body.email
-      }
-    }
+      success: false,
+      statusCode: 404,
+      message: 'User not found',
+      data: {
+        email: req.body.email,
+      },
+    };
     console.log(msg);
     return res.status(404).send(msg);
   }
 
   if (!(await bcrypt.compare(req.body.password, user.password))) {
     const msg = {
-      "success": false,
-      "statusCode": 400,
-      "message": "Invalid credentials",
-      "data": {
-        "email": req.body.email
-      }
-    }
+      success: false,
+      statusCode: 400,
+      message: 'Invalid credentials',
+      data: {
+        email: req.body.email,
+      },
+    };
     console.log(msg);
     return res.status(400).send(msg);
   }
@@ -82,13 +174,13 @@ authRouter.post('/login', async (req, res) => {
   const { _id, password, ...data } = user.toJSON();
 
   res.send({
-    "success": true,
-    "statusCode": 200,
-    "message": "Success",
-    "data" : {
+    success: true,
+    statusCode: 200,
+    message: 'Success',
+    data: {
       ...data,
-      token
-    }
+      token,
+    },
   });
   // res.send(token);
   //  res.send(user);
@@ -98,7 +190,7 @@ interface JwtPayload {
   _id: string;
 }
 
-authRouter.get('/user/show', async (req, res) => {
+authRouter.get('/v1/user/show', async (req, res) => {
   try {
     // const cookie = req.cookies['jwt'];
     // console.log('cookie: ', cookie);
@@ -140,7 +232,7 @@ authRouter.get('/user/show', async (req, res) => {
   // res.send(user)
 });
 
-authRouter.put('/user/update', async (req, res) => {
+authRouter.put('/v1/user/update', async (req, res) => {
   try {
     console.log('body: ', req.body)
     let auth = req.get('authorization') || " " as string
@@ -182,7 +274,7 @@ authRouter.put('/user/update', async (req, res) => {
   }
 });
 
-authRouter.post('/logout', (_req, res) => {
+authRouter.post('/v1/logout', (_req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });
   res.send({
     message: 'success',
@@ -200,11 +292,11 @@ const mockUser = [
   },
 ];
 
-authRouter.get('/', (_req, res) => {
+authRouter.get('/v1/', (_req, res) => {
   return res.status(200).send(`login`);
 });
 
-authRouter.post('/', (req, res) => {
+authRouter.post('/v1/', (req, res) => {
   const { username, password } = req.body;
 
   const user = mockUser.find(users => {

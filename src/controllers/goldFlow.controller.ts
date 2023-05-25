@@ -1,17 +1,17 @@
 import { Response, NextFunction } from 'express';
 import { Types } from 'mongoose';
-import { CourseHierarchy } from '../connections/mongoDB';
+import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { IReqBody } from '../types/handle.type';
 import { isValidObjectId } from '../utils/mongoose.util';
-import { IReqCoursesIds } from '../vmodels/goldFlow.model';
+import { IPostCardRequest, IPostCouponRequest } from '../vmodels/goldFlow.model';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
   /** 讀取購物車資料 */
-  static async postCard(req: IReqBody<IReqCoursesIds>, res: Response, next: NextFunction) {
+  static async postCard(req: IReqBody<IPostCardRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -23,13 +23,14 @@ class GoldFlowController {
           required: true,
           schema: {
             "coursesIds": [
-              "646b8121b65fd84dc4ab0af5",
-              "646b8121b65fd84dc4ab0af6",
-              "646b8121b65fd84dc4ab0af7",
-              "646b8121b65fd84dc4ab0b06",
-              "646b8121b65fd84dc4ab0afd",
-              "646b8121b65fd84dc4ab0b09",
-              "646b8121b65fd84dc4ab0b0c"
+              "646e0e6ffa0eac0933c5a776",
+              "646e0e6ffa0eac0933c5a778",
+              "646e0e6ffa0eac0933c5a77e",
+              "646e0e6ffa0eac0933c5a78c",
+              "646e0e6ffa0eac0933c5a79b",
+              "646e0e6ffa0eac0933c5a79c",
+              "646e0e6ffa0eac0933c5a7ad",
+              "646e0e6ffa0eac0933c5a7ae"
             ]
           }
         }
@@ -174,7 +175,7 @@ class GoldFlowController {
                     default: null,
                   },
                 },
-                time: '$totalTime',
+                time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
                 total: '$totalNumber',
                 instructorName: { $arrayElemAt: ['$user.name', 0] },
                 price: '$price',
@@ -237,7 +238,7 @@ class GoldFlowController {
                 default: null,
               },
             },
-            time: '$totalTime',
+            time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
             total: '$totalNumber',
             instructorName: { $arrayElemAt: ['$user.name', 0] },
             price: '$price',
@@ -265,6 +266,129 @@ class GoldFlowController {
         ...courseHierarchy,
         youMightLike,
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion postCard [ 讀取購物車資料 ]
+
+  //#region postCard [ 查詢單筆優惠卷 ]
+  /** 查詢單筆優惠卷 */
+  static async postCoupon(req: IReqBody<IPostCouponRequest>, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "查詢單筆優惠卷"
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "coursesIds": [
+              "646e0e6ffa0eac0933c5a776",
+              "646e0e6ffa0eac0933c5a778",
+              "646e0e6ffa0eac0933c5a77e",
+              "646e0e6ffa0eac0933c5a78c",
+              "646e0e6ffa0eac0933c5a79b",
+              "646e0e6ffa0eac0933c5a79c",
+              "646e0e6ffa0eac0933c5a7ad",
+              "646e0e6ffa0eac0933c5a7ae"
+            ],
+            "couponCode": "ycks7e6q"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success",
+            "data": {
+              "price": 688
+            }
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "success": false,
+            "statusCode": 400,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const { coursesIds, couponCode } = req.body;
+
+      const isValid = coursesIds.every(isValidObjectId);
+
+      if (!isValid) {
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+      }
+
+      const [courseHierarchy] = await CourseHierarchy.aggregate([
+        {
+          $match: {
+            $and: [
+              { _id: { $in: coursesIds.map(id => new Types.ObjectId(id)) } },
+              { isPublished: true }, // 判斷已上架
+            ],
+          },
+        },
+        {
+          $unwind: '$tagNames', // 展开 uniqueTagNames 字段
+        },
+        {
+          $group: {
+            _id: null,
+            uniqueTagNames: { $addToSet: '$tagNames' }, // 将 tagNames 合并并去重
+          },
+        },
+
+        {
+          $project: {
+            _id: 0,
+            uniqueTagNames: 1,
+          },
+        },
+      ]);
+
+      console.log(courseHierarchy);
+      console.log(courseHierarchy.uniqueTagNames);
+
+      const [platformCoupons] = await PlatformCoupons.aggregate([
+        {
+          $match: {
+            $and: [
+              { couponCode: couponCode },
+              { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            ],
+          },
+        },
+        {
+          $project: {
+            price: 1,
+          },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
+
+      if (!platformCoupons)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, platformCoupons.price);
     } catch (err) {
       next(err);
     }
