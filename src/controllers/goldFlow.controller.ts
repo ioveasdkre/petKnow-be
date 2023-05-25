@@ -272,7 +272,7 @@ class GoldFlowController {
   }
   //#endregion postCard [ 讀取購物車資料 ]
 
-  //#region postCard [ 查詢單筆優惠卷 ]
+  //#region postCoupon [ 查詢單筆優惠卷 ]
   /** 查詢單筆優惠卷 */
   static async postCoupon(req: IReqBody<IPostCouponRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
@@ -363,9 +363,6 @@ class GoldFlowController {
         },
       ]);
 
-      console.log(courseHierarchy);
-      console.log(courseHierarchy.uniqueTagNames);
-
       const [platformCoupons] = await PlatformCoupons.aggregate([
         {
           $match: {
@@ -393,7 +390,7 @@ class GoldFlowController {
       next(err);
     }
   }
-  //#endregion postCard [ 讀取購物車資料 ]
+  //#endregion postCoupon [ 查詢單筆優惠卷 ]
 }
 
 export { GoldFlowController };

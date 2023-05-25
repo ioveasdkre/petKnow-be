@@ -1,10 +1,10 @@
 import express from 'express';
-import { User } from '../connections/mongoDB';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { User } from '../connections/mongoDB';
+import { verifyJwtToken, secret } from '../helpers/login.helper';
 
 export const authRouter = express.Router();
-const secret = 'secret'
 
 authRouter.post('/v1/register', async (req, res) => {
   //#region [ swagger說明文件 ]
@@ -191,19 +191,61 @@ interface JwtPayload {
 }
 
 authRouter.get('/v1/user/show', async (req, res) => {
+  //#region [ swagger說明文件 ]
+  /**
+   * #swagger.tags = ["登入系統 API"]
+   * #swagger.description = "註冊帳號"
+   * #swagger.security = [
+        {
+          "apiKeyAuth": []
+        }
+      ]
+    * #swagger.responses[200] = {
+        description: "成功",
+        schema: {
+          "success": true,
+          "statusCode": 200,
+          "message": "Success",
+          "data": {
+            "name": "Benson",
+            "email": "Abc123#@gmail.com",
+            "__v": 0,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
+          }
+        }
+      }
+    * #swagger.responses[400] = {
+        description: "錯誤的請求",
+        schema:{
+          "success": false,
+          "statusCode": 400,
+          "message": "Invalid credentials",
+          "data": {
+            "email": "Abc123#@gmail.com"
+          }
+        }
+      }
+    * #swagger.responses[500] = {
+        description: "伺服器發生錯誤",
+        schema:{
+          "statusCode": 500,
+          "isSuccess": false,
+          "message": "System error, please contact the system administrator"
+        }
+      }
+    */
+  //#endregion [ swagger說明文件 ]
   try {
-    // const cookie = req.cookies['jwt'];
-    // console.log('cookie: ', cookie);
-    let auth = req.get('authorization') || " " as string
-    const myArray = auth.split(" ");
-    auth = myArray[1];
-    // console.log('auth: ', auth);
+    let auth = req.get('authorization') || (' ' as string);
 
-    const claims = jwt.verify(auth, secret) as JwtPayload;
-    if (!claims) {
-      throw new Error('Unauthenticated');
+    const tokenPrefix = 'Bearer ';
+    if (auth.startsWith(tokenPrefix)) {
+      auth = auth.slice(tokenPrefix.length);
     }
-    const user = await User.findOne({ _id: claims._id });
+
+    const claims = verifyJwtToken(req, res);
+
+    const user = await User.findOne({ _id: claims?._id });
     if (null == user) {
       throw new Error('user not found');
     }
@@ -211,22 +253,22 @@ authRouter.get('/v1/user/show', async (req, res) => {
     // filter out password, don't send it.
     const { password, ...data } = user.toJSON();
     let ret = {
-      "success": true,
-      "statusCode": 200,
-      "message": "Success",
-      "data" : {
+      success: true,
+      statusCode: 200,
+      message: 'Success',
+      data: {
         data,
-      }
-    }
+      },
+    };
     res.send(ret);
   } catch (error) {
-    console.log('error msg: ', error)
+    console.log('error msg: ', error);
     let ret = {
-      "success": false,
-      "statusCode": 401,
-      "message": "Failure",
+      success: false,
+      statusCode: 401,
+      message: 'Failure',
       error,
-    }
+    };
     return res.status(401).send(ret);
   }
   // res.send(user)
@@ -234,9 +276,9 @@ authRouter.get('/v1/user/show', async (req, res) => {
 
 authRouter.put('/v1/user/update', async (req, res) => {
   try {
-    console.log('body: ', req.body)
-    let auth = req.get('authorization') || " " as string
-    const myArray = auth.split(" ");
+    console.log('body: ', req.body);
+    let auth = req.get('authorization') || (' ' as string);
+    const myArray = auth.split(' ');
     auth = myArray[1];
     // console.log('auth: ', auth);
 
@@ -251,21 +293,20 @@ authRouter.put('/v1/user/update', async (req, res) => {
     const { email, ...update } = req.body;
     // const { ...update } = req.body;
     console.log('update: ', update);
-    const user = await User.findOneAndUpdate(filter,
-      update, {returnOriginal: false} );
+    const user = await User.findOneAndUpdate(filter, update, { returnOriginal: false });
     console.log('user: ', user);
     if (null == user) {
       throw new Error('user not found');
     }
-    
+
     // filter out password, don't send it.
     const { password, ...data } = await user.toJSON();
     let ret = {
-      "success": true,
-      "statusCode": 200,
-      "message": "Success",
-      data
-    }
+      success: true,
+      statusCode: 200,
+      message: 'Success',
+      data,
+    };
     res.send(ret);
   } catch (error) {
     return res.status(401).send({

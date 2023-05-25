@@ -5,7 +5,7 @@ import { localEnv } from './env';
 localEnv();
 
 const localPost = process.env.PORT ?? 8000;
-const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:${localPost}`;
+const host = process.env.ENV === 'prod' ? 'petknow-be.onrender.com' : `localhost:${localPost}`;
 
 const options: Options = {
   info: {
@@ -21,8 +21,9 @@ const options: Options = {
       in: 'headers',
       name: 'authorization',
       description: '請加上 API Token',
+      default: 'Bearer ',
     },
-  }, // 對應 PostController.deletePost
+  },
 };
 
 const outputFile = './swagger_output.json';

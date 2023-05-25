@@ -11,11 +11,11 @@ import {
 import { ITokenRecord, tokenRecordSchema } from '../models/identityManagement/tokenRecord.model';
 import { IUser, userSchema } from '../models/identityManagement/user.model';
 
-if (!process.env.IDM_URI) {
+if (!process.env.IDM_URL) {
   throw new Error('IDM Database connection string not found in environment variables.');
 }
 
-const DB = process.env.IDM_URI;
+const DB = process.env.IDM_URL;
 
 const IDM = createConnection(DB, {
   useNewUrlParser: true,
