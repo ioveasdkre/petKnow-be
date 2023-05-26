@@ -1,7 +1,7 @@
 import { createConnection, ConnectOptions } from 'mongoose';
-import { courseSchema, ICourse } from '../models/mongoDB/courseHierarchy.model';
-import { platformCouponsSchema, IPlatformCoupons } from '../models/mongoDB/platformCoupons.model';
-import { UserSchema, IUser } from '../models/mongoDB/user.model';
+import { courseSchema, ICourse } from '../models/courseHierarchy.model';
+import { platformCouponsSchema, IPlatformCoupons } from '../models/platformCoupons.model';
+import { UserSchema, IUser } from '../models/user.model';
 
 if (!process.env.MONGODB_URL) {
   throw new Error('IDM Database connection string not found in environment variables.');

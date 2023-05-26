@@ -2,8 +2,8 @@ import { Types } from 'mongoose';
 import { courseHierarchys, courseHierarchyType, shortDescriptions, descriptions } from '../../__tests__/courseHierarchyData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
 import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
-import { ISubchapter, IChapter, ICourse } from '../models/mongoDB/courseHierarchy.model';
-import { IPlatformCoupons } from '../models/mongoDB/platformCoupons.model';
+import { ISubchapter, IChapter, ICourse } from '../models/courseHierarchy.model';
+import { IPlatformCoupons } from '../models/platformCoupons.model';
 
 class FakeInformationService {
   private generateRandomInt(max: number) {

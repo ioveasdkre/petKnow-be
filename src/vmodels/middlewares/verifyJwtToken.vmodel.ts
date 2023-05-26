@@ -1,5 +1,5 @@
 
-import { IUser } from '../../models/mongoDB/user.model';
+import { IUser } from '../../models/user.model';
 
 interface IVerifyJwtTokenRequest {
   user: IUser;
