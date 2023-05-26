@@ -1602,7 +1602,146 @@
         ],
         "description": "首頁",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Retrieve Failure"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "carousel": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3eb83"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "狗狗訓練入門課程"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          }
+                        }
+                      }
+                    },
+                    "popular": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tag": {
+                            "type": "string",
+                            "example": "兔兔飼養"
+                          },
+                          "courses": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "646f7e2f4802a2dbf6b3ebe5"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "兔兔的健康生活指南"
+                                },
+                                "cover": {
+                                  "type": "string",
+                                  "example": "https://thumbs.dreamstime.com/z/cat-dog-christmas-basket-cat-dog-christmas-basket-tangerines-wine-isolated-white-105007421.jpg"
+                                },
+                                "price": {
+                                  "type": "number",
+                                  "example": 8857
+                                },
+                                "discountPrice": {
+                                  "type": "number",
+                                  "example": 3475
+                                },
+                                "isFree": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad Request"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/": {

@@ -12,32 +12,36 @@ class HomeController {
      * #swagger.tags = ["Home - 基本 API"]
      * #swagger.description = "首頁"
      * #swagger.responses[200] = {
-        "statusCode": 200,
-        "isSuccess": true,
-        "message": "Retrieve Failure",
-        "data": {
-          "carousel": [
-            {
-              "_id": "646f7e2f4802a2dbf6b3eb83",
-              "title": "狗狗訓練入門課程",
-              "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
-            }
-          ],
-          "popular": [
-            {
-              "tag": "兔兔飼養",
-              "courses": [
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Retrieve Failure",
+            "data": {
+              "carousel": [
                 {
-                  "_id": "646f7e2f4802a2dbf6b3ebe5",
-                  "title": "兔兔的健康生活指南",
-                  "cover": "https://thumbs.dreamstime.com/z/cat-dog-christmas-basket-cat-dog-christmas-basket-tangerines-wine-isolated-white-105007421.jpg",
-                  "price": 8857,
-                  "discountPrice": 3475,
-                  "isFree": false
+                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "title": "狗狗訓練入門課程",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                }
+              ],
+              "popular": [
+                {
+                  "tag": "兔兔飼養",
+                  "courses": [
+                    {
+                      "_id": "646f7e2f4802a2dbf6b3ebe5",
+                      "title": "兔兔的健康生活指南",
+                      "cover": "https://thumbs.dreamstime.com/z/cat-dog-christmas-basket-cat-dog-christmas-basket-tangerines-wine-isolated-white-105007421.jpg",
+                      "price": 8857,
+                      "discountPrice": 3475,
+                      "isFree": false
+                    }
+                  ]
                 }
               ]
             }
-          ]
+          }
         }
       * #swagger.responses[400] = {
           description: "錯誤的請求",
