@@ -1595,6 +1595,16 @@
         }
       }
     },
+    "/v1/home": {
+      "get": {
+        "tags": [
+          "Home - 基本 API"
+        ],
+        "description": "首頁",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/": {
       "get": {
         "description": "",
