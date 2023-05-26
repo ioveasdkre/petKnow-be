@@ -1,10 +1,11 @@
 import express from 'express';
-import { User } from '../connections/mongoDB';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { User } from '../connections/mongoDB';
+import { authController } from '../controllers/auth.controller';
+import { secret, verifyJwtToken } from '../middlewares/verifyJwtToken.midlewar';
 
-export const authRouter = express.Router();
-const secret = 'secret'
+const authRouter = express.Router();
 
 authRouter.post('/v1/register', async (req, res) => {
   //#region [ swagger說明文件 ]
@@ -190,53 +191,13 @@ interface JwtPayload {
   _id: string;
 }
 
-authRouter.get('/v1/user/show', async (req, res) => {
-  try {
-    // const cookie = req.cookies['jwt'];
-    // console.log('cookie: ', cookie);
-    let auth = req.get('authorization') || " " as string
-    const myArray = auth.split(" ");
-    auth = myArray[1];
-    // console.log('auth: ', auth);
-
-    const claims = jwt.verify(auth, secret) as JwtPayload;
-    if (!claims) {
-      throw new Error('Unauthenticated');
-    }
-    const user = await User.findOne({ _id: claims._id });
-    if (null == user) {
-      throw new Error('user not found');
-    }
-    // console.log('user: ', user);
-    // filter out password, don't send it.
-    const { password, ...data } = user.toJSON();
-    let ret = {
-      "success": true,
-      "statusCode": 200,
-      "message": "Success",
-      "data" : {
-        data,
-      }
-    }
-    res.send(ret);
-  } catch (error) {
-    console.log('error msg: ', error)
-    let ret = {
-      "success": false,
-      "statusCode": 401,
-      "message": "Failure",
-      error,
-    }
-    return res.status(401).send(ret);
-  }
-  // res.send(user)
-});
+authRouter.get('/v1/user/show', verifyJwtToken, authController.UserExists);
 
 authRouter.put('/v1/user/update', async (req, res) => {
   try {
-    console.log('body: ', req.body)
-    let auth = req.get('authorization') || " " as string
-    const myArray = auth.split(" ");
+    console.log('body: ', req.body);
+    let auth = req.get('authorization') || (' ' as string);
+    const myArray = auth.split(' ');
     auth = myArray[1];
     // console.log('auth: ', auth);
 
@@ -251,21 +212,20 @@ authRouter.put('/v1/user/update', async (req, res) => {
     const { email, ...update } = req.body;
     // const { ...update } = req.body;
     console.log('update: ', update);
-    const user = await User.findOneAndUpdate(filter,
-      update, {returnOriginal: false} );
+    const user = await User.findOneAndUpdate(filter, update, { returnOriginal: false });
     console.log('user: ', user);
     if (null == user) {
       throw new Error('user not found');
     }
-    
+
     // filter out password, don't send it.
     const { password, ...data } = await user.toJSON();
     let ret = {
-      "success": true,
-      "statusCode": 200,
-      "message": "Success",
-      data
-    }
+      success: true,
+      statusCode: 200,
+      message: 'Success',
+      data,
+    };
     res.send(ret);
   } catch (error) {
     return res.status(401).send({
@@ -309,3 +269,5 @@ authRouter.post('/v1/', (req, res) => {
 
   return res.status(200).send(`Welcome ${username}`);
 });
+
+export { authRouter };

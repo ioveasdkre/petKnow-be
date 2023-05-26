@@ -6,9 +6,9 @@ declare global {
       PORT: number;
       DB_PORT: number;
       DB_USER: string;
-      MONGODB_URI: string;
-      IDM_URI: string;
-      CMG_URI: string;
+      MONGODB_URL: string;
+      IDM_URL: string;
+      CMG_URL: string;
       COVER_URL: string;
       VIMEO_URL: string;
       ENV: 'test' | 'dev' | 'prod';

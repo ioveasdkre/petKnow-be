@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { courseHierarchys, courseHierarchyType } from '../../__tests__/courseHierarchyData.test';
+import { courseHierarchys, courseHierarchyType, shortDescriptions, descriptions } from '../../__tests__/courseHierarchyData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
 import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
 import { ISubchapter, IChapter, ICourse } from '../models/mongoDB/courseHierarchy.model';
@@ -34,6 +34,8 @@ class FakeInformationService {
     const coversLength = covers.length;
     const usersLength = users.length;
     const fileNameLength = fileNames.length;
+    const shortDescriptionLength = shortDescriptions.length;
+    const descriptionLength = descriptions.length;
     const newData: ICourse[] = [];
     const tagNameArr: string[] = [];
 
@@ -46,20 +48,19 @@ class FakeInformationService {
         let discountDate;
 
         const courseHierarchy = dataIndex[j];
+        tagNameArr.push(...courseHierarchy.tag);
 
         const userIndex = this.generateRandomInt(usersLength);
         const coverIndex = this.generateRandomInt(coversLength);
-
-        tagNameArr.push(...courseHierarchy.tag);
+        const shortDescriptionIndex = this.generateRandomInt(shortDescriptionLength);
+        const descriptionIndex = this.generateRandomInt(descriptionLength);
 
         const user = new Types.ObjectId(users[userIndex]);
+        const shortDescription = shortDescriptions[shortDescriptionIndex];
+        const description = descriptions[descriptionIndex];
         const tagNames = courseHierarchy.tag;
         const cover = covers[coverIndex];
         const title = courseHierarchy.title;
-        const shortDescription =
-          '犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程';
-        const description =
-          '本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 .....   查看更多立即購課';
         const level = this.generateRandomInt(4);
         const price = this.generateRandomInt(10000);
         const enrollmentCount = this.generateRandomInt(100000);
