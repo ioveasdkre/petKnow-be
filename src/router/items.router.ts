@@ -3,8 +3,8 @@
  */
 
 import express, { Request, Response } from 'express';
-import * as ItemService from '../models/items.service';
-import { BaseItem, Item } from '../models/mongoDB/items.interface';
+import * as ItemService from '../services/items.service';
+import { BaseItem, Item } from '../models/items.interface';
 
 import ItemController from '../controllers/items-controller';
 

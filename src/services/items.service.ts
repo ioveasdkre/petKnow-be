@@ -2,7 +2,7 @@
  * Data Model Interfaces
  */
 
-import { BaseItem, Item, Items } from './mongoDB/items.interface';
+import { BaseItem, Item, Items } from '../models/items.interface';
 // import { Items } from './items.interface';
 
 /**

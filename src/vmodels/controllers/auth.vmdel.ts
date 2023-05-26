@@ -1,4 +1,4 @@
-import { IUser } from '../../models/mongoDB/user.model';
+import { IUser } from '../../models/user.model';
 
 interface IUserExistsRequest {
   user: IUser;
