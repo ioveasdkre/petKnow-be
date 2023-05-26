@@ -286,6 +286,10 @@
                 "data": {
                   "type": "object",
                   "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "646d8bf85f52ae9681b88593"
+                    },
                     "name": {
                       "type": "string",
                       "example": "Benson"
@@ -294,13 +298,13 @@
                       "type": "string",
                       "example": "Abc123#@gmail.com"
                     },
+                    "password": {
+                      "type": "string",
+                      "example": "$2a$10$1yR.UPzTukYyVdiLUTHvhugqp1nBEjZmKD31inX2XGlLpUIGvAwly"
+                    },
                     "__v": {
                       "type": "number",
                       "example": 0
-                    },
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
                     }
                   }
                 }
@@ -325,25 +329,13 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Invalid credentials"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "type": "string",
-                      "example": "Abc123#@gmail.com"
-                    }
-                  }
+                  "example": "Unauthenticated or user not found"
                 }
               },
               "xml": {
                 "name": "main"
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "500": {
             "description": "伺服器發生錯誤",

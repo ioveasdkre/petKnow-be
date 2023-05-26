@@ -4,14 +4,14 @@ import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { IReqBody } from '../types/handle.type';
+import { IRequestBody } from '../types/handle.type';
 import { isValidObjectId } from '../utils/mongoose.util';
-import { IPostCardRequest, IPostCouponRequest } from '../vmodels/goldFlow.model';
+import { IPostCardRequest, IPostCouponRequest } from '../vmodels/controllers/goldFlow.vmodel';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
   /** 讀取購物車資料 */
-  static async postCard(req: IReqBody<IPostCardRequest>, res: Response, next: NextFunction) {
+  static async postCard(req: IRequestBody<IPostCardRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -274,7 +274,7 @@ class GoldFlowController {
 
   //#region postCoupon [ 查詢單筆優惠卷 ]
   /** 查詢單筆優惠卷 */
-  static async postCoupon(req: IReqBody<IPostCouponRequest>, res: Response, next: NextFunction) {
+  static async postCoupon(req: IRequestBody<IPostCouponRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]

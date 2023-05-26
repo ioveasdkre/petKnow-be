@@ -2,9 +2,10 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../connections/mongoDB';
-import { verifyJwtToken, secret } from '../helpers/login.helper';
+import { authController } from '../controllers/auth.controller';
+import { secret, verifyJwtToken } from '../middlewares/verifyJwtToken.midlewar';
 
-export const authRouter = express.Router();
+const authRouter = express.Router();
 
 authRouter.post('/v1/register', async (req, res) => {
   //#region [ swagger說明文件 ]
@@ -190,89 +191,7 @@ interface JwtPayload {
   _id: string;
 }
 
-authRouter.get('/v1/user/show', async (req, res) => {
-  //#region [ swagger說明文件 ]
-  /**
-   * #swagger.tags = ["登入系統 API"]
-   * #swagger.description = "註冊帳號"
-   * #swagger.security = [
-        {
-          "apiKeyAuth": []
-        }
-      ]
-    * #swagger.responses[200] = {
-        description: "成功",
-        schema: {
-          "success": true,
-          "statusCode": 200,
-          "message": "Success",
-          "data": {
-            "name": "Benson",
-            "email": "Abc123#@gmail.com",
-            "__v": 0,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
-          }
-        }
-      }
-    * #swagger.responses[400] = {
-        description: "錯誤的請求",
-        schema:{
-          "success": false,
-          "statusCode": 400,
-          "message": "Invalid credentials",
-          "data": {
-            "email": "Abc123#@gmail.com"
-          }
-        }
-      }
-    * #swagger.responses[500] = {
-        description: "伺服器發生錯誤",
-        schema:{
-          "statusCode": 500,
-          "isSuccess": false,
-          "message": "System error, please contact the system administrator"
-        }
-      }
-    */
-  //#endregion [ swagger說明文件 ]
-  try {
-    let auth = req.get('authorization') || (' ' as string);
-
-    const tokenPrefix = 'Bearer ';
-    if (auth.startsWith(tokenPrefix)) {
-      auth = auth.slice(tokenPrefix.length);
-    }
-
-    const claims = verifyJwtToken(req, res);
-
-    const user = await User.findOne({ _id: claims?._id });
-    if (null == user) {
-      throw new Error('user not found');
-    }
-    // console.log('user: ', user);
-    // filter out password, don't send it.
-    const { password, ...data } = user.toJSON();
-    let ret = {
-      success: true,
-      statusCode: 200,
-      message: 'Success',
-      data: {
-        data,
-      },
-    };
-    res.send(ret);
-  } catch (error) {
-    console.log('error msg: ', error);
-    let ret = {
-      success: false,
-      statusCode: 401,
-      message: 'Failure',
-      error,
-    };
-    return res.status(401).send(ret);
-  }
-  // res.send(user)
-});
+authRouter.get('/v1/user/show', verifyJwtToken, authController.UserExists);
 
 authRouter.put('/v1/user/update', async (req, res) => {
   try {
@@ -350,3 +269,5 @@ authRouter.post('/v1/', (req, res) => {
 
   return res.status(200).send(`Welcome ${username}`);
 });
+
+export { authRouter };

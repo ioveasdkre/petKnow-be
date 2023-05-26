@@ -1,7 +1,7 @@
 import { createConnection, ConnectOptions } from 'mongoose';
 import { courseSchema, ICourse } from '../models/mongoDB/courseHierarchy.model';
 import { platformCouponsSchema, IPlatformCoupons } from '../models/mongoDB/platformCoupons.model';
-import { UserSchema } from '../models/mongoDB/user.model';
+import { UserSchema, IUser } from '../models/mongoDB/user.model';
 
 if (!process.env.MONGODB_URL) {
   throw new Error('IDM Database connection string not found in environment variables.');
@@ -24,6 +24,6 @@ MongoDB.on('error', err => {
 
 const CourseHierarchy = MongoDB.model<ICourse>('CourseHierarchy', courseSchema);
 const PlatformCoupons = MongoDB.model<IPlatformCoupons>('PlatformCoupons', platformCouponsSchema);
-const User = MongoDB.model('User', UserSchema);
+const User = MongoDB.model<IUser>('User', UserSchema);
 
 export { CourseHierarchy, PlatformCoupons, User };

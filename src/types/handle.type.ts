@@ -3,7 +3,7 @@ import { ParsedQs } from 'qs';
 
 // **** Express **** //
 
-export interface IReqBody<T = void> extends e.Request {
+export interface IRequestBody<T = void> extends e.Request {
   body: T;
 }
 

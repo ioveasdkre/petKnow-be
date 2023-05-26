@@ -5,10 +5,19 @@
 import mongoose from 'mongoose';
 import crypto from 'crypto';
 
-const UserSchema = new mongoose.Schema({
+interface IUser {
+  name: string;
+  email: string;
+  password: string;
+  nickname?: string;
+  bio?: string;
+  salt?: string;
+}
+
+const UserSchema = new mongoose.Schema<IUser>({
   name: {
     type: String,
-    required: 'name is required',
+    required: [true, 'name is required'],
   },
   email: {
     type: String,
@@ -60,4 +69,4 @@ UserSchema.virtual('passwordvir')
   });
 
 // module.exports = mongoose.model('User', UserSchema);
-export { UserSchema };
+export { UserSchema, IUser };
