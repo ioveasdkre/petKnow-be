@@ -1,10 +1,11 @@
 import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
-import { localEnv } from './env';
+import { localEnv } from '../config/env';
 
 localEnv();
 
-const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:8000`;
+const localPost = process.env.PORT ?? 8000;
+const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:${localPost}`;
 
 const options: Options = {
   info: {
@@ -20,9 +21,8 @@ const options: Options = {
       in: 'headers',
       name: 'authorization',
       description: '請加上 API Token',
-      default: 'Bearer ',
     },
-  },
+  }, // 對應 PostController.deletePost
 };
 
 const outputFile = './swagger_output.json';
