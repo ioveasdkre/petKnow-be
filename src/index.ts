@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
+import cors from 'cors';
 import { apiRouter, itemsRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
 import {
@@ -17,7 +18,9 @@ import {
 
 export const app = express();
 
-app.use(setSecurityHeaders);
+// todo: fix this back correctly.
+// app.use(setSecurityHeaders);
+app.use(cors());
 
 if (process.env.ENV === 'dev') {
   app.use(morgan('dev'));
