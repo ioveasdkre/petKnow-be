@@ -7,13 +7,13 @@ import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
 import { apiRouter, itemsRouter } from './router/index';
-import swaggerSpec from '../swagger_output.json';
 import {
   handle404Error,
   handleErrors,
   handleUncaughtException,
   handleUnhandledRejection,
 } from './middlewares/error.middleware';
+import swaggerSpec from '../swagger_output.json';
 
 export const app = express();
 

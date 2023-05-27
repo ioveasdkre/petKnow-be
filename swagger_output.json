@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "API 文件"
   },
-  "host": "localhost:3000",
+  "host": "localhost:8000",
   "basePath": "/",
   "schemes": [
     "http",
