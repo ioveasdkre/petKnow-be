@@ -4,8 +4,7 @@ import { localEnv } from './env';
 
 localEnv();
 
-const localPost = process.env.PORT ?? 8000;
-const host = process.env.ENV === 'prod' ? 'petknow-be.onrender.com' : `localhost:${localPost}`;
+const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:8000`;
 
 const options: Options = {
   info: {
