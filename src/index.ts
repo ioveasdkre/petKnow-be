@@ -5,7 +5,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import { setSecurityHeaders } from './config/contentSecurityPolicy';
+// import { setSecurityHeaders } from './config/contentSecurityPolicy';
 import cors from 'cors';
 import { apiRouter, itemsRouter } from './router/index';
 import swaggerSpec from '../swagger_output.json';
