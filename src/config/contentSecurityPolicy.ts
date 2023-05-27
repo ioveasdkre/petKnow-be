@@ -5,8 +5,8 @@ import cors from 'cors';
 function setSecurityHeaders(_req: Request, _res: Response, next: NextFunction) {
   const allowedOrigins =
     process.env.ENV === 'prod'
-      ? ['https://petknow.netlify.app', 'localhost:5173']
-      : ['localhost:3000', 'localhost:5173', 'localhost:8000', 'localhost:8080'];
+      ? ['https://petknow.netlify.app', 'http://localhost:5173']
+      : ['localhost:3000', 'http://localhost:5173', 'localhost:8000', 'localhost:8080'];
 
   helmet({
     xFrameOptions: { action: 'deny' },
