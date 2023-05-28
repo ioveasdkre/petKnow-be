@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { coverUrl } from '../config/env';
 import { CourseHierarchy } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
@@ -64,7 +65,6 @@ class HomeController {
     //#endregion [ swagger說明文件 ]
     try {
       const currentDate = new Date();
-      const coverURL = process.env.COVER_URL;
 
       const [carousel] = await CourseHierarchy.aggregate([
         {
@@ -81,7 +81,7 @@ class HomeController {
               $push: {
                 _id: '$_id',
                 title: '$title',
-                cover: { $concat: [coverURL, '$cover'] },
+                cover: { $concat: [coverUrl, '$cover'] },
               },
             },
             count: { $sum: 1 },
@@ -103,7 +103,8 @@ class HomeController {
             // 添加筛选条件
             isPublished: true,
           },
-        },{
+        },
+        {
           $lookup: {
             from: 'users',
             localField: 'user',
@@ -118,7 +119,7 @@ class HomeController {
               $push: {
                 _id: '$_id',
                 title: '$title',
-                cover: { $concat: [coverURL, '$cover'] },
+                cover: { $concat: [coverUrl, '$cover'] },
                 instructorName: { $arrayElemAt: ['$user.name', 0] },
                 price: '$price',
                 discountPrice: {

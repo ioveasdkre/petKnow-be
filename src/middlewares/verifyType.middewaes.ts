@@ -1,24 +1,18 @@
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
+import { jwtSecret } from '../config/env';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { IRequestBody } from '../types/handle.type';
-import {JwtPayload} from '../types/verifyType.type'
+import { JwtPayload } from '../types/verifyType.type';
 import { isValidObjectId } from '../utils/mongoose.util';
-import { IVerifyJwtTokenRequest,IVerifyObjectIdsRequest } from '../vmodels/middlewares/verifyType.viewModel';
+import {
+  IVerifyJwtTokenRequest,
+  IVerifyObjectIdsRequest,
+} from '../vmodels/middlewares/verifyType.viewModel';
 import { User } from '../connections/mongoDB';
 
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET not found in environment variables.');
-}
-
-const secret = process.env.JWT_SECRET;
-
-async function verifyJwtToken(
-  req: IVerifyJwtTokenRequest,
-  res: Response,
-  next: NextFunction,
-) {
+async function verifyJwtToken(req: IVerifyJwtTokenRequest, res: Response, next: NextFunction) {
   try {
     let auth = req.get('authorization') || (' ' as string);
 
@@ -27,7 +21,7 @@ async function verifyJwtToken(
       auth = auth.slice(tokenPrefix.length);
     }
 
-    const claims = jwt.verify(auth, secret) as JwtPayload;
+    const claims = jwt.verify(auth, jwtSecret) as JwtPayload;
 
     if (!claims) {
       return handleResponse(res, HttpStatusCode.BadRequest, 'Unauthenticated');
@@ -66,4 +60,4 @@ const verifyObjectIds = (
   }
 };
 
-export { verifyObjectIds, verifyJwtToken, secret };
+export { verifyObjectIds, verifyJwtToken, jwtSecret };

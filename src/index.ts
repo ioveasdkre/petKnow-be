@@ -5,8 +5,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-// import { setSecurityHeaders } from './config/contentSecurityPolicy';
-import cors from 'cors';
+import { setSecurityHeaders } from './config/contentSecurityPolicy';
+import { env } from './config/env';
 import { apiRouter, itemsRouter } from './router/index';
 import {
   handle404Error,
@@ -18,11 +18,9 @@ import swaggerSpec from '../swagger_output.json';
 
 export const app = express();
 
-// todo: fix this back correctly.
-// app.use(setSecurityHeaders);
-app.use(cors());
+app.use(setSecurityHeaders);
 
-if (process.env.ENV === 'dev') {
+if (env === 'dev') {
   app.use(morgan('dev'));
 }
 
