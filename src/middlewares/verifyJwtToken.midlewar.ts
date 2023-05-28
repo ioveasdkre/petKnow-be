@@ -3,7 +3,7 @@ import { Response, NextFunction } from 'express';
 import { User } from '../connections/mongoDB';
 import { HttpStatusCode } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { IVerifyJwtTokenRequest } from '../vmodels/middlewares/verifyJwtToken.vmodel';
+import { IVerifyJwtTokenRequest } from '../vmodels/middlewares/verifyJwtToken.viewModel';
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET not found in environment variables.');

@@ -6,7 +6,7 @@ import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { IRequestBody } from '../types/handle.type';
 import { isValidObjectId } from '../utils/mongoose.util';
-import { IPostCardRequest, IPostCouponRequest } from '../vmodels/controllers/goldFlow.vmodel';
+import { IPostCardRequest, IPostCouponRequest } from '../vmodels/controllers/goldFlow.viewModel';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
