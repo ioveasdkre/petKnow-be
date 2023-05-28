@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { IUserExistsRequest } from '../vmodels/controllers/auth.vmdel';
+import { IUserExistsRequest } from '../vmodels/controllers/auth.viewMdel';
 class authController {
   //#region UserExists [ 查詢用戶是否存在 ]
   /** 查詢用戶是否存在 */
