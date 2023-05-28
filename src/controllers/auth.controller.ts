@@ -1,17 +1,11 @@
 import { Response, NextFunction } from 'express';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { IRequestBody } from '../types/handle.type';
 import { IUserExistsRequest } from '../vmodels/controllers/auth.vmdel';
-
 class authController {
   //#region UserExists [ 查詢用戶是否存在 ]
   /** 查詢用戶是否存在 */
-  static async UserExists(
-    req: IRequestBody<IUserExistsRequest>,
-    res: Response,
-    next: NextFunction,
-  ) {
+  static async UserExists(req: IUserExistsRequest, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
    * #swagger.tags = ["登入系統 API"]
@@ -55,7 +49,7 @@ class authController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const { user } = req.body;
+      const user = req.user;
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, user);
     } catch (err) {

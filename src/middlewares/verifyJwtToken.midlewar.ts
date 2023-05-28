@@ -3,7 +3,6 @@ import { Response, NextFunction } from 'express';
 import { User } from '../connections/mongoDB';
 import { HttpStatusCode } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { IRequestBody } from '../types/handle.type';
 import { IVerifyJwtTokenRequest } from '../vmodels/middlewares/verifyJwtToken.vmodel';
 
 if (!process.env.JWT_SECRET) {
@@ -17,7 +16,7 @@ interface JwtPayload {
 }
 
 async function verifyJwtToken(
-  req: IRequestBody<IVerifyJwtTokenRequest>,
+  req: IVerifyJwtTokenRequest,
   res: Response,
   next: NextFunction,
 ) {
@@ -41,7 +40,7 @@ async function verifyJwtToken(
       return handleResponse(res, HttpStatusCode.BadRequest, 'user not found');
     }
 
-    req.body.user = user;
+    req.user = user;
 
     next();
   } catch (err) {
