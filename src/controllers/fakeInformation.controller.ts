@@ -600,7 +600,7 @@ class FakeInformationController {
     //#endregion [ swagger說明文件 ]
     try {
       const service = new FakeInformationService();
-      const state = await service.CouponManyData(10);
+      const state = await service.CouponManyData(30);
 
       if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
 
