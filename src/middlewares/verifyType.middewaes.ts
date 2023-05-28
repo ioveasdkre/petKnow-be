@@ -5,9 +5,8 @@ import { handleResponse } from '../helpers/handle.helper';
 import { IRequestBody } from '../types/handle.type';
 import {JwtPayload} from '../types/verifyType.type'
 import { isValidObjectId } from '../utils/mongoose.util';
-import { IisValidObjectIdsRequest } from '../vmodels/middlewares/mongoDB.viewModel';
+import { IVerifyJwtTokenRequest,IVerifyObjectIdsRequest } from '../vmodels/middlewares/verifyType.viewModel';
 import { User } from '../connections/mongoDB';
-import { IVerifyJwtTokenRequest } from '../vmodels/middlewares/verifyJwtToken.viewModel';
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET not found in environment variables.');
@@ -48,8 +47,8 @@ async function verifyJwtToken(
   }
 }
 
-const isValidObjectIds = (
-  req: IRequestBody<IisValidObjectIdsRequest>,
+const verifyObjectIds = (
+  req: IRequestBody<IVerifyObjectIdsRequest>,
   res: Response,
   next: NextFunction,
 ) => {
@@ -67,4 +66,4 @@ const isValidObjectIds = (
   }
 };
 
-export { isValidObjectIds, verifyJwtToken, secret };
+export { verifyObjectIds, verifyJwtToken, secret };
