@@ -108,7 +108,7 @@ class GoldFlowController {
       const { coursesIds } = req.body;
 
       const goldFlowService = new GoldFlowService();
-      const { courseHierarchy, youMightLike } = await goldFlowService.postCard(coursesIds);
+      const { courseHierarchy, youMightLike } = await goldFlowService.postCardAsync(coursesIds);
 
       if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
@@ -186,7 +186,7 @@ class GoldFlowController {
       const { coursesIds, couponCode } = req.body;
 
       const goldFlowService = new GoldFlowService();
-      const price = await goldFlowService.postCoupon(coursesIds, couponCode);
+      const price = await goldFlowService.postCouponAsync(coursesIds, couponCode);
 
       if (!!price)
         return handleResponse(res, HttpStatusCode.BadRequest, '輸入的優惠券代碼對此課程無效');
@@ -300,7 +300,7 @@ class GoldFlowController {
       const { coursesIds } = req.body;
 
       const goldFlowService = new GoldFlowService();
-      const { courseHierarchy, youMightLike } = await goldFlowService.postCard(coursesIds);
+      const { courseHierarchy, youMightLike } = await goldFlowService.postCardAsync(coursesIds);
 
       if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
