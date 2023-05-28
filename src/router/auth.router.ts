@@ -1,9 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { jwtSecret } from '../config/env';
 import { User } from '../connections/mongoDB';
 import { authController } from '../controllers/auth.controller';
-import { secret, verifyJwtToken } from '../middlewares/verifyType.middewaes';
+import { verifyJwtToken } from '../middlewares/verifyType.middewaes';
 
 const authRouter = express.Router();
 
@@ -19,8 +20,8 @@ authRouter.post('/v1/register', async (req, res) => {
         required: true,
         schema: {
           "name": "Benson",
-          "email": "Abc123#@gmail.com",
-          "password": "Abc123#@gmail.com",
+          "email": "AbcTest@gmail.com",
+          "password": "Abc123#",
         }
       }
     * #swagger.responses[200] = {
@@ -98,8 +99,8 @@ authRouter.post('/v1/login', async (req, res) => {
         type: "object",
         required: true,
         schema: {
-          "email": "Abc123#@gmail.com",
-          "password": "Abc123#@gmail.com"
+          "email": "AbcTest@gmail.com",
+          "password": "Abc123#"
         }
       }
     * #swagger.responses[200] = {
@@ -110,7 +111,7 @@ authRouter.post('/v1/login', async (req, res) => {
           "message": "Success",
           "data": {
             "name": "Benson",
-            "email": "Abc123#@gmail.com",
+            "email": "AbcTest@gmail.com",
             "__v": 0,
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
           }
@@ -123,7 +124,7 @@ authRouter.post('/v1/login', async (req, res) => {
           "statusCode": 400,
           "message": "Invalid credentials",
           "data": {
-            "email": "Abc123#@gmail.com"
+            "email": "AbcTest@gmail.com"
           }
         }
       }
@@ -166,7 +167,7 @@ authRouter.post('/v1/login', async (req, res) => {
     return res.status(400).send(msg);
   }
 
-  const token = jwt.sign({ _id: user._id }, secret);
+  const token = jwt.sign({ _id: user._id }, jwtSecret);
   res.cookie('jwt', token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -201,7 +202,7 @@ authRouter.put('/v1/user/update', async (req, res) => {
     auth = myArray[1];
     // console.log('auth: ', auth);
 
-    const claims = jwt.verify(auth, secret) as JwtPayload;
+    const claims = jwt.verify(auth, jwtSecret) as JwtPayload;
     if (!claims) {
       throw new Error('Unauthenticated');
     }

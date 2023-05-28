@@ -1,15 +1,10 @@
 import { createConnection, ConnectOptions } from 'mongoose';
+import { mongodbUrl } from '../config/env';
 import { courseSchema, ICourse } from '../models/courseHierarchy.model';
 import { platformCouponsSchema, IPlatformCoupons } from '../models/platformCoupons.model';
 import { UserSchema, IUser } from '../models/user.model';
 
-if (!process.env.MONGODB_URL) {
-  throw new Error('IDM Database connection string not found in environment variables.');
-}
-
-const DB = process.env.MONGODB_URL;
-
-const MongoDB = createConnection(DB, {
+const MongoDB = createConnection(mongodbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 } as ConnectOptions);

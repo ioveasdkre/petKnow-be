@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { setSecurityHeaders } from './config/contentSecurityPolicy';
+import { env } from './config/env';
 import { apiRouter, itemsRouter } from './router/index';
 import {
   handle404Error,
@@ -19,7 +20,7 @@ export const app = express();
 
 app.use(setSecurityHeaders);
 
-if (process.env.ENV === 'dev') {
+if (env === 'dev') {
   app.use(morgan('dev'));
 }
 

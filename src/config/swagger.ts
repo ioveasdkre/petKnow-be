@@ -1,11 +1,8 @@
 import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
-import { localEnv } from '../config/env';
+import { port, env } from '../config/env';
 
-localEnv();
-
-const localPost = process.env.PORT ?? 8000;
-const host = process.env.ENV === 'prod' ? 'petknow.netlify.app' : `localhost:${localPost}`;
+const host = env === 'prod' ? 'petknow.netlify.app' : `localhost:${port}`;
 
 const options: Options = {
   info: {

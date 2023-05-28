@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
+import {coverUrl} from '../config/env';
 import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 
 class GoldFlowService {
   async postCard(coursesIds: string[]) {
     const currentDate = new Date();
-    const coverURL = process.env.COVER_URL;
 
     const [courseHierarchy] = await CourseHierarchy.aggregate([
       {
@@ -53,7 +53,7 @@ class GoldFlowService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverURL, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover'] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -116,7 +116,7 @@ class GoldFlowService {
         $project: {
           _id: '$_id',
           title: '$title',
-          cover: { $concat: [coverURL, '$cover'] },
+          cover: { $concat: [coverUrl, '$cover'] },
           level: {
             $switch: {
               branches: Object.entries(Level).map(([level, levelName]) => ({
