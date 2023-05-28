@@ -27,14 +27,15 @@ class HomeController {
               ],
               "popular": [
                 {
-                  "tag": "兔兔飼養",
+                  "tag": "寵物溝通",
                   "courses": [
                     {
-                      "_id": "646f7e2f4802a2dbf6b3ebe5",
-                      "title": "兔兔的健康生活指南",
-                      "cover": "https://thumbs.dreamstime.com/z/cat-dog-christmas-basket-cat-dog-christmas-basket-tangerines-wine-isolated-white-105007421.jpg",
-                      "price": 8857,
-                      "discountPrice": 3475,
+                      "_id": "646f7e2f4802a2dbf6b3ebbd",
+                      "title": "建立與你的寵物更深層的連結",
+                      "cover": "https://thumbs.dreamstime.com/z/cat-dog-love-2025305.jpg",
+                      "instructorName": "Benson",
+                      "price": 3688,
+                      "discountPrice": null,
                       "isFree": false
                     }
                   ]
