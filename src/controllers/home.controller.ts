@@ -102,6 +102,13 @@ class HomeController {
             // 添加筛选条件
             isPublished: true,
           },
+        },{
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user',
+          },
         },
         {
           $group: {
@@ -111,6 +118,7 @@ class HomeController {
                 _id: '$_id',
                 title: '$title',
                 cover: { $concat: [coverURL, '$cover'] },
+                instructorName: { $arrayElemAt: ['$user.name', 0] },
                 price: '$price',
                 discountPrice: {
                   $cond: [
@@ -140,7 +148,7 @@ class HomeController {
             _id: 0,
             tag: '$_id',
             courses: {
-              $slice: ['$courses', 3], // 限制最多 3筆
+              $slice: ['$courses', 5], // 限制最多 3筆
             },
           },
         },
