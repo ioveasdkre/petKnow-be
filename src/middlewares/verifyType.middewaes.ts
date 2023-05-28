@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { User } from '../connections/mongoDB';
-import { HttpStatusCode } from '../enums/handle.enum';
+import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
+import { IRequestBody } from '../types/handle.type';
+import {JwtPayload} from '../types/verifyType.type'
+import { isValidObjectId } from '../utils/mongoose.util';
+import { IisValidObjectIdsRequest } from '../vmodels/middlewares/mongoDB.viewModel';
+import { User } from '../connections/mongoDB';
 import { IVerifyJwtTokenRequest } from '../vmodels/middlewares/verifyJwtToken.viewModel';
 
 if (!process.env.JWT_SECRET) {
@@ -10,10 +14,6 @@ if (!process.env.JWT_SECRET) {
 }
 
 const secret = process.env.JWT_SECRET;
-
-interface JwtPayload {
-  _id: string;
-}
 
 async function verifyJwtToken(
   req: IVerifyJwtTokenRequest,
@@ -48,4 +48,23 @@ async function verifyJwtToken(
   }
 }
 
-export { verifyJwtToken, secret };
+const isValidObjectIds = (
+  req: IRequestBody<IisValidObjectIdsRequest>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { coursesIds } = req.body;
+
+    const isValid = coursesIds.every(isValidObjectId);
+
+    if (!isValid) {
+      return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { isValidObjectIds, verifyJwtToken, secret };

@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../connections/mongoDB';
 import { authController } from '../controllers/auth.controller';
-import { secret, verifyJwtToken } from '../middlewares/verifyJwtToken.midlewar';
+import { secret, verifyJwtToken } from '../middlewares/verifyType.middewaes';
 
 const authRouter = express.Router();
 
