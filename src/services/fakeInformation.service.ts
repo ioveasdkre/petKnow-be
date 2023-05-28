@@ -209,7 +209,7 @@ class FakeInformationService {
       const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
       const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
       const startDate = this.getRandomDate(createdAt, '2023/06/31');
-      const endDate = this.getRandomDate(createdAt, '2023/06/31');
+      const endDate = this.getRandomDate(startDate, '2023/06/31');
 
       const labelQuantity = this.generateRandomInt(3);
 
