@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import {coverUrl} from '../config/env';
+import { coverUrl } from '../config/env';
 import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 
@@ -151,6 +151,8 @@ class GoldFlowService {
   }
 
   async postCouponAsync(coursesIds: string[], couponCode: string) {
+    const currentDate = new Date();
+
     const [courseHierarchy] = await CourseHierarchy.aggregate([
       {
         $match: {
@@ -181,7 +183,13 @@ class GoldFlowService {
     const [platformCoupons] = await PlatformCoupons.aggregate([
       {
         $match: {
-          $and: [{ couponCode: couponCode }, { tagNames: { $in: courseHierarchy.uniqueTagNames } }],
+          $and: [
+            { couponCode: couponCode },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            { isEnabled: true },
+            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+          ],
         },
       },
       {
