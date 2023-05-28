@@ -1,10 +1,13 @@
-type IPostCardRequest = {
-  coursesIds: string[];
-}
+import { ICourseIdsRequest } from '../shares/course.viewModel';
 
-type IPostCouponRequest = {
-  coursesIds: string[];
+interface IPostCardRequest extends ICourseIdsRequest {}
+
+interface IPostCouponRequest extends ICourseIdsRequest {
   couponCode: string;
 }
 
-export { IPostCardRequest, IPostCouponRequest };
+interface IPostCheckRequest extends ICourseIdsRequest {
+  couponCode: string;
+}
+
+export { IPostCardRequest, IPostCouponRequest, IPostCheckRequest };

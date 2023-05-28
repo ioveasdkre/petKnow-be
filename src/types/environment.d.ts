@@ -7,11 +7,19 @@ declare global {
       DB_PORT: number;
       DB_USER: string;
       MONGODB_URL: string;
-      IDM_URL: string;
-      CMG_URL: string;
       COVER_URL: string;
       VIMEO_URL: string;
       ENV: 'test' | 'dev' | 'prod';
+      JWT_SECRET: string;
+      MERCHANTID: string;
+      REPONDTYPE: string;
+      VERSION: number;
+      ALGORITHM: string;
+      GOLDFLOWHASHKEY: string;
+      GOLDFLOWHASHIV: string;
+      ORDERSALT: string;
+      ORDERHASHKEY: string;
+      ORDERHASHIV: string;
     }
   }
 }

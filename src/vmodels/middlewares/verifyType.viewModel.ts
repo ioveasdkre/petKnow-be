@@ -5,7 +5,7 @@ interface IVerifyJwtTokenRequest extends IRequestBody {
   user?: IUser;
 }
 type IVerifyObjectIdsRequest = {
-  coursesIds: string[];
+  courseIds: string[];
 }
 
 export { IVerifyJwtTokenRequest,IVerifyObjectIdsRequest };

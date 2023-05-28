@@ -47,11 +47,11 @@ const verifyObjectIds = (
   next: NextFunction,
 ) => {
   try {
-    const { coursesIds } = req.body;
+    const { courseIds } = req.body;
 
-    if (!coursesIds) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+    if (!courseIds) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-    const isValid = coursesIds.every(isValidObjectId);
+    const isValid = courseIds.every(isValidObjectId);
 
     if (!isValid) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
