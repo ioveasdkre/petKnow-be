@@ -49,11 +49,12 @@ const verifyObjectIds = (
   try {
     const { coursesIds } = req.body;
 
+    if (!coursesIds) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
     const isValid = coursesIds.every(isValidObjectId);
 
-    if (!isValid) {
-      return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-    }
+    if (!isValid) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
     next();
   } catch (err) {
     next(err);

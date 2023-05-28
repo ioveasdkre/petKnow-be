@@ -186,19 +186,24 @@ class GoldFlowController {
       const { coursesIds, couponCode } = req.body;
 
       const goldFlowService = new GoldFlowService();
-      const price = await goldFlowService.postCouponAsync(coursesIds, couponCode);
+      const courseTabs = await goldFlowService.mergeCourseTabsAsync(coursesIds);
 
-      if (!!price)
+      if (!courseTabs)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const price = await goldFlowService.checkCouponCode(couponCode, courseTabs);
+
+      if (!price)
         return handleResponse(res, HttpStatusCode.BadRequest, '輸入的優惠券代碼對此課程無效');
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, price);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, { price });
     } catch (err) {
       next(err);
     }
   }
   //#endregion postCoupon [ 查詢單筆優惠卷 ]
 
-    //#region postCheck [ 讀取確認訂單資料 ]
+  //#region postCheck [ 讀取確認訂單資料 ]
   /** 讀取確認訂單資料 */
   static async postCheck(req: IRequestBody<IPostCardRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
