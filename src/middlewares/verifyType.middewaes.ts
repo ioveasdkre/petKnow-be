@@ -9,7 +9,7 @@ import { isValidObjectId } from '../utils/mongoose.util';
 import {
   IVerifyJwtTokenRequest,
   IVerifyObjectIdsRequest,
-} from '../vmodels/middlewares/verifyType.viewModel';
+} from '../viewModels/middlewares/verifyType.viewModel';
 import { User } from '../connections/mongoDB';
 
 async function verifyJwtToken(req: IVerifyJwtTokenRequest, res: Response, next: NextFunction) {

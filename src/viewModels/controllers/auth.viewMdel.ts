@@ -5,5 +5,4 @@ interface IUserExistsRequest extends IRequestBody {
   user?: IUser;
 }
 
-
 export { IUserExistsRequest };

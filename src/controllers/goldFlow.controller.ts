@@ -3,12 +3,12 @@ import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
 import { IRequestBody } from '../types/handle.type';
-import { createOrderIdAesEncrypt, createOrderIdAesDecrypt } from '../utils/orderIdEncrypt.util';
+// import { createOrderIdAesEncrypt, createOrderIdAesDecrypt } from '../utils/orderIdEncrypt.util';
 import {
   IPostCardRequest,
   IPostCouponRequest,
   IPostCheckRequest,
-} from '../vmodels/controllers/goldFlow.viewModel';
+} from '../viewModels/controllers/goldFlow.viewModel';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
