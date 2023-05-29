@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { coverUrl } from '../config/env';
 import { CourseHierarchy } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
@@ -27,14 +28,15 @@ class HomeController {
               ],
               "popular": [
                 {
-                  "tag": "兔兔飼養",
+                  "tag": "寵物溝通",
                   "courses": [
                     {
-                      "_id": "646f7e2f4802a2dbf6b3ebe5",
-                      "title": "兔兔的健康生活指南",
-                      "cover": "https://thumbs.dreamstime.com/z/cat-dog-christmas-basket-cat-dog-christmas-basket-tangerines-wine-isolated-white-105007421.jpg",
-                      "price": 8857,
-                      "discountPrice": 3475,
+                      "_id": "646f7e2f4802a2dbf6b3ebbd",
+                      "title": "建立與你的寵物更深層的連結",
+                      "cover": "https://thumbs.dreamstime.com/z/cat-dog-love-2025305.jpg",
+                      "instructorName": "Benson",
+                      "price": 3688,
+                      "discountPrice": null,
                       "isFree": false
                     }
                   ]
@@ -63,7 +65,6 @@ class HomeController {
     //#endregion [ swagger說明文件 ]
     try {
       const currentDate = new Date();
-      const coverURL = process.env.COVER_URL;
 
       const [carousel] = await CourseHierarchy.aggregate([
         {
@@ -80,7 +81,7 @@ class HomeController {
               $push: {
                 _id: '$_id',
                 title: '$title',
-                cover: { $concat: [coverURL, '$cover'] },
+                cover: { $concat: [coverUrl, '$cover'] },
               },
             },
             count: { $sum: 1 },
@@ -104,13 +105,22 @@ class HomeController {
           },
         },
         {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
           $group: {
             _id: '$tagNames',
             courses: {
               $push: {
                 _id: '$_id',
                 title: '$title',
-                cover: { $concat: [coverURL, '$cover'] },
+                cover: { $concat: [coverUrl, '$cover'] },
+                instructorName: { $arrayElemAt: ['$user.name', 0] },
                 price: '$price',
                 discountPrice: {
                   $cond: [
@@ -140,7 +150,7 @@ class HomeController {
             _id: 0,
             tag: '$_id',
             courses: {
-              $slice: ['$courses', 3], // 限制最多 3筆
+              $slice: ['$courses', 5], // 限制最多 3筆
             },
           },
         },

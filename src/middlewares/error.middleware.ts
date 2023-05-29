@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { env } from '../config/env';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 
@@ -39,7 +40,7 @@ const handleErrors = (
   _next: NextFunction,
 ) => {
   err.statusCode = err.statusCode || 500;
-  if (process.env.ENV === 'dev') {
+  if (env === 'dev') {
     return resErrorDev(err, res);
   } else if (err.name === 'ValidationError') {
     err.message = '資料欄位未填寫正確，請重新輸入！';

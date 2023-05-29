@@ -1,9 +1,11 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { jwtSecret } from '../config/env';
 import { User } from '../connections/mongoDB';
 import { authController } from '../controllers/auth.controller';
-import { secret, verifyJwtToken } from '../middlewares/verifyJwtToken.midlewar';
+import { verifyJwtToken } from '../middlewares/verifyType.middewaes';
+import { IUser } from '../models/user.model';
 
 const authRouter = express.Router();
 
@@ -19,8 +21,8 @@ authRouter.post('/v1/register', async (req, res) => {
         required: true,
         schema: {
           "name": "Benson",
-          "email": "Abc123#@gmail.com",
-          "password": "Abc123#@gmail.com",
+          "email": "AbcTest@gmail.com",
+          "password": "Abc123#",
         }
       }
     * #swagger.responses[200] = {
@@ -98,8 +100,8 @@ authRouter.post('/v1/login', async (req, res) => {
         type: "object",
         required: true,
         schema: {
-          "email": "Abc123#@gmail.com",
-          "password": "Abc123#@gmail.com"
+          "email": "AbcTest@gmail.com",
+          "password": "Abc123#"
         }
       }
     * #swagger.responses[200] = {
@@ -110,7 +112,7 @@ authRouter.post('/v1/login', async (req, res) => {
           "message": "Success",
           "data": {
             "name": "Benson",
-            "email": "Abc123#@gmail.com",
+            "email": "AbcTest@gmail.com",
             "__v": 0,
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
           }
@@ -123,7 +125,7 @@ authRouter.post('/v1/login', async (req, res) => {
           "statusCode": 400,
           "message": "Invalid credentials",
           "data": {
-            "email": "Abc123#@gmail.com"
+            "email": "AbcTest@gmail.com"
           }
         }
       }
@@ -166,7 +168,7 @@ authRouter.post('/v1/login', async (req, res) => {
     return res.status(400).send(msg);
   }
 
-  const token = jwt.sign({ _id: user._id }, secret);
+  const token = jwt.sign({ _id: user._id }, jwtSecret);
   res.cookie('jwt', token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -187,52 +189,9 @@ authRouter.post('/v1/login', async (req, res) => {
   //  res.send(user);
 });
 
-interface JwtPayload {
-  _id: string;
-}
-
 authRouter.get('/v1/user/show', verifyJwtToken, authController.UserExists);
 
-authRouter.put('/v1/user/update', async (req, res) => {
-  try {
-    console.log('body: ', req.body);
-    let auth = req.get('authorization') || (' ' as string);
-    const myArray = auth.split(' ');
-    auth = myArray[1];
-    // console.log('auth: ', auth);
-
-    const claims = jwt.verify(auth, secret) as JwtPayload;
-    if (!claims) {
-      throw new Error('Unauthenticated');
-    }
-
-    const filter = { _id: claims._id };
-    console.log('filter: ', filter);
-    // can't update email, will cause duplicate key error.
-    const { email, ...update } = req.body;
-    // const { ...update } = req.body;
-    console.log('update: ', update);
-    const user = await User.findOneAndUpdate(filter, update, { returnOriginal: false });
-    console.log('user: ', user);
-    if (null == user) {
-      throw new Error('user not found');
-    }
-
-    // filter out password, don't send it.
-    const { password, ...data } = await user.toJSON();
-    let ret = {
-      success: true,
-      statusCode: 200,
-      message: 'Success',
-      data,
-    };
-    res.send(ret);
-  } catch (error) {
-    return res.status(401).send({
-      message: error,
-    });
-  }
-});
+authRouter.put('/v1/user/update', verifyJwtToken<IUser>, authController.updateUser);
 
 authRouter.post('/v1/logout', (_req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });

@@ -1,12 +1,14 @@
 import { Response, NextFunction } from 'express';
-import { Types } from 'mongoose';
-import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
-import { Level } from '../enums/courseHierarchy.enums';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
+import { GoldFlowService } from '../services/goldFlow.service';
 import { IRequestBody } from '../types/handle.type';
-import { isValidObjectId } from '../utils/mongoose.util';
-import { IPostCardRequest, IPostCouponRequest } from '../vmodels/controllers/goldFlow.vmodel';
+// import { createOrderIdAesEncrypt, createOrderIdAesDecrypt } from '../utils/orderIdEncrypt.util';
+import {
+  IPostCardRequest,
+  IPostCouponRequest,
+  IPostCheckRequest,
+} from '../viewModels/controllers/goldFlow.viewModel';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
@@ -22,7 +24,7 @@ class GoldFlowController {
           type: "object",
           required: true,
           schema: {
-            "coursesIds": [
+            "courseIds": [
               "646e0e6ffa0eac0933c5a776",
               "646e0e6ffa0eac0933c5a778",
               "646e0e6ffa0eac0933c5a77e",
@@ -108,159 +110,15 @@ class GoldFlowController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const { coursesIds } = req.body;
+      const { courseIds } = req.body;
 
-      const isValid = coursesIds.every(isValidObjectId);
-
-      if (!isValid) {
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-      }
-
-      const currentDate = new Date();
-      const coverURL = process.env.COVER_URL;
-
-      const [courseHierarchy] = await CourseHierarchy.aggregate([
-        {
-          $match: {
-            $and: [
-              { _id: { $in: coursesIds.map(id => new Types.ObjectId(id)) } },
-              { isPublished: true }, // 判斷已上架
-            ],
-          },
-        },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $group: {
-            _id: null,
-            totalPrice: {
-              $sum: {
-                $cond: [
-                  {
-                    $eq: ['$isFree', true], // 判斷免費課程
-                  },
-                  0,
-                  {
-                    $cond: [
-                      {
-                        $and: [
-                          { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
-                          { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
-                        ],
-                      },
-                      '$discountPrice',
-                      '$price',
-                    ],
-                  },
-                ],
-              },
-            },
-            shoppingCart: {
-              $push: {
-                _id: '$_id',
-                title: '$title',
-                cover: { $concat: [coverURL, '$cover'] },
-                level: {
-                  $switch: {
-                    branches: Object.entries(Level).map(([level, levelName]) => ({
-                      case: { $eq: ['$level', parseInt(level)] },
-                      then: levelName,
-                    })),
-                    default: null,
-                  },
-                },
-                time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
-                total: '$totalNumber',
-                instructorName: { $arrayElemAt: ['$user.name', 0] },
-                price: '$price',
-                discountPrice: {
-                  $cond: [
-                    {
-                      $and: [
-                        { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
-                        { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
-                      ],
-                    },
-                    '$discountPrice',
-                    null,
-                  ],
-                },
-                isFree: '$isFree',
-              },
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0, // 排除 _id 欄位
-            totalPrice: 1,
-            shoppingCart: 1,
-          },
-        },
-      ]);
-
-      const youMightLike = await CourseHierarchy.aggregate([
-        {
-          $match: {
-            $and: [
-              { isPublished: true, isPopular: true }, // 判斷已 上架 且 為熱門課程
-            ],
-          },
-        },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $sample: { size: 10 }, // 隨機讀取10筆
-        },
-        {
-          $project: {
-            _id: '$_id',
-            title: '$title',
-            cover: { $concat: [coverURL, '$cover'] },
-            level: {
-              $switch: {
-                branches: Object.entries(Level).map(([level, levelName]) => ({
-                  case: { $eq: ['$level', parseInt(level)] },
-                  then: levelName,
-                })),
-                default: null,
-              },
-            },
-            time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
-            total: '$totalNumber',
-            instructorName: { $arrayElemAt: ['$user.name', 0] },
-            price: '$price',
-            discountPrice: {
-              $cond: [
-                {
-                  $and: [
-                    { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
-                    { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
-                  ],
-                },
-                '$discountPrice',
-                null,
-              ],
-            },
-            isFree: '$isFree',
-          },
-        },
-      ]);
+      const goldFlowService = new GoldFlowService();
+      const { courseHierarchy, youMightLike } = await goldFlowService.postCardAsync(courseIds);
 
       if (!courseHierarchy)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.NotFound);
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+          youMightLike,
+        });
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
         ...courseHierarchy,
@@ -274,7 +132,11 @@ class GoldFlowController {
 
   //#region postCoupon [ 查詢單筆優惠卷 ]
   /** 查詢單筆優惠卷 */
-  static async postCoupon(req: IRequestBody<IPostCouponRequest>, res: Response, next: NextFunction) {
+  static async postCoupon(
+    req: IRequestBody<IPostCouponRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -285,7 +147,7 @@ class GoldFlowController {
           type: "object",
           required: true,
           schema: {
-            "coursesIds": [
+            "courseIds": [
               "646e0e6ffa0eac0933c5a776",
               "646e0e6ffa0eac0933c5a778",
               "646e0e6ffa0eac0933c5a77e",
@@ -328,69 +190,139 @@ class GoldFlowController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const { coursesIds, couponCode } = req.body;
+      const { courseIds, couponCode } = req.body;
 
-      const isValid = coursesIds.every(isValidObjectId);
+      const goldFlowService = new GoldFlowService();
+      const courseTabs = await goldFlowService.mergeCourseTabsAsync(courseIds);
 
-      if (!isValid) {
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
-      }
+      if (!courseTabs)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-      const [courseHierarchy] = await CourseHierarchy.aggregate([
-        {
-          $match: {
-            $and: [
-              { _id: { $in: coursesIds.map(id => new Types.ObjectId(id)) } },
-              { isPublished: true }, // 判斷已上架
-            ],
-          },
-        },
-        {
-          $unwind: '$tagNames', // 展开 uniqueTagNames 字段
-        },
-        {
-          $group: {
-            _id: null,
-            uniqueTagNames: { $addToSet: '$tagNames' }, // 将 tagNames 合并并去重
-          },
-        },
+      const price = await goldFlowService.checkCouponCode(couponCode, courseTabs);
 
-        {
-          $project: {
-            _id: 0,
-            uniqueTagNames: 1,
-          },
-        },
-      ]);
+      if (!price)
+        return handleResponse(res, HttpStatusCode.BadRequest, '輸入的優惠券代碼對此課程無效');
 
-      const [platformCoupons] = await PlatformCoupons.aggregate([
-        {
-          $match: {
-            $and: [
-              { couponCode: couponCode },
-              { tagNames: { $in: courseHierarchy.uniqueTagNames } },
-            ],
-          },
-        },
-        {
-          $project: {
-            price: 1,
-          },
-        },
-        {
-          $limit: 1,
-        },
-      ]);
-
-      if (!platformCoupons)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, platformCoupons.price);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, { price });
     } catch (err) {
       next(err);
     }
   }
   //#endregion postCoupon [ 查詢單筆優惠卷 ]
+
+  //#region postCheckOrder [ 讀取確認訂單資料 ]
+  /** 讀取確認訂單資料 */
+  static async postCheckOrder(
+    req: IRequestBody<IPostCheckRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "讀取確認訂單資料"
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "courseIds": [
+              "646f7e2f4802a2dbf6b3eb83",
+              "646f7e2f4802a2dbf6b3eb84",
+              "646f7e2f4802a2dbf6b3eb85"
+            ],
+            "couponCode": "ugyV1E8P"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success",
+            "data": {
+              "totalPrice": 7022,
+              "shoppingCart": [
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "title": "狗狗訓練入門課程",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "level": "初階課程",
+                  "time": 135.6,
+                  "total": 53,
+                  "instructorName": "RubyTest",
+                  "price": 3148,
+                  "discountPrice": null,
+                  "isFree": false
+                },
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb84",
+                  "title": "高效狗狗訓練方法",
+                  "cover": "https://thumbs.dreamstime.com/z/hunting-duck-dog-blind-29141083.jpg",
+                  "level": "高階課程",
+                  "time": 85.7,
+                  "total": 85,
+                  "instructorName": "test0514",
+                  "price": 5282,
+                  "discountPrice": 2586,
+                  "isFree": false
+                },
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb85",
+                  "title": "狗狗訓練實戰指南",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-jumping-over-pool-water-29720697.jpg",
+                  "level": "所有級別",
+                  "time": 52.8,
+                  "total": 87,
+                  "instructorName": "RUBYTEST",
+                  "price": 1288,
+                  "discountPrice": null,
+                  "isFree": false
+                }
+              ],
+              "discountedPrice": 6210,
+              "platformCoupons": {
+                "couponPrice": 812
+              }
+            }
+          }
+        }
+        * #swagger.responses[400] = {
+          description: "請求錯誤",
+          schema: {
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Bad Request"
+          }
+        }
+        * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema: {
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const { courseIds, couponCode } = req.body;
+
+      const goldFlowService = new GoldFlowService();
+      const courseHierarchy = await goldFlowService.checkCoursesAsync(courseIds);
+
+      if (!courseHierarchy)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const order = await goldFlowService.checkOrderAsync(courseHierarchy, couponCode);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, order);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion postCheckOrder [ 讀取確認訂單資料 ]
 }
 
 export { GoldFlowController };
