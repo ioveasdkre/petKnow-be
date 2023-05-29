@@ -1,8 +1,10 @@
-import { IUser } from '../../models/user.model';
-import { IRequestBody } from '../../types/handle.type';
-
-interface IUserExistsRequest extends IRequestBody {
-  user?: IUser;
+interface IUpdateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+  nickname?: string;
+  bio?: string;
+  salt?: string;
 }
 
-export { IUserExistsRequest };
+export { IUpdateUserRequest };

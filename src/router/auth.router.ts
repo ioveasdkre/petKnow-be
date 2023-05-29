@@ -5,6 +5,7 @@ import { jwtSecret } from '../config/env';
 import { User } from '../connections/mongoDB';
 import { authController } from '../controllers/auth.controller';
 import { verifyJwtToken } from '../middlewares/verifyType.middewaes';
+import { IUser } from '../models/user.model';
 
 const authRouter = express.Router();
 
@@ -188,52 +189,9 @@ authRouter.post('/v1/login', async (req, res) => {
   //  res.send(user);
 });
 
-interface JwtPayload {
-  _id: string;
-}
-
 authRouter.get('/v1/user/show', verifyJwtToken, authController.UserExists);
 
-authRouter.put('/v1/user/update', async (req, res) => {
-  try {
-    console.log('body: ', req.body);
-    let auth = req.get('authorization') || (' ' as string);
-    const myArray = auth.split(' ');
-    auth = myArray[1];
-    // console.log('auth: ', auth);
-
-    const claims = jwt.verify(auth, jwtSecret) as JwtPayload;
-    if (!claims) {
-      throw new Error('Unauthenticated');
-    }
-
-    const filter = { _id: claims._id };
-    console.log('filter: ', filter);
-    // can't update email, will cause duplicate key error.
-    const { email, ...update } = req.body;
-    // const { ...update } = req.body;
-    console.log('update: ', update);
-    const user = await User.findOneAndUpdate(filter, update, { returnOriginal: false });
-    console.log('user: ', user);
-    if (null == user) {
-      throw new Error('user not found');
-    }
-
-    // filter out password, don't send it.
-    const { password, ...data } = await user.toJSON();
-    let ret = {
-      success: true,
-      statusCode: 200,
-      message: 'Success',
-      data,
-    };
-    res.send(ret);
-  } catch (error) {
-    return res.status(401).send({
-      message: error,
-    });
-  }
-});
+authRouter.put('/v1/user/update', verifyJwtToken<IUser>, authController.updateUser);
 
 authRouter.post('/v1/logout', (_req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });

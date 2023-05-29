@@ -119,7 +119,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
           youMightLike,
         });
-        
+
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
         ...courseHierarchy,
         youMightLike,
