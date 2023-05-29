@@ -3,14 +3,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 
 function setSecurityHeaders(_req: Request, _res: Response, next: NextFunction) {
-  const allowedOrigins = [
-    'petknow.netlify.app',
-    'localhost:3000',
-    'localhost:5173',
-    'localhost:8000',
-    'localhost:8080',
-  ];
-
   helmet({
     xFrameOptions: { action: 'deny' },
     contentSecurityPolicy: {
@@ -39,10 +31,7 @@ function setSecurityHeaders(_req: Request, _res: Response, next: NextFunction) {
     },
   });
 
-  cors({
-    credentials: true,
-    origin: allowedOrigins,
-  });
+  cors();
 
   next();
 }
