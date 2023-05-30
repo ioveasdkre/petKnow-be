@@ -8,7 +8,6 @@ declare global {
       DB_USER: string;
       MONGODB_URL: string;
       COVER_URL: string;
-      VIMEO_URL: string;
       ENV: 'test' | 'dev' | 'prod';
       JWT_SECRET: string;
       MERCHANTID: string;
