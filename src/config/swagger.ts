@@ -2,7 +2,7 @@ import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
 import { port, env } from '../config/env';
 
-const host = env === 'prod' ? 'petknow.netlify.app' : `localhost:${port}`;
+const host = env === 'prod' ? 'petknow-be.onrender.com' : `localhost:${port}`;
 
 const options: Options = {
   info: {
