@@ -19,15 +19,19 @@ const orderHasKey = process.env.ORDERHASHKEY;
 const orderHasIv = process.env.ORDERHASHIV;
 
 if (!mongodbUrl) {
-  throw new Error('IDM Database connection string not found in environment variables.');
+  throw new Error('在環境變量中找不到 testPetknow 數據庫連接字符串');
 }
 
 if (!jwtSecret) {
-  throw new Error('JWT_SECRET not found in environment variables.');
+  throw new Error('在環境變量中找不到 JWT_SECRET');
 }
 
 if (!goldFlowHashKey || !goldFlowHashIv) {
-  throw new Error('GoldFlowHashKey or GoldFlowHashIv is empty');
+  throw new Error('在環境變量中找不到 GoldFlowHashKey 或 GoldFlowHashIv');
+}
+
+if (!orderSalt || !orderHasKey || !orderHasIv) {
+  throw new Error('在環境變量中找不到 orderSalt 或 orderHasKey 或 orderHasIv');
 }
 
 export {

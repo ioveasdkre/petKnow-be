@@ -36,7 +36,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -290,7 +290,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -367,7 +367,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -498,7 +498,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -547,7 +547,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -593,7 +593,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
