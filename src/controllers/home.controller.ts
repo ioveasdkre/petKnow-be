@@ -178,7 +178,7 @@ class HomeController {
       next(err);
     }
   }
-  //#region getIndex [ 首頁 ]
+  //#endregion getIndex [ 首頁 ]
 }
 
 export { HomeController };
