@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "API 文件"
   },
-  "host": "localhost:8000",
+  "host": "petknow-be.onrender.com",
   "basePath": "/",
   "schemes": [
     "http",
@@ -382,17 +382,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "patrick"
-                },
                 "bio": {
                   "type": "string",
-                  "example": "Just another software developer"
+                  "example": "無敵鐵金剛"
                 },
                 "nickname": {
                   "type": "string",
-                  "example": "pat"
+                  "example": "說你好"
                 }
               }
             }
@@ -404,40 +400,40 @@
             "schema": {
               "type": "object",
               "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": true
-                },
                 "statusCode": {
                   "type": "number",
                   "example": 200
                 },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "Modify Success"
                 },
                 "data": {
                   "type": "object",
                   "properties": {
-                    "_id": {
-                      "type": "string",
-                      "example": "646d8bf85f52ae9681b88593"
-                    },
                     "name": {
                       "type": "string",
-                      "example": "Benson"
+                      "example": "patrick"
                     },
                     "email": {
                       "type": "string",
-                      "example": "Abc123#@gmail.com"
-                    },
-                    "password": {
-                      "type": "string",
-                      "example": "$2a$10$1yR.UPzTukYyVdiLUTHvhugqp1nBEjZmKD31inX2XGlLpUIGvAwly"
+                      "example": "AbcTest@gmail.com"
                     },
                     "__v": {
                       "type": "number",
                       "example": 0
+                    },
+                    "bio": {
+                      "type": "string",
+                      "example": "無敵鐵金剛"
+                    },
+                    "nickname": {
+                      "type": "string",
+                      "example": "說你好"
                     }
                   }
                 }
