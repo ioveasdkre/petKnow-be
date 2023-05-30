@@ -8,7 +8,6 @@
   "host": "petknow-be.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "securityDefinitions": {
@@ -1694,6 +1693,188 @@
         }
       }
     },
+    "/v1/goldFlow/createOrder": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "新增訂單",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseIds": {
+                  "type": "array",
+                  "example": [
+                    "646f7e2f4802a2dbf6b3eb83",
+                    "646f7e2f4802a2dbf6b3eb84",
+                    "646f7e2f4802a2dbf6b3eb85"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "ugyV1E8P"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "amt": {
+                      "type": "number",
+                      "example": 6210
+                    },
+                    "itemDesc": {
+                      "type": "string",
+                      "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                    },
+                    "totalPrice": {
+                      "type": "number",
+                      "example": 7022
+                    },
+                    "shoppingCart": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3eb83"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "狗狗訓練入門課程"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "初階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 135.6
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 53
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "RubyTest"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 3148
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "discountedPrice": {
+                      "type": "number",
+                      "example": 6210
+                    },
+                    "couponPrice": {
+                      "type": "number",
+                      "example": 812
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "請求錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad Request"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "System error, please contact the system administrator"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
     "/v1/goldFlow/checkOrder": {
       "post": {
         "tags": [
@@ -1749,6 +1930,14 @@
                 "data": {
                   "type": "object",
                   "properties": {
+                    "amt": {
+                      "type": "number",
+                      "example": 6210
+                    },
+                    "itemDesc": {
+                      "type": "string",
+                      "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                    },
                     "totalPrice": {
                       "type": "number",
                       "example": 7022
@@ -1760,35 +1949,35 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb85"
+                            "example": "646f7e2f4802a2dbf6b3eb83"
                           },
                           "title": {
                             "type": "string",
-                            "example": "狗狗訓練實戰指南"
+                            "example": "狗狗訓練入門課程"
                           },
                           "cover": {
                             "type": "string",
-                            "example": "https://thumbs.dreamstime.com/z/dog-jumping-over-pool-water-29720697.jpg"
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
                           },
                           "level": {
                             "type": "string",
-                            "example": "所有級別"
+                            "example": "初階課程"
                           },
                           "time": {
                             "type": "number",
-                            "example": 52.8
+                            "example": 135.6
                           },
                           "total": {
                             "type": "number",
-                            "example": 87
+                            "example": 53
                           },
                           "instructorName": {
                             "type": "string",
-                            "example": "RUBYTEST"
+                            "example": "RubyTest"
                           },
                           "price": {
                             "type": "number",
-                            "example": 1288
+                            "example": 3148
                           },
                           "discountPrice": {},
                           "isFree": {
@@ -1802,14 +1991,9 @@
                       "type": "number",
                       "example": 6210
                     },
-                    "platformCoupons": {
-                      "type": "object",
-                      "properties": {
-                        "couponPrice": {
-                          "type": "number",
-                          "example": 812
-                        }
-                      }
+                    "couponPrice": {
+                      "type": "number",
+                      "example": 812
                     }
                   }
                 }
