@@ -2096,6 +2096,10 @@
                           "cover": {
                             "type": "string",
                             "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "RubyTest"
                           }
                         }
                       }
