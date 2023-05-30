@@ -53,7 +53,7 @@ class ItemController {
 				return res.status(200).send(item);
 			}
 
-			res.status(404).send('item not found');
+			res.status(404).send('item 查詢不到資料');
 		} catch (e: any) {
 			res.status(500).send(e.message);
 		}

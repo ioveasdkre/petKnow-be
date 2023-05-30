@@ -34,7 +34,7 @@ const verifyJwtToken = async <T = void>(
     const user = await User.findById(claims._id);
 
     if (!user) {
-      return handleResponse(res, HttpStatusCode.BadRequest, 'user not found');
+      return handleResponse(res, HttpStatusCode.BadRequest, 'user 查詢不到資料');
     }
 
     req.user = user;

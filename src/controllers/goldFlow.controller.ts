@@ -106,7 +106,7 @@ class GoldFlowController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -186,7 +186,7 @@ class GoldFlowController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -276,7 +276,7 @@ class GoldFlowController {
           schema: {
             "statusCode": 400,
             "isSuccess": false,
-            "message": "Bad Request"
+            "message": "錯誤的請求"
           }
         }
         * #swagger.responses[500] = {
@@ -284,7 +284,7 @@ class GoldFlowController {
           schema: {
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
@@ -385,7 +385,7 @@ class GoldFlowController {
           schema: {
             "statusCode": 400,
             "isSuccess": false,
-            "message": "Bad Request"
+            "message": "錯誤的請求"
           }
         }
         * #swagger.responses[500] = {
@@ -393,7 +393,7 @@ class GoldFlowController {
           schema: {
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */
