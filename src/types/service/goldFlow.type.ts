@@ -11,11 +11,26 @@ interface ShoppingCartItem {
   isFree: boolean;
 }
 
-interface ICheckCourseResult {
+interface ICheckCourse {
   totalPrice: number;
   shoppingCart: ShoppingCartItem[];
   uniqueTagNames?: string[];
+  courseIds?: string;
   discountedPrice?: number;
+}
+
+interface ICheckCourseReturn {
+  id?: string;
+  platformCoupons?: number;
+  totalPrice: number;
+  shoppingCart: ShoppingCartItem[];
+  uniqueTagNames?: string[] | undefined;
+  discountedPrice?: number | undefined;
+  email?: string;
+  amt?: number;
+  itemDesc?: string;
+  timeStamp?: number;
+  merchantOrderNo?: number;
 }
 
 interface IOrderParameter {
@@ -26,4 +41,4 @@ interface IOrderParameter {
   MerchantOrderNo: number;
 }
 
-export { ICheckCourseResult, IOrderParameter };
+export { ICheckCourse, IOrderParameter, ICheckCourseReturn };

@@ -52,9 +52,7 @@ class authController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const user = req.user;
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, user);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, req.user);
     } catch (err) {
       next(err);
     }

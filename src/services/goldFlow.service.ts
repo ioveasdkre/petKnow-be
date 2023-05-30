@@ -1,17 +1,15 @@
 import { Types } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
-import {
-  coverUrl,
-  merchantID,
-  respondType,
-  version,
-  algorithm,
-  goldFlowHashKey,
-  goldFlowHashIv,
-} from '../config/env';
+import { coverUrl, merchantID, respondType, version } from '../config/env';
 import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
-import { ICheckCourseResult, IOrderParameter } from '../types/service/goldFlow.type';
+import {
+  ICheckCourse as ICheckCourseResult,
+  ICheckCourse as ICheckCourseParameter,
+  IOrderParameter,
+  ICheckCourseReturn,
+} from '../types/service/goldFlow.type';
 
 class GoldFlowService {
   async postCardAsync(courseIds: string[]) {
@@ -300,6 +298,7 @@ class GoldFlowService {
             },
           },
           uniqueTagNames: { $addToSet: '$tagNames' },
+          courseIds: { $push: { $toString: '$_id' } },
         },
       },
       {
@@ -308,6 +307,15 @@ class GoldFlowService {
           totalPrice: 1,
           shoppingCart: 1,
           uniqueTagNames: 1,
+          courseIds: {
+            $reduce: {
+              input: '$courseIds',
+              initialValue: '',
+              in: {
+                $concat: ['$$value', { $cond: [{ $eq: ['$$value', ''] }, '', ','] }, '$$this'],
+              },
+            },
+          },
         },
       },
     ]);
@@ -315,7 +323,10 @@ class GoldFlowService {
     return courseHierarchy ? courseHierarchy : false;
   }
 
-  async checkOrderAsync(courseHierarchy: ICheckCourseResult, couponCode: string) {
+  async checkOrderAsync(
+    courseHierarchy: ICheckCourseParameter,
+    couponCode: string,
+  ): Promise<ICheckCourseReturn> {
     const currentDate = new Date();
 
     const [platformCoupons] = await PlatformCoupons.aggregate([
@@ -341,13 +352,52 @@ class GoldFlowService {
       },
     ]);
 
-    delete courseHierarchy.uniqueTagNames;
-
-    if (!platformCoupons) return { ...courseHierarchy, platformCoupons };
+    if (!platformCoupons) return { ...courseHierarchy };
 
     courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
 
-    return { ...courseHierarchy, platformCoupons };
+    const amt = courseHierarchy.discountedPrice
+      ? courseHierarchy.discountedPrice
+      : courseHierarchy.totalPrice;
+    const itemDesc = courseHierarchy.courseIds;
+
+    delete courseHierarchy.courseIds;
+    delete courseHierarchy.uniqueTagNames;
+
+    return { amt, itemDesc, ...courseHierarchy, ...platformCoupons };
+  }
+
+  createOrderId(timeStamp: number): string {
+    const uuid = uuidv4();
+    const orderId = `${uuid}-${timeStamp}`;
+    return orderId;
+  }
+
+  orderIdAesEncrypt(
+    data: string,
+    useKey: string,
+    useIv: string,
+    salt: string,
+    algorithm: string = 'aes-256-cbc',
+  ): string {
+    const key = crypto.scryptSync(useKey, salt, 32); // 密钥
+    const iv = Buffer.from(useIv, 'hex'); // 初始化向量
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+
+    return encrypted + cipher.final('hex');
+  }
+
+  orderIdAesDecrypt(encryptedData: string, useKey: string, useIv: string, salt: string): string {
+    const key = crypto.scryptSync(useKey, salt, 32); // 密钥
+    const iv = Buffer.from(useIv, 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
   }
 
   //#region genDataChain [ 生成資料鏈串的函式，用於將訂單物件轉換成資料鏈串。 ]
@@ -372,12 +422,17 @@ class GoldFlowService {
    * @param TradeInfo 交易資訊物件
    * @returns AES 加密後的結果
    */
-  createMpgAesEncrypt(TradeInfo: IOrderParameter) {
+  createMpgAesEncrypt(
+    TradeInfo: IOrderParameter,
+    useKey: string,
+    useIv: string,
+    algorithm: string = 'aes-256-cbc',
+  ) {
     // 對應文件 P17：使用 aes 加密
     // $edata1=bin2hex(openssl_encrypt($data1, "AES-256-CBC", $key, OPENSSL_RAW_DATA, $iv));
 
     // 使用指定的 hashKey 和 hashIv 建立加密器
-    const encrypt = crypto.createCipheriv(algorithm, goldFlowHashKey, goldFlowHashIv);
+    const encrypt = crypto.createCipheriv(algorithm, useKey, useIv);
 
     // 使用 UTF-8 編碼將交易資訊轉換為字串後進行加密，並將結果轉換為十六進位表示
     const enc = encrypt.update(this.genDataChain(TradeInfo), 'utf8', 'hex');
@@ -393,7 +448,7 @@ class GoldFlowService {
    * @param aesEncrypt AES 加密結果
    * @returns SHA-256 雜湊加密後的結果
    */
-  createMpgShaEncrypt(aesEncrypt: string) {
+  createMpgShaEncrypt(aesEncrypt: string, useKey: string, useIv: string) {
     // 對應文件 P18：使用 sha256 加密
     // $hashs="HashKey=".$key."&".$edata1."&HashIV=".$iv;
 
@@ -401,7 +456,7 @@ class GoldFlowService {
     const sha = crypto.createHash('sha256');
 
     // 準備進行雜湊加密的明文，格式為 "HashKey=xxx&AesEncrypt=xxx&HashIV=xxx"
-    const plainText = `HashKey=${goldFlowHashKey}&${aesEncrypt}&HashIV=${goldFlowHashIv}`;
+    const plainText = `HashKey=${useKey}&${aesEncrypt}&HashIV=${useIv}`;
 
     // 使用 SHA-256 雜湊加密器對明文進行雜湊運算，並將結果轉換為十六進位表示，最後轉換為大寫字母
     return sha.update(plainText).digest('hex').toUpperCase();
@@ -415,9 +470,14 @@ class GoldFlowService {
    * @returns 解密後的交易資訊，以 JSON 格式返回
    * @throws 如果 HashKey 或 HashIV 為空，則拋出錯誤
    */
-  createMpgAesDecrypt(TradeInfo: string) {
+  createMpgAesDecrypt(
+    TradeInfo: string,
+    useKey: string,
+    useIv: string,
+    algorithm: string = 'aes-256-cbc',
+  ) {
     // 使用 AES-256-CBC 演算法建立解密器
-    const decrypt = crypto.createDecipheriv(algorithm, goldFlowHashKey, goldFlowHashIv);
+    const decrypt = crypto.createDecipheriv(algorithm, useKey, useIv);
 
     // 取消自動填充，因為交易資訊可能沒有填滿區塊大小
     decrypt.setAutoPadding(false);
