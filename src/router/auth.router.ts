@@ -48,7 +48,7 @@ authRouter.post('/v1/register', async (req, res) => {
         schema:{
           "statusCode": 500,
           "isSuccess": false,
-          "message": "System error, please contact the system administrator"
+          "message": "系統發生錯誤，請聯繫系統管理員"
         }
       }
     */
@@ -134,7 +134,7 @@ authRouter.post('/v1/login', async (req, res) => {
         schema:{
           "statusCode": 500,
           "isSuccess": false,
-          "message": "System error, please contact the system administrator"
+          "message": "系統發生錯誤，請聯繫系統管理員"
         }
       }
     */
@@ -146,7 +146,7 @@ authRouter.post('/v1/login', async (req, res) => {
     const msg = {
       success: false,
       statusCode: 404,
-      message: 'User not found',
+      message: 'User 查詢不到資料',
       data: {
         email: req.body.email,
       },
@@ -223,7 +223,7 @@ authRouter.post('/v1/', (req, res) => {
   });
 
   if (!user) {
-    return res.status(404).send('User Not Found!');
+    return res.status(404).send('查詢不到使用者資料!');
   }
 
   return res.status(200).send(`Welcome ${username}`);

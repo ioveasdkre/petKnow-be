@@ -17,7 +17,7 @@ class HomeController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "Retrieve Failure",
+            "message": "查詢失敗",
             "data": {
               "carousel": [
                 {
@@ -51,7 +51,7 @@ class HomeController {
           schema:{
             "success": false,
             "statusCode": 400,
-            "message": "Bad Request"
+            "message": "錯誤的請求"
           }
         }
       * #swagger.responses[500] = {
@@ -59,7 +59,7 @@ class HomeController {
           schema:{
             "statusCode": 500,
             "isSuccess": false,
-            "message": "System error, please contact the system administrator"
+            "message": "系統發生錯誤，請聯繫系統管理員"
           }
         }
       */

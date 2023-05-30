@@ -38,7 +38,7 @@ class authController {
         schema:{
           "success": false,
           "statusCode": 400,
-          "message": "Unauthenticated or user not found",
+          "message": "未通過認證 或 查詢不到使用者資料",
         }
       }
     * #swagger.responses[500] = {
@@ -46,7 +46,7 @@ class authController {
         schema:{
           "statusCode": 500,
           "isSuccess": false,
-          "message": "System error, please contact the system administrator"
+          "message": "系統發生錯誤，請聯繫系統管理員"
         }
       }
     */
@@ -90,7 +90,7 @@ class authController {
         schema: {
           "statusCode": 200,
           "isSuccess": true,
-          "message": "Modify Success",
+          "message": "更新成功",
           "data": {
             "name": "patrick",
             "email": "AbcTest@gmail.com",
@@ -105,7 +105,7 @@ class authController {
         schema:{
           "success": false,
           "statusCode": 400,
-          "message": "Unauthenticated or user not found",
+          "message": "未通過認證 或 查詢不到使用者資料",
         }
       }
     * #swagger.responses[500] = {
@@ -113,7 +113,7 @@ class authController {
         schema:{
           "statusCode": 500,
           "isSuccess": false,
-          "message": "System error, please contact the system administrator"
+          "message": "系統發生錯誤，請聯繫系統管理員"
         }
       }
     */
