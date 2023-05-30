@@ -12,7 +12,11 @@ import {
   IVerifyObjectIdsRequest,
 } from '../viewModels/middlewares/verifyType.viewModel';
 
-async function verifyJwtToken<T = void>(req: IVerifyJwtTokenRequest<T>, res: Response, next: NextFunction) {
+const verifyJwtToken = async <T = void>(
+  req: IVerifyJwtTokenRequest<T>,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     let auth = req.get('authorization') || (' ' as string);
 
@@ -32,7 +36,7 @@ async function verifyJwtToken<T = void>(req: IVerifyJwtTokenRequest<T>, res: Res
     if (!user) {
       return handleResponse(res, HttpStatusCode.BadRequest, 'user not found');
     }
-    
+
     req.user = user;
 
     next();
@@ -61,4 +65,4 @@ const verifyObjectIds = (
   }
 };
 
-export { verifyObjectIds, verifyJwtToken, jwtSecret };
+export { verifyJwtToken, verifyObjectIds };

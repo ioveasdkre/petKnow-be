@@ -1,14 +1,16 @@
 import { Response, NextFunction } from 'express';
+import { orderHasKey, orderHasIv, orderSalt } from '../config/env';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
 import { IRequestBody } from '../types/handle.type';
-// import { createOrderIdAesEncrypt, createOrderIdAesDecrypt } from '../utils/orderIdEncrypt.util';
 import {
   IPostCardRequest,
   IPostCouponRequest,
+  ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
+import { IVerifyJwtTokenRequest as IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
 class GoldFlowController {
   //#region postCard [ 讀取購物車資料 ]
@@ -210,6 +212,120 @@ class GoldFlowController {
   }
   //#endregion postCoupon [ 查詢單筆優惠卷 ]
 
+  //#region createOrder [ 新增訂單 ]
+  /** 新增訂單 */
+  static async createOrder(
+    req: IRequestJwtBody<ICreateOrderRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "新增訂單"
+    * #swagger.security = [
+        {
+          "apiKeyAuth": []
+        }
+      ]
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "courseIds": [
+              "646f7e2f4802a2dbf6b3eb83",
+              "646f7e2f4802a2dbf6b3eb84",
+              "646f7e2f4802a2dbf6b3eb85"
+            ],
+            "couponCode": "ugyV1E8P"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "Success",
+            "data": {
+              "amt": 6210,
+              "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+              "totalPrice": 7022,
+              "shoppingCart": [
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "title": "狗狗訓練入門課程",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "level": "初階課程",
+                  "time": 135.6,
+                  "total": 53,
+                  "instructorName": "RubyTest",
+                  "price": 3148,
+                  "discountPrice": null,
+                  "isFree": false
+                }
+              ],
+              "discountedPrice": 6210,
+              "couponPrice": 812
+            }
+          }
+        }
+        * #swagger.responses[400] = {
+          description: "請求錯誤",
+          schema: {
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Bad Request"
+          }
+        }
+        * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema: {
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "System error, please contact the system administrator"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const user = req.user;
+
+      if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const { courseIds, couponCode } = req.body;
+
+      const goldFlowService = new GoldFlowService();
+      const courseHierarchy = await goldFlowService.checkCoursesAsync(courseIds);
+
+      if (!courseHierarchy)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const timeStamp = Math.round(new Date().getTime() / 1000);
+      const orderId = goldFlowService.createOrderId(timeStamp);
+
+      const orderIdAesEncrypt = goldFlowService.orderIdAesEncrypt(
+        orderId,
+        orderHasKey,
+        orderHasIv,
+        orderSalt,
+      );
+
+      const order = await goldFlowService.checkOrderAsync(courseHierarchy, couponCode);
+
+      order.id = orderIdAesEncrypt;
+      order.email = user.email;
+      order.timeStamp = timeStamp;
+      order.merchantOrderNo = timeStamp;
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, order);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion createOrder [ 新增訂單 ]
+
   //#region postCheckOrder [ 讀取確認訂單資料 ]
   /** 讀取確認訂單資料 */
   static async postCheckOrder(
@@ -242,6 +358,8 @@ class GoldFlowController {
             "isSuccess": true,
             "message": "Success",
             "data": {
+              "amt": 6210,
+              "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
               "totalPrice": 7022,
               "shoppingCart": [
                 {
@@ -255,36 +373,10 @@ class GoldFlowController {
                   "price": 3148,
                   "discountPrice": null,
                   "isFree": false
-                },
-                {
-                  "_id": "646f7e2f4802a2dbf6b3eb84",
-                  "title": "高效狗狗訓練方法",
-                  "cover": "https://thumbs.dreamstime.com/z/hunting-duck-dog-blind-29141083.jpg",
-                  "level": "高階課程",
-                  "time": 85.7,
-                  "total": 85,
-                  "instructorName": "test0514",
-                  "price": 5282,
-                  "discountPrice": 2586,
-                  "isFree": false
-                },
-                {
-                  "_id": "646f7e2f4802a2dbf6b3eb85",
-                  "title": "狗狗訓練實戰指南",
-                  "cover": "https://thumbs.dreamstime.com/z/dog-jumping-over-pool-water-29720697.jpg",
-                  "level": "所有級別",
-                  "time": 52.8,
-                  "total": 87,
-                  "instructorName": "RUBYTEST",
-                  "price": 1288,
-                  "discountPrice": null,
-                  "isFree": false
                 }
               ],
               "discountedPrice": 6210,
-              "platformCoupons": {
-                "couponPrice": 812
-              }
+              "couponPrice": 812
             }
           }
         }
