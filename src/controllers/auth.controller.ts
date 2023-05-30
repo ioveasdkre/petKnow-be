@@ -125,10 +125,10 @@ class authController {
 
       const filter = { _id: claims._id };
       const { nickname, bio } = req.body;
-
-      if (nickname === undefined || bio === undefined)
+      
+      if ((nickname === undefined) && (bio === undefined)) {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
+      }
       const user = await User.findOneAndUpdate(
         filter,
         { nickname, bio },
