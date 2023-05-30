@@ -5,7 +5,7 @@ import { jwtSecret } from '../config/env';
 import { User } from '../connections/mongoDB';
 import { authController } from '../controllers/auth.controller';
 import { verifyJwtToken } from '../middlewares/verifyType.middewaes';
-import { IUser } from '../models/user.model';
+import { IUpdateUserRequest } from '../viewModels/controllers/auth.viewMdel';
 
 const authRouter = express.Router();
 
@@ -191,7 +191,7 @@ authRouter.post('/v1/login', async (req, res) => {
 
 authRouter.get('/v1/user/show', verifyJwtToken, authController.UserExists);
 
-authRouter.put('/v1/user/update', verifyJwtToken<IUser>, authController.updateUser);
+authRouter.put('/v1/user/update', verifyJwtToken<IUpdateUserRequest>, authController.updateUser);
 
 authRouter.post('/v1/logout', (_req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });

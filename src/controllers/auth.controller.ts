@@ -63,7 +63,11 @@ class authController {
 
   //#region updateUser [ 更新用戶資料 ]
   /** 更新用戶資料 */
-  static async updateUser(req: IRequestBody<IUpdateUserRequest>, res: Response, next: NextFunction) {
+  static async updateUser(
+    req: IRequestBody<IUpdateUserRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
     //#region [ swagger說明文件 ]
     /**
     * #swagger.tags = ["登入系統 API"]
@@ -79,23 +83,22 @@ class authController {
         type: "object",
         required: true,
         schema: {
-          "name": "patrick",
-          "bio": "Just another software developer",
-          "nickname": "pat"
+          "bio": "無敵鐵金剛",
+          "nickname": "說你好"
         }
       }
     * #swagger.responses[200] = {
         description: "成功",
         schema: {
-          "success": true,
           "statusCode": 200,
-          "message": "Success",
+          "isSuccess": true,
+          "message": "Modify Success",
           "data": {
-            "_id": "646d8bf85f52ae9681b88593",
-            "name": "Benson",
-            "email": "Abc123#@gmail.com",
-            "password": "$2a$10$1yR.UPzTukYyVdiLUTHvhugqp1nBEjZmKD31inX2XGlLpUIGvAwly",
-            "__v": 0
+            "name": "patrick",
+            "email": "AbcTest@gmail.com",
+            "__v": 0,
+            "bio": "無敵鐵金剛",
+            "nickname": "說你好"
           }
         }
       }
@@ -120,20 +123,28 @@ class authController {
     try {
       const claims = req.user;
 
-      if (!claims)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      if (!claims) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const filter = { _id: claims._id };
-      const { email, ...update } = req.body;
-      const user = await User.findOneAndUpdate(filter, update, { returnOriginal: false });
+      const { nickname, bio } = req.body;
+      const user = await User.findOneAndUpdate(
+        filter,
+        { nickname, bio },
+        {
+          new: true,
+          projection: {
+            _id: 0,
+            password: 0,
+            salt: 0,
+          },
+        },
+      );
 
       if (!user) {
         return handleResponse(res, HttpStatusCode.BadRequest, '找不到用戶');
       }
 
-      const { password, ...data } = await user.toJSON();
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.ModifySuccess, data);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.ModifySuccess, user);
     } catch (err) {
       next(err);
     }

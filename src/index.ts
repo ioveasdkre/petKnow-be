@@ -16,9 +16,9 @@ import {
 } from './middlewares/error.middleware';
 import swaggerSpec from '../swagger_output.json';
 
-export const app = express();
+const app = express();
 
-app.use(setSecurityHeaders);
+setSecurityHeaders(app);
 
 if (env === 'dev') {
   app.use(morgan('dev'));
