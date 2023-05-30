@@ -23,7 +23,8 @@ class HomeController {
                 {
                   "_id": "646f7e2f4802a2dbf6b3eb83",
                   "title": "狗狗訓練入門課程",
-                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "instructorName": "RubyTest"
                 }
               ],
               "popular": [
@@ -75,6 +76,14 @@ class HomeController {
           },
         },
         {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
           $group: {
             _id: null,
             carousel: {
@@ -82,6 +91,7 @@ class HomeController {
                 _id: '$_id',
                 title: '$title',
                 cover: { $concat: [coverUrl, '$cover'] },
+                instructorName: { $arrayElemAt: ['$user.name', 0] },
               },
             },
             count: { $sum: 1 },

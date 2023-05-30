@@ -19,7 +19,7 @@ const options: Options = {
       name: 'authorization',
       description: '請加上 API Token',
     },
-  }, // 對應 PostController.deletePost
+  },
 };
 
 const outputFile = './swagger_output.json';
