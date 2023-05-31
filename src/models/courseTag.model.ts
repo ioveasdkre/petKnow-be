@@ -1,15 +1,18 @@
 import { Schema, Document } from 'mongoose';
 
-interface ICourseTag extends Document {
+interface ICourseTag {
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const courseTagSchema = new Schema<ICourseTag>(
+interface ICourseTagModel extends ICourseTag, Document {}
+
+const courseTagSchema = new Schema<ICourseTagModel>(
   {
     name: {
       type: String,
+      unique: true,
       required: [true, '標籤未填寫'],
     },
     createdAt: {
@@ -24,4 +27,4 @@ const courseTagSchema = new Schema<ICourseTag>(
   { versionKey: false },
 );
 
-export { courseTagSchema, ICourseTag };
+export { courseTagSchema, ICourseTagModel, ICourseTag };
