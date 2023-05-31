@@ -27,14 +27,9 @@ class GoldFlowController {
           required: true,
           schema: {
             "courseIds": [
-              "646e0e6ffa0eac0933c5a776",
-              "646e0e6ffa0eac0933c5a778",
-              "646e0e6ffa0eac0933c5a77e",
-              "646e0e6ffa0eac0933c5a78c",
-              "646e0e6ffa0eac0933c5a79b",
-              "646e0e6ffa0eac0933c5a79c",
-              "646e0e6ffa0eac0933c5a7ad",
-              "646e0e6ffa0eac0933c5a7ae"
+              "646f7e2f4802a2dbf6b3eb83",
+              "646f7e2f4802a2dbf6b3eb84",
+              "646f7e2f4802a2dbf6b3eb85"
             ]
           }
         }
