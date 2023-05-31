@@ -1,8 +1,14 @@
 import { Types } from 'mongoose';
-import { courseHierarchys, courseHierarchyType, shortDescriptions, descriptions } from '../../__tests__/courseHierarchyData.test';
+import {
+  courseHierarchys,
+  courseHierarchyType,
+  shortDescriptions,
+  descriptions,
+} from '../../__tests__/courseHierarchyData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
-import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
+import { CourseHierarchy, CourseTag, PlatformCoupons, User } from '../connections/mongoDB';
 import { ISubchapter, IChapter, ICourse } from '../models/courseHierarchy.model';
+import { ICourseTag } from '../models/courseTag.model';
 import { IPlatformCoupons } from '../models/platformCoupons.model';
 
 class FakeInformationService {
@@ -38,7 +44,6 @@ class FakeInformationService {
     const descriptionLength = descriptions.length;
     const newData: ICourse[] = [];
     const tagNameArr: string[] = [];
-
 
     for (let i = 0; i < data.length; i++) {
       const dataIndex = data[i];
@@ -169,7 +174,7 @@ class FakeInformationService {
     return couponCode;
   }
 
-  async GenerateManyData() {
+  async courseHierarchyManyData() {
     const { dogCovers, catCovers, petCovers, fileNames, dagData, catData, petData } =
       courseHierarchys;
     const newData: ICourse[] = [];
@@ -232,6 +237,27 @@ class FakeInformationService {
     }
 
     const result = await PlatformCoupons.insertMany(newData);
+
+    if (result.length === 0) return false;
+
+    return true;
+  }
+
+  async CourseTagManyData() {
+    const newData: ICourseTag[] = [];
+
+    const deleteCourseTag = await CourseTag.deleteMany();
+
+    if (!deleteCourseTag.acknowledged) return false;
+
+    // 產生 標籤
+    for (let i = 0; i < lables.length; i++) {
+      newData.push({
+        name: lables[i],
+      });
+    }
+
+    const result = await CourseTag.insertMany(newData);
 
     if (result.length === 0) return false;
 

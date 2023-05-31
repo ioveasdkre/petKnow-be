@@ -1,16 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
+import { CourseTag } from '../connections/mongoDB';
+import { ICourseTag, ICourseTagModel } from '../models/courseTag.model';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
-import { HomeService } from '../services/home.service';
+import { CRUDService } from '../services/shares/crud.service';
 
-class HomeController {
-  //#region getIndex [ 首頁 ]
-  /** 首頁 */
-  static async getIndex(_req: Request, res: Response, next: NextFunction) {
+class CourseTagController {
+  //#region getAll [ 查詢所有資料 ]
+  /** 查詢所有資料 */
+  static async getAll(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["Home - 基本 API"]
-     * #swagger.description = "首頁"
+     * #swagger.tags = ["CourseTag - 標籤資料表"]
+     * #swagger.description = "查詢所有資料"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -41,9 +43,6 @@ class HomeController {
                     }
                   ]
                 }
-              ],
-              "tagNames": [
-                "寵物溝通"
               ]
             }
           }
@@ -67,22 +66,18 @@ class HomeController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const homeService = new HomeService();
-      const { carousel, popular, tagNames } = await homeService.getIndex();
+      const _CRUDService = new CRUDService<ICourseTagModel>(CourseTag);
+      const result: ICourseTag[] = await _CRUDService.getAll();
+      
+      if (result.length === 0)
+        return handleResponse(res, HttpStatusCode.NotFound, HttpMessage.NotFound);
 
-      if (!carousel || popular.length === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveFailure, {
-        ...carousel,
-        popular,
-        tagNames,
-      });
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion getIndex [ 首頁 ]
+  //#endregion getAll [ 查詢所有資料 ]
 }
 
-export { HomeController };
+export { CourseTagController as CourseTagController };
