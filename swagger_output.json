@@ -95,7 +95,7 @@
             "success": false,
             "statusCode": 400,
             "message": "Failure",
-            "description": "錯誤的請求"
+            "description": "Bad Request"
           },
           "500": {
             "description": "伺服器發生錯誤",
@@ -228,7 +228,7 @@
             }
           },
           "404": {
-            "description": "查詢不到資料"
+            "description": "Not Found"
           },
           "500": {
             "description": "伺服器發生錯誤",
@@ -541,7 +541,161 @@
             "description": "OK"
           },
           "404": {
-            "description": "查詢不到資料"
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/courseTag/getAll": {
+      "get": {
+        "tags": [
+          "CourseTag - 標籤資料表"
+        ],
+        "description": "查詢所有資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢失敗"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "carousel": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3eb83"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "狗狗訓練入門課程"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "RubyTest"
+                          }
+                        }
+                      }
+                    },
+                    "popular": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tag": {
+                            "type": "string",
+                            "example": "寵物溝通"
+                          },
+                          "courses": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "646f7e2f4802a2dbf6b3ebbd"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "建立與你的寵物更深層的連結"
+                                },
+                                "cover": {
+                                  "type": "string",
+                                  "example": "https://thumbs.dreamstime.com/z/cat-dog-love-2025305.jpg"
+                                },
+                                "instructorName": {
+                                  "type": "string",
+                                  "example": "Benson"
+                                },
+                                "price": {
+                                  "type": "number",
+                                  "example": 3688
+                                },
+                                "discountPrice": {},
+                                "isFree": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -1017,7 +1171,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "新增成功"
                 }
               },
               "xml": {
@@ -1040,7 +1194,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Failure"
+                  "example": "新增失敗"
                 }
               },
               "xml": {
@@ -1079,7 +1233,7 @@
         "tags": [
           "FakeInformation - 假資料 API"
         ],
-        "description": "產生假資料至平台標籤資料表",
+        "description": "產生假資料至平台優惠碼資料表",
         "parameters": [],
         "responses": {
           "200": {
@@ -1097,7 +1251,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "新增成功"
                 }
               },
               "xml": {
@@ -1120,7 +1274,87 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Failure"
+                  "example": "新增失敗"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fakeInformation/generateCourseTagData": {
+      "get": {
+        "tags": [
+          "FakeInformation - 假資料 API"
+        ],
+        "description": "產生假資料至標籤資料表",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增失敗"
                 }
               },
               "xml": {
@@ -2148,6 +2382,15 @@
                           }
                         }
                       }
+                    },
+                    "tagNames": {
+                      "type": "array",
+                      "example": [
+                        "寵物溝通"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -2259,7 +2502,7 @@
             "description": "OK"
           },
           "404": {
-            "description": "查詢不到資料"
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
