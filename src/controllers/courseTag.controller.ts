@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { CourseTag } from '../connections/mongoDB';
-import { ICourseTag } from '../models/courseTag.model';
+import { ICourseTag, ICourseTagModel } from '../models/courseTag.model';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { CRUDService } from '../services/shares/crud.service';
@@ -66,7 +66,7 @@ class CourseTagController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const _CRUDService = new CRUDService<ICourseTag>(CourseTag);
+      const _CRUDService = new CRUDService<ICourseTagModel>(CourseTag);
       const result: ICourseTag[] = await _CRUDService.getAll();
       
       if (result.length === 0)
