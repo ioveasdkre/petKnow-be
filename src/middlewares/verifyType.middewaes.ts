@@ -28,7 +28,7 @@ const verifyJwtToken = async <T = void>(
     const claims = jwt.verify(auth, jwtSecret) as JwtPayload;
 
     if (!claims) {
-      return handleResponse(res, HttpStatusCode.BadRequest, 'Unauthenticated');
+      return handleResponse(res, HttpStatusCode.BadRequest, '請登入帳密');
     }
 
     const user = await User.findById(claims._id);
