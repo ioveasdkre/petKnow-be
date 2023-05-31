@@ -531,7 +531,7 @@ class FakeInformationController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "Success"
+            "message": "新增成功"
           }
         }
       * #swagger.responses[400] = {
@@ -539,7 +539,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 400,
             "isSuccess": false,
-            "message": "Failure"
+            "message": "新增失敗"
           }
         }
       * #swagger.responses[500] = {
@@ -554,30 +554,30 @@ class FakeInformationController {
     //#endregion [ swagger說明文件 ]
     try {
       const service = new FakeInformationService();
-      const state = await service.GenerateManyData();
+      const state = await service.courseHierarchyManyData();
 
-      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
     } catch (err) {
       next(err);
     }
   }
   //#endregion generateCourseHierarchysData [ 產生假資料至課程彙總資料 ]
 
-  //#region generateCouponsData [ 產生假資料至平台標籤資料表 ]
-  /** 產生假資料至平台標籤資料表 */
+  //#region generateCouponsData [ 產生假資料至平台優惠碼資料表 ]
+  /** 產生假資料至平台優惠碼資料表 */
   static async generateCouponsData(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["FakeInformation - 假資料 API"]
-     * #swagger.description = "產生假資料至平台標籤資料表"
+     * #swagger.description = "產生假資料至平台優惠碼資料表"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "Success"
+            "message": "新增成功"
           }
         }
       * #swagger.responses[400] = {
@@ -585,7 +585,7 @@ class FakeInformationController {
           schema:{
             "statusCode": 400,
             "isSuccess": false,
-            "message": "Failure"
+            "message": "新增失敗"
           }
         }
       * #swagger.responses[500] = {
@@ -602,14 +602,60 @@ class FakeInformationController {
       const service = new FakeInformationService();
       const state = await service.CouponManyData(30);
 
-      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion generateCouponsData [ 產生假資料至平台標籤資料表 ]
+  //#endregion generateCouponsData [ 產生假資料至平台優惠碼資料表 ]
+
+  //#region generateCourseTagData [ 產生假資料至標籤資料表 ]
+  /** 產生假資料至標籤資料表 */
+  static async generateCourseTagData(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
+     * #swagger.description = "產生假資料至標籤資料表"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "新增成功"
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "新增失敗"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const service = new FakeInformationService();
+      const state = await service.CourseTagManyData();
+
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion generateCourseTagData [ 產生假資料至標籤資料表 ]
 }
 
 export { FakeInformationController };
