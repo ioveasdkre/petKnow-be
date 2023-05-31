@@ -16,7 +16,7 @@ class HomeController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "查詢失敗",
+            "message": "查詢成功",
             "data": {
               "carousel": [
                 {
@@ -73,7 +73,7 @@ class HomeController {
       if (!carousel || popular.length === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveFailure, {
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
         ...carousel,
         popular,
         tagNames,

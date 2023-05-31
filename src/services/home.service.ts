@@ -13,6 +13,7 @@ class HomeService {
           isPopular: true,
         },
       },
+      { $sample: { size: 10 } }, // 讀取 10筆並隨機排序
       {
         $lookup: {
           from: 'users',
@@ -41,7 +42,6 @@ class HomeService {
           carousel: 1,
         },
       },
-      { $limit: 10 }, // 讀取 4筆
     ]);
 
     const popular = await CourseHierarchy.aggregate([
@@ -90,19 +90,33 @@ class HomeService {
       },
       {
         $match: {
-          count: { $gt: 3 },
+          count: { $gt: 5 },
         },
       },
+      { $sample: { size: 4 } },
       {
         $project: {
           _id: 0,
           tag: '$_id',
           courses: {
-            $slice: ['$courses', 5], // 限制最多 3筆
+            $slice: [
+              {
+                $map: {
+                  input: { $range: [0, { $size: '$courses' }] },
+                  as: 'index',
+                  in: {
+                    $arrayElemAt: [
+                      '$courses',
+                      { $floor: { $multiply: [{ $rand: {} }, { $size: '$courses' }] } },
+                    ],
+                  },
+                },
+              },
+              5, // 限制最多 5 个随机值
+            ],
           },
         },
       },
-      { $limit: 4 }, // 讀取 4筆
     ]);
 
     const [tagNames] = await CourseTag.aggregate([
