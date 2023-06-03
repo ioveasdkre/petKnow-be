@@ -1,20 +1,19 @@
 import { Types } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
-import { coverUrl, merchantID, respondType, version } from '../config/env';
+import { coverUrl, merchantId, respondType, version } from '../config/env';
 import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import {
-  ICheckCardCoursesReturn,
-  ICheckCourse as ICheckCardCouponParameter,
+  ICheckCartCoursesReturn,
+  ICheckCourse as ICheckCartCouponParameter,
   ICheckCourse as ICheckCourseResult,
   ICheckCourse as ICheckCourseParameter,
   IOrderParameter,
-  ICheckCourseReturn,
-} from '../types/service/goldFlow.type';
+  ICreateOrderReturn,
+} from '../types/goldFlow.type';
 
 class GoldFlowService {
-  async chenkCardCoursesAsync(courseIds: string[]) {
+  async chenkCartCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();
 
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
@@ -102,18 +101,6 @@ class GoldFlowService {
       {
         $project: {
           _id: 0, // 排除 _id 欄位
-          totalPrice: 1,
-          shoppingCart: 1,
-          uniqueTagNames: 1,
-          courseIds: {
-            $reduce: {
-              input: '$courseIds',
-              initialValue: '',
-              in: {
-                $concat: ['$$value', { $cond: [{ $eq: ['$$value', ''] }, '', ','] }, '$$this'],
-              },
-            },
-          },
         },
       },
     ]);
@@ -175,10 +162,10 @@ class GoldFlowService {
     return { courseHierarchy, youMightLike };
   }
 
-  async checkCardCouponAsync(
-    courseHierarchy: ICheckCardCouponParameter,
+  async checkCartCouponAsync(
+    courseHierarchy: ICheckCartCouponParameter,
     couponCode: string,
-  ): Promise<ICheckCardCoursesReturn> {
+  ): Promise<ICheckCartCoursesReturn> {
     const currentDate = new Date();
 
     const [platformCoupons] = await PlatformCoupons.aggregate([
@@ -214,7 +201,7 @@ class GoldFlowService {
     return { ...courseHierarchy, ...platformCoupons };
   }
 
-  async checkCoursesAsync(courseIds: string[]) {
+  async checkOrderCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();
 
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
@@ -305,7 +292,8 @@ class GoldFlowService {
           totalPrice: 1,
           shoppingCart: 1,
           uniqueTagNames: 1,
-          courseIds: {
+          courseIds: 1,
+          courseIdsStr: {
             $reduce: {
               input: '$courseIds',
               initialValue: '',
@@ -321,10 +309,10 @@ class GoldFlowService {
     return courseHierarchy ? courseHierarchy : false;
   }
 
-  async checkOrderAsync(
+  async createOrderAsync(
     courseHierarchy: ICheckCourseParameter,
     couponCode: string,
-  ): Promise<ICheckCourseReturn> {
+  ): Promise<ICreateOrderReturn> {
     const currentDate = new Date();
 
     const [platformCoupons] = await PlatformCoupons.aggregate([
@@ -350,8 +338,10 @@ class GoldFlowService {
       },
     ]);
 
+    const itemDesc = courseHierarchy.courseIdsStr;
     delete courseHierarchy.uniqueTagNames;
-    const itemDesc = courseHierarchy.courseIds;
+    delete courseHierarchy.courseIds;
+    delete courseHierarchy.courseIdsStr;
 
     if (!platformCoupons) {
       const amt = courseHierarchy.totalPrice;
@@ -366,12 +356,6 @@ class GoldFlowService {
       : courseHierarchy.totalPrice;
 
     return { amt, itemDesc, ...courseHierarchy, ...platformCoupons };
-  }
-
-  createOrderId(timeStamp: number): string {
-    const uuid = uuidv4();
-    const orderId = `${uuid}-${timeStamp}`;
-    return orderId;
   }
 
   orderIdAesEncrypt(
@@ -390,10 +374,16 @@ class GoldFlowService {
     return encrypted + cipher.final('hex');
   }
 
-  orderIdAesDecrypt(encryptedData: string, useKey: string, useIv: string, salt: string): string {
+  orderIdAesDecrypt(
+    encryptedData: string,
+    useKey: string,
+    useIv: string,
+    salt: string,
+    algorithm: string = 'aes-256-cbc',
+  ): string {
     const key = crypto.scryptSync(useKey, salt, 32); // 密钥
     const iv = Buffer.from(useIv, 'hex');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
     let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -409,11 +399,11 @@ class GoldFlowService {
    */
   genDataChain(order: IOrderParameter) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI
-    return `MerchantID=${merchantID}&RespondType=${respondType}&TimeStamp=${
-      order.TimeStamp
-    }&Version=${version}&MerchantOrderNo=${order.MerchantOrderNo}&Amt=${
-      order.Amt
-    }&ItemDesc=${encodeURIComponent(order.ItemDesc)}&Email=${encodeURIComponent(order.Email)}`;
+    return `MerchantID=${merchantId}&RespondType=${respondType}&TimeStamp=${
+      order.timeStamp
+    }&Version=${version}&MerchantOrderNo=${order.merchantOrderNo}&Amt=${
+      order.amt
+    }&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.email)}`;
   }
   //#endregion genDataChain [ 生成資料鏈串的函式，用於將訂單物件轉換成資料鏈串。 ]
 

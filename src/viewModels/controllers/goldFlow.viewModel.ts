@@ -4,8 +4,16 @@ interface ICourseIdsAndCouponCodeRequest extends ICourseIdsRequest {
   couponCode: string;
 }
 
+interface IPostCheckRequest {
+  amt: number;
+  itemDesc: string;
+  email: string;
+  timeStamp: number;
+  merchantOrderNo: string;
+}
+
 export {
-  ICourseIdsAndCouponCodeRequest as IPostCardRequest,
+  ICourseIdsAndCouponCodeRequest as IPostCartRequest,
   ICourseIdsAndCouponCodeRequest as ICreateOrderRequest,
-  ICourseIdsAndCouponCodeRequest as IPostCheckRequest,
+  IPostCheckRequest,
 };
