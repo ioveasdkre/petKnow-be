@@ -7,7 +7,6 @@ const router: Router = express.Router();
 
 router
   .post('/v1/goldFlow/Card', verifyObjectIds, controller.postCard)
-  .post('/v1/goldFlow/QueryCoupon', verifyObjectIds, controller.postCoupon)
   .post(
     '/v1/goldFlow/createOrder',
     verifyJwtToken<ICreateOrderRequest>,

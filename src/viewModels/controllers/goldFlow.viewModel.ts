@@ -5,8 +5,7 @@ interface ICourseIdsAndCouponCodeRequest extends ICourseIdsRequest {
 }
 
 export {
-  ICourseIdsRequest as IPostCardRequest,
-  ICourseIdsAndCouponCodeRequest as IPostCouponRequest,
+  ICourseIdsAndCouponCodeRequest as IPostCardRequest,
   ICourseIdsAndCouponCodeRequest as ICreateOrderRequest,
   ICourseIdsAndCouponCodeRequest as IPostCheckRequest,
 };

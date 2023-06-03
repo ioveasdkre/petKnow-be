@@ -5,6 +5,8 @@ import { coverUrl, merchantID, respondType, version } from '../config/env';
 import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import {
+  ICheckCardCoursesReturn,
+  ICheckCourse as ICheckCardCouponParameter,
   ICheckCourse as ICheckCourseResult,
   ICheckCourse as ICheckCourseParameter,
   IOrderParameter,
@@ -12,7 +14,7 @@ import {
 } from '../types/service/goldFlow.type';
 
 class GoldFlowService {
-  async postCardAsync(courseIds: string[]) {
+  async chenkCardCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();
 
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
@@ -23,6 +25,9 @@ class GoldFlowService {
             { isPublished: true }, // 判斷已上架
           ],
         },
+      },
+      {
+        $unwind: '$tagNames', // 展开 uniqueTagNames 字段
       },
       {
         $lookup: {
@@ -90,6 +95,8 @@ class GoldFlowService {
               isFree: '$isFree',
             },
           },
+          uniqueTagNames: { $addToSet: '$tagNames' },
+          courseIds: { $push: { $toString: '$_id' } },
         },
       },
       {
@@ -97,6 +104,16 @@ class GoldFlowService {
           _id: 0, // 排除 _id 欄位
           totalPrice: 1,
           shoppingCart: 1,
+          uniqueTagNames: 1,
+          courseIds: {
+            $reduce: {
+              input: '$courseIds',
+              initialValue: '',
+              in: {
+                $concat: ['$$value', { $cond: [{ $eq: ['$$value', ''] }, '', ','] }, '$$this'],
+              },
+            },
+          },
         },
       },
     ]);
@@ -158,37 +175,10 @@ class GoldFlowService {
     return { courseHierarchy, youMightLike };
   }
 
-  async mergeCourseTabsAsync(courseIds: string[]) {
-    const [courseHierarchy] = await CourseHierarchy.aggregate([
-      {
-        $match: {
-          $and: [
-            { _id: { $in: courseIds.map(id => new Types.ObjectId(id)) } },
-            { isPublished: true }, // 判斷已上架
-          ],
-        },
-      },
-      {
-        $unwind: '$tagNames', // 展开 uniqueTagNames 字段
-      },
-      {
-        $group: {
-          _id: null,
-          uniqueTagNames: { $addToSet: '$tagNames' }, // 将 tagNames 合并并去重
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          uniqueTagNames: 1,
-        },
-      },
-    ]);
-
-    return courseHierarchy ? courseHierarchy.uniqueTagNames : false;
-  }
-
-  async checkCouponCode(couponCode: string, tagNamess: string[]) {
+  async checkCardCouponAsync(
+    courseHierarchy: ICheckCardCouponParameter,
+    couponCode: string,
+  ): Promise<ICheckCardCoursesReturn> {
     const currentDate = new Date();
 
     const [platformCoupons] = await PlatformCoupons.aggregate([
@@ -196,7 +186,7 @@ class GoldFlowService {
         $match: {
           $and: [
             { couponCode: couponCode },
-            { tagNames: { $in: tagNamess } },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
             { isEnabled: true },
             { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
             { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
@@ -205,7 +195,9 @@ class GoldFlowService {
       },
       {
         $project: {
-          price: 1,
+          _id: 0,
+          couponCode: '$couponCode',
+          couponPrice: '$price',
         },
       },
       {
@@ -213,7 +205,13 @@ class GoldFlowService {
       },
     ]);
 
-    return platformCoupons ? platformCoupons.price : false;
+    delete courseHierarchy.uniqueTagNames;
+
+    if (!platformCoupons) return { ...courseHierarchy };
+
+    courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
+
+    return { ...courseHierarchy, ...platformCoupons };
   }
 
   async checkCoursesAsync(courseIds: string[]) {
@@ -352,17 +350,20 @@ class GoldFlowService {
       },
     ]);
 
-    if (!platformCoupons) return { ...courseHierarchy };
+    delete courseHierarchy.uniqueTagNames;
+    const itemDesc = courseHierarchy.courseIds;
+
+    if (!platformCoupons) {
+      const amt = courseHierarchy.totalPrice;
+
+      return { amt, itemDesc, ...courseHierarchy };
+    }
 
     courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
 
     const amt = courseHierarchy.discountedPrice
       ? courseHierarchy.discountedPrice
       : courseHierarchy.totalPrice;
-    const itemDesc = courseHierarchy.courseIds;
-
-    delete courseHierarchy.courseIds;
-    delete courseHierarchy.uniqueTagNames;
 
     return { amt, itemDesc, ...courseHierarchy, ...platformCoupons };
   }
