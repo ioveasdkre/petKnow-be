@@ -13,12 +13,13 @@ declare global {
       MERCHANTID: string;
       REPONDTYPE: string;
       VERSION: number;
-      ALGORITHM: string;
       GOLDFLOWHASHKEY: string;
       GOLDFLOWHASHIV: string;
+      GOLDFLOWHALGORITHM: string;
       ORDERSALT: string;
       ORDERHASHKEY: string;
       ORDERHASHIV: string;
+      ORDERALGORITHM: string;
     }
   }
 }
