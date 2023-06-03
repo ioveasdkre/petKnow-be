@@ -185,7 +185,7 @@
                     },
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc1NDk0ZWNjMjdkYTc4MjY3NzI5MGYiLCJpYXQiOjE2ODU4MDI3NDJ9.yaZztYXs60BVqh-XuzU2tXmWfXUUbB1ypket8HJE2CA"
                     }
                   }
                 }
@@ -1622,7 +1622,7 @@
         }
       }
     },
-    "/v1/goldFlow/Card": {
+    "/v1/goldFlow/Cart": {
       "post": {
         "tags": [
           "GoldFlow - 金流 API"
@@ -1640,18 +1640,17 @@
                 "courseIds": {
                   "type": "array",
                   "example": [
-                    "646e0e6ffa0eac0933c5a776",
-                    "646e0e6ffa0eac0933c5a778",
-                    "646e0e6ffa0eac0933c5a77e",
-                    "646e0e6ffa0eac0933c5a78c",
-                    "646e0e6ffa0eac0933c5a79b",
-                    "646e0e6ffa0eac0933c5a79c",
-                    "646e0e6ffa0eac0933c5a7ad",
-                    "646e0e6ffa0eac0933c5a7ae"
+                    "646f7e2f4802a2dbf6b3eb83",
+                    "646f7e2f4802a2dbf6b3eb84",
+                    "646f7e2f4802a2dbf6b3eb85"
                   ],
                   "items": {
                     "type": "string"
                   }
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "ugyV1E8P"
                 }
               }
             }
@@ -1673,14 +1672,14 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "成功"
                 },
                 "data": {
                   "type": "object",
                   "properties": {
                     "totalPrice": {
                       "type": "number",
-                      "example": 28226
+                      "example": 7022
                     },
                     "shoppingCart": {
                       "type": "array",
@@ -1689,11 +1688,11 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646b8121b65fd84dc4ab0af6"
+                            "example": "646f7e2f4802a2dbf6b3eb83"
                           },
                           "title": {
                             "type": "string",
-                            "example": "高效狗狗訓練方法"
+                            "example": "狗狗訓練入門課程"
                           },
                           "cover": {
                             "type": "string",
@@ -1705,19 +1704,19 @@
                           },
                           "time": {
                             "type": "number",
-                            "example": 496794
+                            "example": 135.6
                           },
                           "total": {
                             "type": "number",
-                            "example": 48
+                            "example": 53
                           },
                           "instructorName": {
                             "type": "string",
-                            "example": "zihyin"
+                            "example": "RubyTest"
                           },
                           "price": {
                             "type": "number",
-                            "example": 8155
+                            "example": 3148
                           },
                           "discountPrice": {},
                           "isFree": {
@@ -1727,6 +1726,27 @@
                         }
                       }
                     },
+                    "courseIds": {
+                      "type": "array",
+                      "example": [
+                        "646f7e2f4802a2dbf6b3eb83"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "discountedPrice": {
+                      "type": "number",
+                      "example": 6210
+                    },
+                    "couponCode": {
+                      "type": "string",
+                      "example": "ugyV1E8P"
+                    },
+                    "couponPrice": {
+                      "type": "number",
+                      "example": 812
+                    },
                     "youMightLike": {
                       "type": "array",
                       "items": {
@@ -1734,15 +1754,15 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646b8121b65fd84dc4ab0b5b"
+                            "example": "646f7e2f4802a2dbf6b3ebcd"
                           },
                           "title": {
                             "type": "string",
-                            "example": "兔兔的健康與飼養"
+                            "example": "寵物洗澡的基本知識與技巧"
                           },
                           "cover": {
                             "type": "string",
-                            "example": "https://thumbs.dreamstime.com/z/dog-cat-11133177.jpg"
+                            "example": "https://thumbs.dreamstime.com/z/cat-dog-under-christmas-tree-pets-plaid-105463936.jpg"
                           },
                           "level": {
                             "type": "string",
@@ -1750,19 +1770,19 @@
                           },
                           "time": {
                             "type": "number",
-                            "example": 340664
+                            "example": 48.6
                           },
                           "total": {
                             "type": "number",
-                            "example": 23
+                            "example": 26
                           },
                           "instructorName": {
                             "type": "string",
-                            "example": "zihyin"
+                            "example": "ffffff"
                           },
                           "price": {
                             "type": "number",
-                            "example": 7805
+                            "example": 7907
                           },
                           "discountPrice": {},
                           "isFree": {
@@ -1773,127 +1793,6 @@
                       }
                     }
                   }
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "伺服器發生錯誤",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "statusCode": {
-                  "type": "number",
-                  "example": 500
-                },
-                "isSuccess": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "系統發生錯誤，請聯繫系統管理員"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/goldFlow/QueryCoupon": {
-      "post": {
-        "tags": [
-          "GoldFlow - 金流 API"
-        ],
-        "description": "查詢單筆優惠卷",
-        "parameters": [
-          {
-            "name": "body",
-            "description": "資料格式",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "courseIds": {
-                  "type": "array",
-                  "example": [
-                    "646e0e6ffa0eac0933c5a776",
-                    "646e0e6ffa0eac0933c5a778",
-                    "646e0e6ffa0eac0933c5a77e",
-                    "646e0e6ffa0eac0933c5a78c",
-                    "646e0e6ffa0eac0933c5a79b",
-                    "646e0e6ffa0eac0933c5a79c",
-                    "646e0e6ffa0eac0933c5a7ad",
-                    "646e0e6ffa0eac0933c5a7ae"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "couponCode": {
-                  "type": "string",
-                  "example": "ycks7e6q"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "成功",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "statusCode": {
-                  "type": "number",
-                  "example": 200
-                },
-                "isSuccess": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Success"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "price": {
-                      "type": "number",
-                      "example": 688
-                    }
-                  }
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "400": {
-            "description": "錯誤的請求",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "statusCode": {
-                  "type": "number",
-                  "example": 400
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Failure"
                 }
               },
               "xml": {
@@ -1977,7 +1876,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "成功"
                 },
                 "data": {
                   "type": "object",
@@ -2046,6 +1945,14 @@
                     "couponPrice": {
                       "type": "number",
                       "example": 812
+                    },
+                    "timeStamp": {
+                      "type": "number",
+                      "example": 1685801564
+                    },
+                    "merchantOrderNo": {
+                      "type": "string",
+                      "example": "da0fc2143dc2b6ca599416e07077db85b75f1800845663b969543fecd4598b43"
                     }
                   }
                 }
@@ -2124,20 +2031,21 @@
             "schema": {
               "type": "object",
               "properties": {
-                "courseIds": {
-                  "type": "array",
-                  "example": [
-                    "646f7e2f4802a2dbf6b3eb83",
-                    "646f7e2f4802a2dbf6b3eb84",
-                    "646f7e2f4802a2dbf6b3eb85"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
+                "amt": {
+                  "type": "number",
+                  "example": 6210
                 },
-                "couponCode": {
+                "itemDesc": {
                   "type": "string",
-                  "example": "ugyV1E8P"
+                  "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                },
+                "timeStamp": {
+                  "type": "number",
+                  "example": 1685802800
+                },
+                "merchantOrderNo": {
+                  "type": "string",
+                  "example": "ef59949668ed65c41864ea71f75050562f58f1f372b2e49fdc5b9e7d65274894"
                 }
               }
             }
@@ -2159,75 +2067,46 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Success"
+                  "example": "查詢成功"
                 },
                 "data": {
                   "type": "object",
                   "properties": {
+                    "merchantId": {
+                      "type": "string",
+                      "example": "MS148918186"
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "1.5"
+                    },
                     "amt": {
                       "type": "number",
                       "example": 6210
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "AbcTest@gmail.com"
+                    },
+                    "timeStamp": {
+                      "type": "number",
+                      "example": 1685802800
+                    },
+                    "merchantOrderNo": {
+                      "type": "string",
+                      "example": "647b4f2f41fda7e8d1f78253"
                     },
                     "itemDesc": {
                       "type": "string",
                       "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                     },
-                    "totalPrice": {
-                      "type": "number",
-                      "example": 7022
+                    "aesEncrypted": {
+                      "type": "string",
+                      "example": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad7d89182aef5d12aa625ffbef1e47f6e05157613038cc5437d505aa8e6c9c1c50cbe57a61c51698d43fa32367b1bd4d3b9da0ee2d4df5f35e087cd62d3cf870dd55f4c24fba5391c90dfc7f620f19c680c0e7bdc1ce85fff671232dba401ef2bad292ae5ba31cc024f3738452fedadaf165f4363d9d3b9d3100900402c8c469e824fe341b520390ab88e5c8b68078ae8a6780dd260c7f98c1ab464f3c1f46f157a11b064bd661c72dfd41604506de7e9c7fdc6602b42cf8eaa9f1f8a3021ff2c3"
                     },
-                    "shoppingCart": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "_id": {
-                            "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
-                          },
-                          "title": {
-                            "type": "string",
-                            "example": "狗狗訓練入門課程"
-                          },
-                          "cover": {
-                            "type": "string",
-                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
-                          },
-                          "level": {
-                            "type": "string",
-                            "example": "初階課程"
-                          },
-                          "time": {
-                            "type": "number",
-                            "example": 135.6
-                          },
-                          "total": {
-                            "type": "number",
-                            "example": 53
-                          },
-                          "instructorName": {
-                            "type": "string",
-                            "example": "RubyTest"
-                          },
-                          "price": {
-                            "type": "number",
-                            "example": 3148
-                          },
-                          "discountPrice": {},
-                          "isFree": {
-                            "type": "boolean",
-                            "example": false
-                          }
-                        }
-                      }
-                    },
-                    "discountedPrice": {
-                      "type": "number",
-                      "example": 6210
-                    },
-                    "couponPrice": {
-                      "type": "number",
-                      "example": 812
+                    "shaEncrypted": {
+                      "type": "string",
+                      "example": "8189C432B9F7BA618F65E246FB5C4E3B09380067C23AD0B8FBD8AC1E999138D3"
                     }
                   }
                 }
@@ -2283,7 +2162,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/v1/home": {

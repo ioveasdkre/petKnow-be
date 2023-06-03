@@ -8,15 +8,16 @@ const env = process.env.ENV;
 const mongodbUrl = process.env.MONGODB_URL;
 const coverUrl = process.env.COVER_URL;
 const jwtSecret = process.env.JWT_SECRET;
-const merchantID = process.env.MERCHANTID;
+const merchantId = process.env.MERCHANTID;
 const respondType = process.env.REPONDTYPE;
 const version = process.env.VERSION;
-const algorithm = process.env.ALGORITHM;
 const goldFlowHashKey = process.env.GOLDFLOWHASHKEY;
 const goldFlowHashIv = process.env.GOLDFLOWHASHIV;
+const goldFlowalgorithm = process.env.GOLDFLOWHALGORITHM;
 const orderSalt = process.env.ORDERSALT;
 const orderHasKey = process.env.ORDERHASHKEY;
 const orderHasIv = process.env.ORDERHASHIV;
+const orderalgorithm = process.env.ORDERALGORITHM;
 
 if (!mongodbUrl) {
   throw new Error('在環境變量中找不到 testPetknow 數據庫連接字符串');
@@ -26,12 +27,12 @@ if (!jwtSecret) {
   throw new Error('在環境變量中找不到 JWT_SECRET');
 }
 
-if (!goldFlowHashKey || !goldFlowHashIv) {
-  throw new Error('在環境變量中找不到 GoldFlowHashKey 或 GoldFlowHashIv');
+if (!goldFlowHashKey || !goldFlowHashIv || !goldFlowalgorithm) {
+  throw new Error('在環境變量中找不到 GoldFlowHashKey 或 GoldFlowHashIv 或 goldFlowalgorithm');
 }
 
-if (!orderSalt || !orderHasKey || !orderHasIv) {
-  throw new Error('在環境變量中找不到 orderSalt 或 orderHasKey 或 orderHasIv');
+if (!orderSalt || !orderHasKey || !orderHasIv || !orderalgorithm) {
+  throw new Error('在環境變量中找不到 orderSalt 或 orderHasKey 或 orderHasIv 或 orderalgorithm');
 }
 
 export {
@@ -40,13 +41,14 @@ export {
   mongodbUrl,
   coverUrl,
   jwtSecret,
-  merchantID,
+  merchantId,
   respondType,
   version,
-  algorithm,
   goldFlowHashKey,
   goldFlowHashIv,
+  goldFlowalgorithm,
   orderSalt,
   orderHasKey,
   orderHasIv,
+  orderalgorithm,
 };

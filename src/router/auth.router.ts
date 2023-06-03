@@ -114,7 +114,7 @@ authRouter.post('/v1/login', async (req, res) => {
             "name": "Benson",
             "email": "AbcTest@gmail.com",
             "__v": 0,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDZkOGJmODVmNTJhZTk2ODFiODg1OTMiLCJpYXQiOjE2ODQ5MDA5MDR9.4_l8XUaVPW58-6VCpt51-QkLq5SyKRnYndt1P_xQ2Ng"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc1NDk0ZWNjMjdkYTc4MjY3NzI5MGYiLCJpYXQiOjE2ODU4MDI3NDJ9.yaZztYXs60BVqh-XuzU2tXmWfXUUbB1ypket8HJE2CA"
           }
         }
       }
