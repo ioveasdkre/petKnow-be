@@ -1,7 +1,10 @@
 import { coverUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
+import { Level } from '../enums/courseHierarchy.enums';
+import { ISearcheCourses } from '../types/home.type';
 
 class HomeService {
+  //#region getIndex [ 首頁 ]
   async getIndex() {
     const currentDate = new Date();
 
@@ -138,6 +141,248 @@ class HomeService {
     return { carousel, popular, tagNames: tagNames.tagNames };
   }
   //#endregion getIndex [ 首頁 ]
+
+  //#region getSearcheCourses [ 搜尋關鍵字 - 相關課程 ]
+  async getSearcheCoursesAsync(q: string) {
+    const currentDate = new Date();
+
+    const [courses] = await CourseHierarchy.aggregate<ISearcheCourses>([
+      {
+        $match: {
+          $and: [
+            { isPublished: true }, // 判斷已上架
+            {
+              $or: [
+                {
+                  title: { $regex: q, $options: 'i' },
+                },
+                {
+                  tagNames: {
+                    $elemMatch: {
+                      $regex: q,
+                      $options: 'i',
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      { $sample: { size: 100 } },
+      {
+        $unwind: '$tagNames', // 展开 uniqueTagNames 字段
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          courses: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              shortDescription: '$shortDescription',
+              cover: { $concat: [coverUrl, '$cover'] },
+              level: {
+                $switch: {
+                  branches: Object.entries(Level).map(([level, levelName]) => ({
+                    case: { $eq: ['$level', parseInt(level)] },
+                    then: levelName,
+                  })),
+                  default: null,
+                },
+              },
+              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              total: '$totalNumber',
+              instructorName: { $arrayElemAt: ['$user.name', 0] },
+              price: '$price',
+              discountPrice: {
+                $cond: [
+                  {
+                    $and: [
+                      { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
+                      { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
+                    ],
+                  },
+                  '$discountPrice',
+                  null,
+                ],
+              },
+              isFree: '$isFree',
+            },
+          },
+          uniqueTagNames: { $addToSet: '$tagNames' },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // 排除 _id 欄位
+        },
+      },
+    ]);
+
+    return courses;
+  }
+  //#endregion getSearcheCourses [ 搜尋關鍵字 - 相關課程 ]
+
+  //#region getSearcheComboPack [ 搜尋關鍵字 - 組合包 ]
+  async getSearcheComboPackAsync(tagNameArr: string[]) {
+    const currentDate = new Date();
+
+    const [comboPack] = await CourseHierarchy.aggregate([
+      {
+        $match: {
+          $and: [
+            { isPublished: true, isPopular: true, tagNames: { $in: tagNameArr } }, // 判斷已 上架 且 為熱門課程
+          ],
+        },
+      },
+      {
+        $sample: { size: 3 }, // 隨機讀取10筆
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPrice: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ['$isFree', true], // 判斷免費課程
+                },
+                0,
+                {
+                  $cond: [
+                    {
+                      $and: [
+                        { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
+                        { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
+                      ],
+                    },
+                    '$discountPrice',
+                    '$price',
+                  ],
+                },
+              ],
+            },
+          },
+          courses: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              shortDescription: '$shortDescription',
+              cover: { $concat: [coverUrl, '$cover'] },
+              level: {
+                $switch: {
+                  branches: Object.entries(Level).map(([level, levelName]) => ({
+                    case: { $eq: ['$level', parseInt(level)] },
+                    then: levelName,
+                  })),
+                  default: null,
+                },
+              },
+              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              total: '$totalNumber',
+              instructorName: { $arrayElemAt: ['$user.name', 0] },
+              price: '$price',
+              discountPrice: {
+                $cond: [
+                  {
+                    $and: [
+                      { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
+                      { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
+                    ],
+                  },
+                  '$discountPrice',
+                  null,
+                ],
+              },
+              isFree: '$isFree',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // 排除 _id 欄位
+        },
+      },
+    ]);
+
+    const [courseCards] = await CourseHierarchy.aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              isPublished: true,
+              discountDate: { $ne: null, $gte: currentDate },
+              tagNames: { $in: tagNameArr },
+            }, // 判斷已上架且為特價課程
+          ],
+        },
+      },
+      {
+        $sample: { size: 10 }, // 隨機讀取10筆
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          courses: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              cover: { $concat: [coverUrl, '$cover'] },
+              level: {
+                $switch: {
+                  branches: Object.entries(Level).map(([level, levelName]) => ({
+                    case: { $eq: ['$level', parseInt(level)] },
+                    then: levelName,
+                  })),
+                  default: null,
+                },
+              },
+              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              total: '$totalNumber',
+              instructorName: { $arrayElemAt: ['$user.name', 0] },
+              price: '$price',
+              discountPrice: '$discountPrice',
+              isFree: '$isFree',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // 排除 _id 欄位
+        },
+      },
+    ]);
+
+    return { comboPack, courseCards };
+  }
+  //#endregion getSearcheComboPack [ 搜尋關鍵字 - 組合包 ]
 }
 
 export { HomeService };
