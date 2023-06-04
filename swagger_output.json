@@ -2333,6 +2333,279 @@
         }
       }
     },
+    "/v1/home/searche": {
+      "get": {
+        "tags": [
+          "Home - 基本 API"
+        ],
+        "description": "搜尋關鍵字",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "關鍵字",
+            "required": true,
+            "type": "string",
+            "default": "狗狗"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "courses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3eb89"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "高效狗狗訓練課程"
+                          },
+                          "shortDescription": {
+                            "type": "string",
+                            "example": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "所有級別"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 139.1
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 59
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "zihyin"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 6189
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "comboPack": {
+                      "type": "object",
+                      "properties": {
+                        "totalPrice": {
+                          "type": "number",
+                          "example": 10694
+                        },
+                        "courses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "646f7e2f4802a2dbf6b3eb91"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "狗狗養育指南"
+                              },
+                              "shortDescription": {
+                                "type": "string",
+                                "example": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>"
+                              },
+                              "cover": {
+                                "type": "string",
+                                "example": "https://thumbs.dreamstime.com/z/dog-jumping-over-pool-water-29720697.jpg"
+                              },
+                              "level": {
+                                "type": "string",
+                                "example": "所有級別"
+                              },
+                              "time": {
+                                "type": "number",
+                                "example": 55.2
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 42
+                              },
+                              "instructorName": {
+                                "type": "string",
+                                "example": "Benson"
+                              },
+                              "price": {
+                                "type": "number",
+                                "example": 7546
+                              },
+                              "discountPrice": {},
+                              "isFree": {
+                                "type": "boolean",
+                                "example": false
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "courseCards": {
+                      "type": "object",
+                      "properties": {
+                        "courses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "646f7e2f4802a2dbf6b3eb96"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "狗狗的健康管理"
+                              },
+                              "cover": {
+                                "type": "string",
+                                "example": "https://thumbs.dreamstime.com/z/dog-love-rose-valentines-jack-russell-sticking-out-tongue-lying-bed-full-petals-as-background-day-wearing-78523443.jpg"
+                              },
+                              "level": {
+                                "type": "string",
+                                "example": "初階課程"
+                              },
+                              "time": {
+                                "type": "number",
+                                "example": 158.4
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 86
+                              },
+                              "instructorName": {
+                                "type": "string",
+                                "example": "RUBYTEST"
+                              },
+                              "price": {
+                                "type": "number",
+                                "example": 7508
+                              },
+                              "discountPrice": {
+                                "type": "number",
+                                "example": 7299
+                              },
+                              "isFree": {
+                                "type": "boolean",
+                                "example": false
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tagNames": {
+                      "type": "array",
+                      "example": [
+                        "狗狗解悶遊戲"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "description": "",
