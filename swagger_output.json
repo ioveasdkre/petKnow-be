@@ -546,7 +546,7 @@
         }
       }
     },
-    "/v1/courseTag/getAll": {
+    "/v1/courseTag": {
       "get": {
         "tags": [
           "CourseTag - 標籤資料表"
@@ -2706,6 +2706,264 @@
             "description": "Internal Server Error"
           }
         }
+      }
+    },
+    "/v1/Caghinopprst": {
+      "get": {
+        "tags": [
+          "ShoppingCart - 購物車資料表 API"
+        ],
+        "description": "讀取購物車資料表所有資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查詢成功"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "647d509a14f1d0f929617f93"
+                      },
+                      "user": {
+                        "type": "string",
+                        "example": "6475494ecc27da782677290f"
+                      },
+                      "courses": {
+                        "type": "array",
+                        "example": [
+                          "646f7e2f4802a2dbf6b3eb83",
+                          "646f7e2f4802a2dbf6b3eb84",
+                          "646f7e2f4802a2dbf6b3eb85"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2023-06-05T03:02:46.521Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "example": "2023-06-05T03:02:46.521Z"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "ShoppingCart - 購物車資料表 API"
+        ],
+        "description": "新增一筆購物車資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courses": {
+                  "type": "array",
+                  "example": [
+                    "646f7e2f4802a2dbf6b3eb83",
+                    "646f7e2f4802a2dbf6b3eb84",
+                    "646f7e2f4802a2dbf6b3eb85"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "新增成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "string",
+                      "example": "6475494ecc27da782677290f"
+                    },
+                    "courses": {
+                      "type": "array",
+                      "example": [
+                        "646f7e2f4802a2dbf6b3eb83",
+                        "646f7e2f4802a2dbf6b3eb84",
+                        "646f7e2f4802a2dbf6b3eb85"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2023-06-05T03:07:37.811Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2023-06-05T03:07:37.811Z"
+                    },
+                    "_id": {
+                      "type": "string",
+                      "example": "647d519e664f577d916827dd"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     }
   }

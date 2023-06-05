@@ -6,9 +6,9 @@ import { handleResponse } from '../helpers/handle.helper';
 import { CRUDService } from '../services/shares/crud.service';
 
 class CourseTagController {
-  //#region getAll [ 查詢所有資料 ]
+  //#region getCourseTags [ 查詢所有資料 ]
   /** 查詢所有資料 */
-  static async getAll(_req: Request, res: Response, next: NextFunction) {
+  static async getCourseTags(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["CourseTag - 標籤資料表"]
@@ -77,7 +77,7 @@ class CourseTagController {
       next(err);
     }
   }
-  //#endregion getAll [ 查詢所有資料 ]
+  //#endregion getCourseTags [ 查詢所有資料 ]
 }
 
 export { CourseTagController as CourseTagController };

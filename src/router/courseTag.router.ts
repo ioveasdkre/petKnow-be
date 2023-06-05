@@ -3,6 +3,6 @@ import { CourseTagController as controller } from '../controllers/courseTag.cont
 
 const router: Router = express.Router();
 
-router.get('/v1/courseTag/getAll', controller.getAll);
+router.get('/v1/courseTag', controller.getCourseTags);
 
 export { router as courseTagRouter };
