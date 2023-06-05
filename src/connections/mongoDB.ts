@@ -3,6 +3,7 @@ import { mongodbUrl } from '../config/env';
 import { courseSchema, ICourse } from '../models/courseHierarchy.model';
 import { courseTagSchema, ICourseTagModel } from '../models/courseTag.model';
 import { platformCouponsSchema, IPlatformCoupons } from '../models/platformCoupons.model';
+import { shoppingCartSchema, IShoppingCartModel } from '../models/shoppingCart.model';
 import { UserSchema, IUser } from '../models/user.model';
 
 const MongoDB = createConnection(mongodbUrl, {
@@ -21,6 +22,7 @@ MongoDB.on('error', err => {
 const CourseHierarchy = MongoDB.model<ICourse>('CourseHierarchy', courseSchema);
 const CourseTag = MongoDB.model<ICourseTagModel>('CourseTag', courseTagSchema);
 const PlatformCoupons = MongoDB.model<IPlatformCoupons>('PlatformCoupons', platformCouponsSchema);
+const ShoppingCart = MongoDB.model<IShoppingCartModel>('ShoppingCart', shoppingCartSchema);
 const User = MongoDB.model<IUser>('User', UserSchema);
 
-export { CourseHierarchy, CourseTag, PlatformCoupons, User };
+export { CourseHierarchy, CourseTag, PlatformCoupons, ShoppingCart, User };

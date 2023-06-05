@@ -22,7 +22,7 @@ import {
   ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
-import { IVerifyJwtTokenRequest as IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
+import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
 class GoldFlowController {
   //#region postCart [ 讀取購物車資料 ]

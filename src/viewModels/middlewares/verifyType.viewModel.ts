@@ -14,4 +14,8 @@ interface IVerifyObjectIdsRequest {
   courseIds: string[];
 }
 
-export { IVerifyJwtTokenRequest, IVerifyObjectIdsRequest };
+export {
+  IVerifyJwtTokenRequest,
+  IVerifyObjectIdsRequest,
+  IVerifyJwtTokenRequest as IRequestJwtBody,
+};
