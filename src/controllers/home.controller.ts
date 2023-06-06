@@ -3,7 +3,7 @@ import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { HomeService } from '../services/home.service';
 import { IReqQuery } from '../types/handle.type';
-import { IGetSearcheRequest } from '../viewModels/controllers/home.viewModel';
+import { IGetSearchRequest } from '../viewModels/controllers/home.viewModel';
 
 class HomeController {
   //#region getIndex [ 首頁 ]
@@ -86,9 +86,9 @@ class HomeController {
   }
   //#endregion getIndex [ 首頁 ]+
 
-  //#region getSearche [ 搜尋關鍵字 ]
+  //#region getSearch [ 搜尋關鍵字 ]
   /** 搜尋關鍵字 */
-  static async getSearche(req: IReqQuery<IGetSearcheRequest>, res: Response, next: NextFunction) {
+  static async getSearch(req: IReqQuery<IGetSearchRequest>, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["Home - 基本 API"]
@@ -111,7 +111,7 @@ class HomeController {
                 {
                   "_id": "646f7e2f4802a2dbf6b3eb89",
                   "title": "高效狗狗訓練課程",
-                  "shortDescription": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n  <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n  <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n  <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>",
+                  "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "所有級別",
                   "time": 139.1,
@@ -184,7 +184,7 @@ class HomeController {
       const { q } = req.query;
 
       const homeService = new HomeService();
-      const courses = await homeService.getSearcheCoursesAsync(q);
+      const courses = await homeService.getSearchCoursesAsync(q);
       const tagNames = courses.uniqueTagNames;
 
       if (!courses || !tagNames)
@@ -192,19 +192,123 @@ class HomeController {
 
       delete courses.uniqueTagNames;
 
-      const { comboPack, courseCards } = await homeService.getSearcheComboPackAsync(tagNames);
+      const { comboPack, courseCards } = await homeService.getSearchComboPackAsync(tagNames);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
         ...courses,
         comboPack,
         courseCards,
-        tagNames
+        tagNames,
       });
     } catch (err) {
       next(err);
     }
   }
-  //#endregion getSearche [ 搜尋關鍵字 ]
+  //#endregion getSearch [ 搜尋關鍵字 ]
+
+  //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
+  /** 訪客 課程介紹 */
+  static async getVisitorCourseDetails(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["Home - 基本 API"]
+     * #swagger.description = "訪客 課程介紹"
+     * #swagger.parameters['q'] = {
+          in: 'query',
+          description: '關鍵字',
+          required: true,
+          type: 'string',
+          default: '狗狗'
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "查詢成功",
+            "data": {
+              "courses": [
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb89",
+                  "title": "高效狗狗訓練課程",
+                  "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "level": "所有級別",
+                  "time": 139.1,
+                  "total": 59,
+                  "instructorName": "zihyin",
+                  "price": 6189,
+                  "discountPrice": null,
+                  "isFree": false
+                }
+              ],
+              "comboPack": {
+                "totalPrice": 10694,
+                "courses": [
+                  {
+                    "_id": "646f7e2f4802a2dbf6b3eb91",
+                    "title": "狗狗養育指南",
+                    "shortDescription": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n  <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n  <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n  <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>",
+                    "cover": "https://thumbs.dreamstime.com/z/dog-jumping-over-pool-water-29720697.jpg",
+                    "level": "所有級別",
+                    "time": 55.2,
+                    "total": 42,
+                    "instructorName": "Benson",
+                    "price": 7546,
+                    "discountPrice": null,
+                    "isFree": false
+                  }
+                ]
+              },
+              "courseCards": {
+                "courses": [
+                  {
+                    "_id": "646f7e2f4802a2dbf6b3eb96",
+                    "title": "狗狗的健康管理",
+                    "cover": "https://thumbs.dreamstime.com/z/dog-love-rose-valentines-jack-russell-sticking-out-tongue-lying-bed-full-petals-as-background-day-wearing-78523443.jpg",
+                    "level": "初階課程",
+                    "time": 158.4,
+                    "total": 86,
+                    "instructorName": "RUBYTEST",
+                    "price": 7508,
+                    "discountPrice": 7299,
+                    "isFree": false
+                  }
+                ]
+              },
+              "tagNames": [
+                "狗狗解悶遊戲"
+              ]
+            }
+          }
+        }
+     *  #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "success": false,
+            "statusCode": 400,
+            "message": "錯誤的請求"
+          }
+        }
+     *  #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+     */
+    //#endregion [ swagger說明文件 ]
+    try {
+      // const courseId = req.params.courseId;
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion getVisitorCourseDetails [ 訪客 課程介紹 ]
 }
 
 export { HomeController };

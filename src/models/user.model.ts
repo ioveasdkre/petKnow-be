@@ -12,6 +12,7 @@ interface IUser {
   nickname?: string;
   bio?: string;
   salt?: string;
+  instructors?: string;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -36,7 +37,12 @@ const UserSchema = new mongoose.Schema<IUser>({
   bio: {
     type: String,
   },
-  salt: String,
+  salt: {
+    type: String,
+  },
+  instructors: {
+    type: String,
+  },
 });
 
 UserSchema.statics.generateSalt = function () {

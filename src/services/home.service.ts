@@ -1,10 +1,11 @@
 import { coverUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
-import { ISearcheCourses } from '../types/home.type';
+import { ISearchCourses } from '../types/home.type';
 
 class HomeService {
   //#region getIndex [ 首頁 ]
+  /** 首頁 */
   async getIndex() {
     const currentDate = new Date();
 
@@ -142,11 +143,12 @@ class HomeService {
   }
   //#endregion getIndex [ 首頁 ]
 
-  //#region getSearcheCourses [ 搜尋關鍵字 - 相關課程 ]
-  async getSearcheCoursesAsync(q: string) {
+  //#region getSearchCourses [ 搜尋關鍵字 - 相關課程 ]
+  /** 搜尋關鍵字 - 相關課程 */
+  async getSearchCoursesAsync(q: string) {
     const currentDate = new Date();
 
-    const [courses] = await CourseHierarchy.aggregate<ISearcheCourses>([
+    const [courses] = await CourseHierarchy.aggregate<ISearchCourses>([
       {
         $match: {
           $and: [
@@ -230,10 +232,10 @@ class HomeService {
 
     return courses;
   }
-  //#endregion getSearcheCourses [ 搜尋關鍵字 - 相關課程 ]
+  //#endregion getSearchCourses [ 搜尋關鍵字 - 相關課程 ]
 
-  //#region getSearcheComboPack [ 搜尋關鍵字 - 組合包 ]
-  async getSearcheComboPackAsync(tagNameArr: string[]) {
+  //#region getSearchComboPack [ 搜尋關鍵字 - 組合包 ]
+  async getSearchComboPackAsync(tagNameArr: string[]) {
     const currentDate = new Date();
 
     const [comboPack] = await CourseHierarchy.aggregate([
@@ -382,7 +384,75 @@ class HomeService {
 
     return { comboPack, courseCards };
   }
-  //#endregion getSearcheComboPack [ 搜尋關鍵字 - 組合包 ]
+  //#endregion getSearchComboPack [ 搜尋關鍵字 - 組合包 ]
+
+  //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
+  async getVisitorCourseDetails(courseId: string) {
+    const currentDate = new Date();
+
+    const [courses] = await CourseHierarchy.aggregate<ISearchCourses>([
+      {
+        $match: {
+          $and: [{ isPublished: true }, { _id: courseId }],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          courses: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              description: '$description',
+              cover: { $concat: [coverUrl, '$cover'] },
+              level: {
+                $switch: {
+                  branches: Object.entries(Level).map(([level, levelName]) => ({
+                    case: { $eq: ['$level', parseInt(level)] },
+                    then: levelName,
+                  })),
+                  default: null,
+                },
+              },
+              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              total: '$totalNumber',
+              instructorName: { $arrayElemAt: ['$user.name', 0] },
+              price: '$price',
+              discountPrice: {
+                $cond: [
+                  {
+                    $and: [
+                      { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
+                      { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
+                    ],
+                  },
+                  '$discountPrice',
+                  null,
+                ],
+              },
+              isFree: '$isFree',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // 排除 _id 欄位
+        },
+      },
+    ]);
+
+    return courses;
+  }
+  //#endregion getVisitorCourseDetails [ 訪客 課程介紹 ]
 }
 
 export { HomeService };

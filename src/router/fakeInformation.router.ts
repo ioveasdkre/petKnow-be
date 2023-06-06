@@ -10,6 +10,7 @@ router
   .get('/v1/fakeInformation/generateCourseHierarchysData', controller.generateCourseHierarchysData)
   .get('/v1/fakeInformation/generateCouponsData', controller.generateCouponsData)
   .get('/v1/fakeInformation/generateCourseTagData', controller.generateCourseTagData)
+  .get('/v1/fakeInformation/generateUserData', controller.generateUserData)
   .post('/v1/fakeInformation/createCourseHierarchys', controller.createCourseHierarchys);
 
 export { router as fakeInformationRouter };
