@@ -7,6 +7,7 @@ declare global {
       DB_PORT: number;
       DB_USER: string;
       MONGODB_URL: string;
+      COVERPARAMS_URL: string;
       COVER_URL: string;
       ENV: 'test' | 'dev' | 'prod';
       JWT_SECRET: string;
