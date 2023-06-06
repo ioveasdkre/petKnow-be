@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import crypto from 'crypto';
-import { coverUrl, merchantId, respondType, version } from '../config/env';
+import { coverUrl, coverParamsUrl, merchantId, respondType, version } from '../config/env';
 import { CourseHierarchy, PlatformCoupons, ShoppingCart } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import {
@@ -160,7 +160,7 @@ class GoldFlowService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -223,7 +223,7 @@ class GoldFlowService {
         $project: {
           _id: '$_id',
           title: '$title',
-          cover: { $concat: [coverUrl, '$cover'] },
+          cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
           level: {
             $switch: {
               branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -348,7 +348,7 @@ class GoldFlowService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({

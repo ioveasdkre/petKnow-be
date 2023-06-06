@@ -7,6 +7,7 @@ const port = process.env.PORT ?? 8000;
 const env = process.env.ENV;
 const mongodbUrl = process.env.MONGODB_URL;
 const coverUrl = process.env.COVER_URL;
+const coverParamsUrl = process.env.COVERPARAMS_URL;
 const jwtSecret = process.env.JWT_SECRET;
 const merchantId = process.env.MERCHANTID;
 const respondType = process.env.REPONDTYPE;
@@ -40,6 +41,7 @@ export {
   env,
   mongodbUrl,
   coverUrl,
+  coverParamsUrl,
   jwtSecret,
   merchantId,
   respondType,
