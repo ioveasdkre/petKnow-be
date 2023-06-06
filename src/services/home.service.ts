@@ -1,4 +1,4 @@
-import { coverUrl } from '../config/env';
+import { coverUrl, coverParamsUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { ISearchCourses } from '../types/home.type';
@@ -33,7 +33,7 @@ class HomeService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               instructorName: { $arrayElemAt: ['$user.name', 0] },
             },
           },
@@ -71,7 +71,7 @@ class HomeService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               instructorName: { $arrayElemAt: ['$user.name', 0] },
               price: '$price',
               discountPrice: {
@@ -191,7 +191,7 @@ class HomeService {
               _id: '$_id',
               title: '$title',
               shortDescription: '$shortDescription',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -287,7 +287,7 @@ class HomeService {
               _id: '$_id',
               title: '$title',
               shortDescription: '$shortDescription',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -355,7 +355,7 @@ class HomeService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -412,7 +412,7 @@ class HomeService {
               _id: '$_id',
               title: '$title',
               description: '$description',
-              cover: { $concat: [coverUrl, '$cover'] },
+              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
