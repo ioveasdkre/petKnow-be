@@ -20,6 +20,7 @@ enum HttpMessage {
   Failure = '失敗',
   SystemError = '系統發生錯誤，請聯繫系統管理員',
   NoPage = '無此路由頁面',
+  InvalidCredentials = '無效的憑證',
 }
 
 export { HttpStatusCode, HttpMessage };

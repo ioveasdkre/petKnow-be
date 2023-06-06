@@ -25,4 +25,6 @@ const PlatformCoupons = MongoDB.model<IPlatformCoupons>('PlatformCoupons', platf
 const ShoppingCart = MongoDB.model<IShoppingCartModel>('ShoppingCart', shoppingCartSchema);
 const User = MongoDB.model<IUser>('User', UserSchema);
 
+MongoDB.set('versionKey', false);
+
 export { CourseHierarchy, CourseTag, PlatformCoupons, ShoppingCart, User };

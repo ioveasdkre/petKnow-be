@@ -1,19 +1,114 @@
 import { Types } from 'mongoose';
 import crypto from 'crypto';
 import { coverUrl, merchantId, respondType, version } from '../config/env';
-import { CourseHierarchy, PlatformCoupons } from '../connections/mongoDB';
+import { CourseHierarchy, PlatformCoupons, ShoppingCart } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import {
   ICheckCartCoursesReturn,
   ICheckCourse as ICheckCartCouponParameter,
   ICheckCourse as ICheckCourseResult,
   ICheckCourse as ICheckCourseParameter,
-  IOrderParameter,
+  IOrderParams,
   ICreateOrderReturn,
 } from '../types/goldFlow.type';
 
 class GoldFlowService {
-  async chenkCartCoursesAsync(courseIds: string[]) {
+  //#region saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+  /** 新增或更新 使用者購物車 - 課程資料 */
+  async saveOrUpdateUserCartCourse(userId: Types.ObjectId, courseId: string) {
+    courseId;
+    const courseHierarchy = await CourseHierarchy.findOne({
+      _id: courseId,
+      isPublished: true, // 判斷已上架
+    });
+
+    if (!courseHierarchy) return 0;
+
+    const shoppingCart = await ShoppingCart.findOne({ user: userId });
+
+    if (!shoppingCart) {
+      const courseIds = [courseId];
+      const result = await ShoppingCart.create({ user: userId, courseIds: courseIds });
+
+      return result ? result : false;
+    }
+
+    const courseIds = shoppingCart.courseIds;
+
+    if (courseIds.includes(courseId)) return 1;
+
+    courseIds.push(courseId);
+
+    const result = await ShoppingCart.findOneAndUpdate(
+      {
+        user: userId,
+      },
+      {
+        $set: { courseIds: courseIds, updatedAt: new Date() }, // 更新部分欄位
+      },
+      {
+        new: true, // 回傳更新的文檔
+        select: 'courseIds couponCode',
+      },
+    );
+
+    return result ? result : false;
+  }
+  //#endregion saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+
+  //#region saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+  /** 新增或更新 使用者購物車 - 優惠卷資料 */
+  async saveOrUpdateUserCartCoupon(userId: Types.ObjectId, couponCode: string) {
+    const currentDate = new Date();
+
+    const shoppingCartCourseIds = await ShoppingCart.findOne({ user: userId }, { courseIds: 1 });
+
+    if (!shoppingCartCourseIds) return 1;
+
+    const courseIds = shoppingCartCourseIds.courseIds;
+    const courseHierarchy = await CourseHierarchy.find({
+      _id: { $in: courseIds.map(id => new Types.ObjectId(id)) },
+      isPublished: true,
+    }).distinct('tagNames');
+
+    const platformCoupons = await PlatformCoupons.findOne({
+      $and: [
+        { couponCode: couponCode },
+        { tagNames: { $in: courseHierarchy } },
+        { isEnabled: true },
+        { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+        { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+      ],
+    });
+
+    if (!platformCoupons) return 0;
+
+    const shoppingCart = await ShoppingCart.findOne({ user: userId });
+
+    if (!shoppingCart) {
+      const result = await ShoppingCart.create({ user: userId, couponCode: couponCode });
+
+      return result ? result : false;
+    }
+
+    const result = await ShoppingCart.findOneAndUpdate(
+      {
+        user: userId,
+      },
+      {
+        $set: { couponCode: couponCode, updatedAt: new Date() }, // 更新部分欄位
+      },
+      {
+        new: true, // 回傳更新的文檔
+        select: 'courseIds couponCode',
+      },
+    );
+
+    return result ? result : false;
+  }
+  //#endregion saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+
+  async checkCartCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();
 
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
@@ -397,7 +492,7 @@ class GoldFlowService {
    * @param order 訂單物件
    * @returns 轉換後的資料鏈串
    */
-  genDataChain(order: IOrderParameter) {
+  genDataChain(order: IOrderParams) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI
     return `MerchantID=${merchantId}&RespondType=${respondType}&TimeStamp=${
       order.timeStamp
@@ -414,7 +509,7 @@ class GoldFlowService {
    * @returns AES 加密後的結果
    */
   createMpgAesEncrypt(
-    TradeInfo: IOrderParameter,
+    TradeInfo: IOrderParams,
     useKey: string,
     useIv: string,
     algorithm: string = 'aes-256-cbc',
