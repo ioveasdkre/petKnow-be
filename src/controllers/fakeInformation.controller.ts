@@ -77,8 +77,8 @@ class FakeInformationController {
                 "cover": "z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                 "promoVideo": null,
                 "title": "狗狗訓練入門課程",
-                "shortDescription": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n  <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n  <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n  <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>",
-                "description": "這堂課將教您如何選擇適合的狗糧，並提供營養均衡的飲食建議。我們將討論飲食需求、餵食時間和食物選擇，確保您的狗狗獲得健康的營養。",
+                "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
+                "description": "<p>在這堂課中，我們將介紹狗狗的基本養育需求，幫助您了解如何照顧一隻健康快樂的狗狗。</p>\n<ul>\n  <li>狗狗的飲食需求：選擇適合的狗糧種類和餵食方式。</li>\n  <li>適合的住所環境：提供舒適的睡覺空間和適合運動的戶外區域。</li>\n  <li>定期醫療護理：疫苗接種、定期驅蟲和常見疾病預防。</li>\n  <li>適度的運動和遊戲：維持狗狗的身體健康和心理活躍。</li>\n</ul>\n<p>透過這些基本養育需求的認識，您將能夠提供一個健康快樂的生活環境給您的狗狗。</p>",
                 "level": 1,
                 "price": 3148,
                 "enrollmentCount": 8152,
@@ -405,8 +405,8 @@ class FakeInformationController {
             "cover": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA",
             "promoVideo": "https://example.com/videos/promo_video.mp4",
             "title": "成為寵物訓練達人:寵物訓練入門基礎課程",
-            "shortDescription": "犬學堂於2009年成立，至今超過13年，絕對係香港最具規模、實力既狗狗酒店、樂園、訓練中心。我們主要提供狗隻訓練，並設有狗酒店、狗泳池、狗公園、狗餐廳等設施及服務。主要訓練課程：- 30日基本訓練寄宿課程- 45日高級訓練寄宿課程",
-            "description": "本課程適合對象 ：家有幼犬之飼主。您將能夠透過本課程獲得：基礎幼犬互動訓練提高幼犬社會化經驗提高幼犬於外界環境之適應力習得犬隻基礎馴養技巧幼犬性格尚未成長完全，正是適合進行各項訓練的年齡段！無論您是已有馴養經驗、亦或是初次飼養幼犬隻飼主，您都能夠透過本課程獲得基礎寵物訓練的知識與技巧。本課程將幫助您透過各項技巧提高犬隻社會化與性格穩定度 @src@src.   查看更多立即購課",
+            "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
+            "description": "<p>在這堂課中，我們將介紹狗狗的基本養育需求，幫助您了解如何照顧一隻健康快樂的狗狗。</p>\n<ul>\n  <li>狗狗的飲食需求：選擇適合的狗糧種類和餵食方式。</li>\n  <li>適合的住所環境：提供舒適的睡覺空間和適合運動的戶外區域。</li>\n  <li>定期醫療護理：疫苗接種、定期驅蟲和常見疾病預防。</li>\n  <li>適度的運動和遊戲：維持狗狗的身體健康和心理活躍。</li>\n</ul>\n<p>透過這些基本養育需求的認識，您將能夠提供一個健康快樂的生活環境給您的狗狗。</p>",
             "level": 0,
             "price": 2500,
             "discountPrice": 1000,
@@ -600,7 +600,7 @@ class FakeInformationController {
     //#endregion [ swagger說明文件 ]
     try {
       const service = new FakeInformationService();
-      const state = await service.CouponManyData(30);
+      const state = await service.couponManyData(30);
 
       if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
@@ -646,7 +646,7 @@ class FakeInformationController {
     //#endregion [ swagger說明文件 ]
     try {
       const service = new FakeInformationService();
-      const state = await service.CourseTagManyData();
+      const state = await service.courseTagManyData();
 
       if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
@@ -656,6 +656,52 @@ class FakeInformationController {
     }
   }
   //#endregion generateCourseTagData [ 產生假資料至標籤資料表 ]
+
+  //#region generateUserData [ 產生假資料至使用者資料表 ]
+  /** 產生假資料至使用者資料表 */
+  static async generateUserData(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
+     * #swagger.description = "產生假資料至使用者資料表"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "新增成功"
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "新增失敗"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const service = new FakeInformationService();
+      const state = await service.userManyData();
+
+      if (!state) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion generateUserData [ 產生假資料至使用者資料表 ]
 }
 
 export { FakeInformationController };

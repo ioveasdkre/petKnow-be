@@ -208,7 +208,7 @@ class HomeController {
 
   //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
   /** 訪客 課程介紹 */
-  static async getVisitorCourseDetails(req: Request, res: Response, next: NextFunction) {
+  static async getVisitorCourseDetails(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["Home - 基本 API"]
@@ -301,7 +301,7 @@ class HomeController {
      */
     //#endregion [ swagger說明文件 ]
     try {
-      const courseId = req.params.courseId;
+      // const courseId = req.params.courseId;
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess);
     } catch (err) {

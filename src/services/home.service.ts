@@ -450,7 +450,7 @@ class HomeService {
       },
     ]);
 
-    return '';
+    return courses;
   }
   //#endregion getVisitorCourseDetails [ 訪客 課程介紹 ]
 }

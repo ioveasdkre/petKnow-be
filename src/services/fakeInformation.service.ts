@@ -4,12 +4,15 @@ import {
   courseHierarchyType,
   shortDescriptions,
   descriptions,
+  instructors,
+  names,
 } from '../../__tests__/courseHierarchyData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
 import { CourseHierarchy, CourseTag, PlatformCoupons, User } from '../connections/mongoDB';
 import { ISubchapter, IChapter, ICourse } from '../models/courseHierarchy.model';
 import { ICourseTag } from '../models/courseTag.model';
 import { IPlatformCoupons } from '../models/platformCoupons.model';
+import { IUser } from '../models/user.model';
 
 class FakeInformationService {
   private generateRandomInt(max: number) {
@@ -196,7 +199,7 @@ class FakeInformationService {
     return true;
   }
 
-  async CouponManyData(quantity: number) {
+  async couponManyData(quantity: number) {
     const newData: IPlatformCoupons[] = [];
 
     const deleteplatformCoupons = await PlatformCoupons.deleteMany();
@@ -243,7 +246,7 @@ class FakeInformationService {
     return true;
   }
 
-  async CourseTagManyData() {
+  async courseTagManyData() {
     const newData: ICourseTag[] = [];
 
     const deleteCourseTag = await CourseTag.deleteMany();
@@ -258,6 +261,41 @@ class FakeInformationService {
     }
 
     const result = await CourseTag.insertMany(newData);
+
+    if (result.length === 0) return false;
+
+    return true;
+  }
+
+  async userManyData() {
+    const newData: IUser[] = [];
+
+    const namesLength = names.length;
+    const instructorsLength = instructors.length;
+    const deleteUser = await User.deleteMany();
+
+    if (!deleteUser.acknowledged) return false;
+
+    // 產生 標籤
+    for (let i = 0; i < namesLength; i++) {
+      const email = `Abc123${i}@gmail.com`;
+      const password = 'Abc123';
+
+      const namesIndex = this.generateRandomInt(namesLength);
+      const instructorsIndex = this.generateRandomInt(instructorsLength);
+
+      const name = names[namesIndex];
+      const _instructors = instructors[instructorsIndex];
+
+      newData.push({
+        name,
+        email,
+        password,
+        instructors: _instructors,
+      });
+    }
+
+    const result = await User.insertMany(newData);
 
     if (result.length === 0) return false;
 
