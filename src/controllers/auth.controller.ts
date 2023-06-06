@@ -27,7 +27,7 @@ class authController {
           "data": {
             "_id": "646d8bf85f52ae9681b88593",
             "name": "Benson",
-            "email": "Abc123#@gmail.com",
+            "email": "Abc123@gmail.com",
             "password": "$2a$10$1yR.UPzTukYyVdiLUTHvhugqp1nBEjZmKD31inX2XGlLpUIGvAwly",
             "__v": 0
           }
@@ -93,7 +93,7 @@ class authController {
           "message": "更新成功",
           "data": {
             "name": "patrick",
-            "email": "AbcTest@gmail.com",
+            "email": "Abc1231@gmail.com",
             "__v": 0,
             "bio": "無敵鐵金剛",
             "nickname": "說你好"

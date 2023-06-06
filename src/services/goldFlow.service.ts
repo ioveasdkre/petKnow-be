@@ -28,7 +28,10 @@ class GoldFlowService {
 
     if (!shoppingCart) {
       const courseIds = [courseId];
-      const result = await ShoppingCart.create({ user: userId, courseIds: courseIds });
+      const result = await ShoppingCart.create(
+        { user: userId, courseIds: courseIds },
+        { select: '_id' },
+      );
 
       return result ? result : false;
     }
@@ -48,7 +51,7 @@ class GoldFlowService {
       },
       {
         new: true, // 回傳更新的文檔
-        select: 'courseIds couponCode',
+        select: '_id',
       },
     );
 
@@ -86,7 +89,10 @@ class GoldFlowService {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
     if (!shoppingCart) {
-      const result = await ShoppingCart.create({ user: userId, couponCode: couponCode });
+      const result = await ShoppingCart.create(
+        { user: userId, couponCode: couponCode },
+        { select: '_id' },
+      );
 
       return result ? result : false;
     }
@@ -100,7 +106,7 @@ class GoldFlowService {
       },
       {
         new: true, // 回傳更新的文檔
-        select: 'courseIds couponCode',
+        select: '_id',
       },
     );
 

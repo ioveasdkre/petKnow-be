@@ -5,13 +5,13 @@ import { handleResponse } from '../helpers/handle.helper';
 import { FakeInformationService } from '../services/fakeInformation.service';
 
 class FakeInformationController {
-  //#region getAllUser [ 取得全部使用者的 _id 資料 ]
-  /** 取得全部使用者的 _id 資料 */
+  //#region getAllUser [ 取得全部使用者資料 ]
+  /** 取得全部使用者資料 */
   static async getAllUserId(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["FakeInformation - 假資料 API"]
-     * #swagger.description = "取得全部使用者的 _id 資料"
+     * #swagger.description = "取得全部使用者資料"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -42,7 +42,7 @@ class FakeInformationController {
       */
     //#endregion [ swagger說明文件 ]
     try {
-      const Users = await User.distinct('_id');
+      const Users = await User.find();
 
       if (Users.length === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
@@ -52,7 +52,7 @@ class FakeInformationController {
       next(err);
     }
   }
-  //#endregion getAllUser [ 取得全部使用者的 _id 資料 ]
+  //#endregion getAllUser [ 取得全部使用者資料 ]
 
   //#region getAllCourseHierarchys [ 取得全部課程彙總資料 ]
   /** 取得全部課程彙總資料 */

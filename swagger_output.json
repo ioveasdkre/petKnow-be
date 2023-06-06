@@ -40,11 +40,11 @@
                 },
                 "email": {
                   "type": "string",
-                  "example": "AbcTest@gmail.com"
+                  "example": "Abc1231@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "Abc123#"
+                  "example": "Abc123"
                 }
               }
             }
@@ -140,11 +140,11 @@
               "properties": {
                 "email": {
                   "type": "string",
-                  "example": "AbcTest@gmail.com"
+                  "example": "Abc1231@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "Abc123#"
+                  "example": "Abc123"
                 }
               }
             }
@@ -177,7 +177,7 @@
                     },
                     "email": {
                       "type": "string",
-                      "example": "AbcTest@gmail.com"
+                      "example": "Abc1231@gmail.com"
                     },
                     "__v": {
                       "type": "number",
@@ -185,7 +185,7 @@
                     },
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc1NDk0ZWNjMjdkYTc4MjY3NzI5MGYiLCJpYXQiOjE2ODU4MDI3NDJ9.yaZztYXs60BVqh-XuzU2tXmWfXUUbB1ypket8HJE2CA"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmMzUxM2FlZTNhODBlYmZiNTk0Y2UiLCJpYXQiOjE2ODYwNTgyNzl9.Omcfsqojx_HtagWSEJq7bVOQzhuyAWbXWRK_0Ikxn_8"
                     }
                   }
                 }
@@ -217,7 +217,7 @@
                   "properties": {
                     "email": {
                       "type": "string",
-                      "example": "AbcTest@gmail.com"
+                      "example": "Abc1231@gmail.com"
                     }
                   }
                 }
@@ -294,7 +294,7 @@
                     },
                     "email": {
                       "type": "string",
-                      "example": "Abc123#@gmail.com"
+                      "example": "Abc123@gmail.com"
                     },
                     "password": {
                       "type": "string",
@@ -420,7 +420,7 @@
                     },
                     "email": {
                       "type": "string",
-                      "example": "AbcTest@gmail.com"
+                      "example": "Abc1231@gmail.com"
                     },
                     "__v": {
                       "type": "number",
@@ -705,7 +705,7 @@
         "tags": [
           "FakeInformation - 假資料 API"
         ],
-        "description": "取得全部使用者的 _id 資料",
+        "description": "取得全部使用者資料",
         "parameters": [],
         "responses": {
           "200": {
@@ -2342,7 +2342,7 @@
                     },
                     "email": {
                       "type": "string",
-                      "example": "AbcTest@gmail.com"
+                      "example": "Abc1231@gmail.com"
                     },
                     "timeStamp": {
                       "type": "number",
