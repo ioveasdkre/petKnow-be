@@ -21,8 +21,8 @@ authRouter.post('/v1/register', async (req, res) => {
         required: true,
         schema: {
           "name": "Benson",
-          "email": "AbcTest@gmail.com",
-          "password": "Abc123#",
+          "email": "Abc1231@gmail.com",
+          "password": "Abc123",
         }
       }
     * #swagger.responses[200] = {
@@ -100,8 +100,8 @@ authRouter.post('/v1/login', async (req, res) => {
         type: "object",
         required: true,
         schema: {
-          "email": "AbcTest@gmail.com",
-          "password": "Abc123#"
+          "email": "Abc1231@gmail.com",
+          "password": "Abc123"
         }
       }
     * #swagger.responses[200] = {
@@ -112,9 +112,9 @@ authRouter.post('/v1/login', async (req, res) => {
           "message": "Success",
           "data": {
             "name": "Benson",
-            "email": "AbcTest@gmail.com",
+            "email": "Abc1231@gmail.com",
             "__v": 0,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc1NDk0ZWNjMjdkYTc4MjY3NzI5MGYiLCJpYXQiOjE2ODU4MDI3NDJ9.yaZztYXs60BVqh-XuzU2tXmWfXUUbB1ypket8HJE2CA"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmMzUxM2FlZTNhODBlYmZiNTk0Y2UiLCJpYXQiOjE2ODYwNTgyNzl9.Omcfsqojx_HtagWSEJq7bVOQzhuyAWbXWRK_0Ikxn_8"
           }
         }
       }
@@ -125,7 +125,7 @@ authRouter.post('/v1/login', async (req, res) => {
           "statusCode": 400,
           "message": "Invalid credentials",
           "data": {
-            "email": "AbcTest@gmail.com"
+            "email": "Abc1231@gmail.com"
           }
         }
       }

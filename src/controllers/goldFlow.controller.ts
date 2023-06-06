@@ -425,7 +425,7 @@ class GoldFlowController {
               "merchantId": "MS148918186",
               "version": "1.5",
               "amt": 6210,
-              "email": "AbcTest@gmail.com",
+              "email": "Abc1231@gmail.com",
               "timeStamp": 1685802800,
               "merchantOrderNo": "647b4f2f41fda7e8d1f78253",
               "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",

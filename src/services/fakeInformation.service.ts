@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import bcrypt from 'bcryptjs';
 import {
   courseHierarchys,
   courseHierarchyType,
@@ -280,6 +281,8 @@ class FakeInformationService {
     for (let i = 0; i < namesLength; i++) {
       const email = `Abc123${i}@gmail.com`;
       const password = 'Abc123';
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       const namesIndex = this.generateRandomInt(namesLength);
       const instructorsIndex = this.generateRandomInt(instructorsLength);
@@ -290,7 +293,7 @@ class FakeInformationService {
       newData.push({
         name,
         email,
-        password,
+        password: hashedPassword,
         instructors: _instructors,
       });
     }
