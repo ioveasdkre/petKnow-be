@@ -6,7 +6,7 @@ const router: Router = express.Router();
 
 router
   .route('/v1/Caghinopprst')
-  .get(verifyJwtToken, controller.getShoppingCarts)
+  .get(controller.getShoppingCarts)
   .post(verifyJwtToken, controller.postShoppingCart);
 
 export { router as shoppingCartRouter };

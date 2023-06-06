@@ -15,11 +15,6 @@ class ShoppingCartController {
     /**
      * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
      * #swagger.description = "讀取購物車資料表所有資料"
-     * #swagger.security = [
-          {
-            "apiKeyAuth": []
-          }
-        ]
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -149,7 +144,7 @@ class ShoppingCartController {
       if (!courses || courses.length === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-      const shoppingCart: IPostShoppingCart = {
+      const shoppingCart = {
         user: user._id,
         courses,
       };
@@ -165,6 +160,53 @@ class ShoppingCartController {
     }
   }
   //#endregion postShoppingCart [ 新增一筆購物車資料 ]
+
+  //#region deleteShoppingCarts [ 刪除所有資料 ]
+  /** 刪除所有資料 */
+  static async deleteShoppingCarts(
+    _req: IRequestJwtBody,
+    res: Response,
+    next: NextFunction,
+  ) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
+     * #swagger.description = "刪除所有資料"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "刪除成功"
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "success": false,
+            "statusCode": 400,
+            "message": "錯誤的請求"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      await ShoppingCart.deleteMany();
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.DeleteSuccess);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion deleteShoppingCarts [ 刪除所有資料 ]
 }
 
 export { ShoppingCartController };

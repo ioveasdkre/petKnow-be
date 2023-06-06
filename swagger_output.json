@@ -1622,7 +1622,183 @@
         }
       }
     },
-    "/v1/goldFlow/Cart": {
+    "/v1/goldFlow/userCartCourse": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "新增或更新 使用者購物車 - 課程資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseId": {
+                  "type": "string",
+                  "example": "646f7e2f4802a2dbf6b3eb83"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "courseIds": {
+                      "type": "array",
+                      "example": [
+                        "646f7e2f4802a2dbf6b3eb83",
+                        "646f7e2f4802a2dbf6b3eb99",
+                        "646f7e2f4802a2dbf6b3eb9a"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "couponCode": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/goldFlow/userCartCoupon": {
+      "post": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "新增或更新 使用者購物車 - 優惠卷資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "couponCode": {
+                  "type": "string",
+                  "example": "ugyV1E8P"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/goldFlow/cart": {
       "post": {
         "tags": [
           "GoldFlow - 金流 API"
@@ -2820,12 +2996,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "apiKeyAuth": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [

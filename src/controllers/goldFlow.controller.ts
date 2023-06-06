@@ -15,9 +15,11 @@ import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
 import { IRequestBody } from '../types/handle.type';
-import { IOrderParameter as IOrder } from '../types/goldFlow.type';
+import { IOrderParams as IOrder } from '../types/goldFlow.type';
 import { isValidObjectId } from '../utils/mongoose.util';
 import {
+  ICreateUserCartCourse,
+  ICreateUserCartCoupon,
   IPostCartRequest,
   ICreateOrderRequest,
   IPostCheckRequest,
@@ -25,6 +27,147 @@ import {
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
 class GoldFlowController {
+  //#region saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+  /** 新增或更新 使用者購物車 - 課程資料 */
+  static async saveOrUpdateUserCartCourse(
+    req: IRequestJwtBody<ICreateUserCartCourse>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "新增或更新 使用者購物車 - 課程資料"
+     * #swagger.security = [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "courseId": "646f7e2f4802a2dbf6b3eb83"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "成功",
+            "data": {
+              "courseIds": [
+                "646f7e2f4802a2dbf6b3eb83",
+                "646f7e2f4802a2dbf6b3eb99",
+                "646f7e2f4802a2dbf6b3eb9a"
+              ],
+              "couponCode": ""
+            }
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const user = req.user;
+      const { courseId } = req.body;
+
+      if (!user)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.InvalidCredentials);
+      else if (!isValidObjectId(courseId))
+        return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
+
+      const goldFlowService = new GoldFlowService();
+      const result = await goldFlowService.saveOrUpdateUserCartCourse(user._id, courseId);
+
+      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
+      else if (result === 1) return handleResponse(res, HttpStatusCode.OK, '已儲存在購物車當中');
+      else if (result === false)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+
+  //#region saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+  /** 新增或更新 使用者購物車 - 優惠卷資料 */
+  static async saveOrUpdateUserCartCoupon(
+    req: IRequestJwtBody<ICreateUserCartCoupon>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "新增或更新 使用者購物車 - 優惠卷資料"
+     * #swagger.security = [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "couponCode": "ugyV1E8P"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "成功"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const user = req.user;
+      const { couponCode } = req.body;
+
+      if (!user || !couponCode)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const goldFlowService = new GoldFlowService();
+      const result = await goldFlowService.saveOrUpdateUserCartCoupon(user._id, couponCode);
+
+      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, '優惠碼不存在或不符合條件');
+      else if (result === false)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+
   //#region postCart [ 讀取購物車資料 ]
   /** 讀取購物車資料 */
   static async postCart(req: IRequestBody<IPostCartRequest>, res: Response, next: NextFunction) {
@@ -105,7 +248,7 @@ class GoldFlowController {
       const { courseIds, couponCode } = req.body;
 
       const goldFlowService = new GoldFlowService();
-      const { courseHierarchy, youMightLike } = await goldFlowService.chenkCartCoursesAsync(
+      const { courseHierarchy, youMightLike } = await goldFlowService.checkCartCoursesAsync(
         courseIds,
       );
 

@@ -1,6 +1,6 @@
 interface ICheckCartCoursesReturn {
   id?: string;
-  platformCoupons?: IPlatfoemCoupon;
+  platformCoupons?: IPlatformCoupon;
   totalPrice: number;
   shoppingCart: ShoppingCartItem[];
   uniqueTagNames?: string[] | undefined;
@@ -29,13 +29,13 @@ interface ICheckCourse {
   discountedPrice?: number;
 }
 
-interface IPlatfoemCoupon {
+interface IPlatformCoupon {
   couponCode: string;
   couponPrice: number;
 }
 
 interface ICreateOrderReturn {
-  platformCoupons?: IPlatfoemCoupon;
+  platformCoupons?: IPlatformCoupon;
   totalPrice: number;
   shoppingCart: ShoppingCartItem[];
   uniqueTagNames?: string[] | undefined;
@@ -47,7 +47,7 @@ interface ICreateOrderReturn {
   merchantOrderNo?: string;
 }
 
-interface IOrderParameter {
+interface IOrderParams {
   email: string;
   amt: number;
   itemDesc: string;
@@ -55,4 +55,9 @@ interface IOrderParameter {
   merchantOrderNo: string;
 }
 
-export { ICheckCartCoursesReturn, ICheckCourse, IOrderParameter, ICreateOrderReturn };
+export {
+  ICheckCartCoursesReturn,
+  ICheckCourse,
+  IOrderParams,
+  ICreateOrderReturn,
+};

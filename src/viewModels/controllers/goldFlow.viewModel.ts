@@ -1,8 +1,14 @@
 import { ICourseIdsRequest } from '../shares/course.viewModel';
 
-interface ICourseIdsAndCouponCodeRequest extends ICourseIdsRequest {
+interface ICreateCartCourse {
+  courseId: string;
+}
+
+interface ICreateCartCoupon {
   couponCode: string;
 }
+
+interface ICourseIdsAndCouponCodeRequest extends ICourseIdsRequest, ICreateCartCoupon {}
 
 interface IPostCheckRequest {
   amt: number;
@@ -13,6 +19,8 @@ interface IPostCheckRequest {
 }
 
 export {
+  ICreateCartCourse as ICreateUserCartCourse,
+  ICreateCartCoupon as ICreateUserCartCoupon,
   ICourseIdsAndCouponCodeRequest as IPostCartRequest,
   ICourseIdsAndCouponCodeRequest as ICreateOrderRequest,
   IPostCheckRequest,
