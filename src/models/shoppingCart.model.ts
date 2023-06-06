@@ -1,8 +1,10 @@
 import { Schema, Types, Document } from 'mongoose';
 
 interface IShoppingCart {
-  user: Types.ObjectId;
+  user?: Types.ObjectId;
+  visitor?: Types.ObjectId;
   courses: string[];
+  couponsCode?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -14,12 +16,19 @@ const shoppingCartSchema = new Schema<IShoppingCartModel>({
     type: Schema.Types.ObjectId,
     ref: 'User',
     unique: true,
-    required: [true, '請填寫必填欄位'],
+    index: true,
+  },
+  visitor: {
+    type: Schema.Types.ObjectId,
+    unique: true,
     index: true,
   },
   courses: {
     type: [String],
-    required: [true, '請填寫必填欄位'],
+    required: [true, '課程id為必填欄位'],
+  },
+  couponsCode: {
+    type: String,
   },
   createdAt: {
     type: Date,
