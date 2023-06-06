@@ -1,9 +1,9 @@
 import { ParsedQs } from 'qs';
 
-interface IGetSearcheRequest extends ParsedQs {
+interface IGetSearchRequest extends ParsedQs {
   q: string;
 }
 
 export {
-  IGetSearcheRequest,
+  IGetSearchRequest,
 };

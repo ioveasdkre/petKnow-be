@@ -11,9 +11,9 @@ interface Course {
   isFree: boolean;
 }
 
-interface ISearcheCourses {
+interface ISearchCourses {
   courses: Course[];
   uniqueTagNames?: string[];
 }
 
-export { ISearcheCourses };
+export { ISearchCourses };
