@@ -1,7 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(path.resolve(process.cwd()), '.env') });
 
 const port = process.env.PORT ?? 8000;
 const env = process.env.ENV;
