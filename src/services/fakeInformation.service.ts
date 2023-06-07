@@ -6,8 +6,8 @@ import {
   shortDescriptions,
   descriptions,
   instructors,
-  names,
 } from '../../__tests__/courseHierarchyData.test';
+import { names } from '../../__tests__/userData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
 import { CourseHierarchy, CourseTag, PlatformCoupons, User } from '../connections/mongoDB';
 import { ISubchapter, IChapter, ICourse } from '../models/courseHierarchy.model';
@@ -158,10 +158,6 @@ class FakeInformationService {
         });
       }
     }
-
-    const test = tagNameArr.filter((item, index) => tagNameArr.indexOf(item) === index);
-
-    console.log(test);
 
     return newData;
   }
