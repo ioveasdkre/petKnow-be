@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { courseHierarchyType } from '../../__tests__/course.type.test';
 import {
   courseHierarchys,
-  courseHierarchyType,
   shortDescriptions,
   descriptions,
   instructors,
@@ -185,9 +185,20 @@ class FakeInformationService {
 
     if (!deleteCourseHierarchy.acknowledged) return false;
 
-    newData.push(...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, 0));
-    newData.push(...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, 1));
-    newData.push(...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, 2));
+    for (let i = 0; i < 12; i++) {
+      if (i % 3 === 0)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, i),
+        );
+      else if (i % 3 === 1)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, i),
+        );
+      else if (i % 3 === 2)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, i),
+        );
+    }
 
     const result = await CourseHierarchy.insertMany(newData);
 
