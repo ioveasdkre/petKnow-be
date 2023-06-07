@@ -1702,12 +1702,216 @@
         }
       }
     },
+    "/v1/goldFlow/userCart": {
+      "get": {
+        "tags": [
+          "GoldFlow - 金流 API"
+        ],
+        "description": "使用者 讀取購物車資料",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "資料格式",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseIds": {
+                  "type": "array",
+                  "example": [
+                    "646f7e2f4802a2dbf6b3eb83",
+                    "646f7e2f4802a2dbf6b3eb84",
+                    "646f7e2f4802a2dbf6b3eb85"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "ugyV1E8P"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "成功"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "totalPrice": {
+                      "type": "number",
+                      "example": 7022
+                    },
+                    "shoppingCart": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3eb83"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "狗狗訓練入門課程"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "初階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 135.6
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 53
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "RubyTest"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 3148
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    },
+                    "courseIds": {
+                      "type": "array",
+                      "example": [
+                        "646f7e2f4802a2dbf6b3eb83"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "discountedPrice": {
+                      "type": "number",
+                      "example": 6210
+                    },
+                    "couponCode": {
+                      "type": "string",
+                      "example": "ugyV1E8P"
+                    },
+                    "couponPrice": {
+                      "type": "number",
+                      "example": 812
+                    },
+                    "youMightLike": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "646f7e2f4802a2dbf6b3ebcd"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "寵物洗澡的基本知識與技巧"
+                          },
+                          "cover": {
+                            "type": "string",
+                            "example": "https://thumbs.dreamstime.com/z/cat-dog-under-christmas-tree-pets-plaid-105463936.jpg"
+                          },
+                          "level": {
+                            "type": "string",
+                            "example": "初階課程"
+                          },
+                          "time": {
+                            "type": "number",
+                            "example": 48.6
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 26
+                          },
+                          "instructorName": {
+                            "type": "string",
+                            "example": "ffffff"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 7907
+                          },
+                          "discountPrice": {},
+                          "isFree": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/goldFlow/userCartCourse": {
       "post": {
         "tags": [
           "GoldFlow - 金流 API"
         ],
-        "description": "新增或更新 使用者購物車 - 課程資料",
+        "description": "使用者 新增或更新購物車 - 課程資料",
         "parameters": [
           {
             "name": "body",
@@ -1742,26 +1946,6 @@
                 "message": {
                   "type": "string",
                   "example": "成功"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "courseIds": {
-                      "type": "array",
-                      "example": [
-                        "646f7e2f4802a2dbf6b3eb83",
-                        "646f7e2f4802a2dbf6b3eb99",
-                        "646f7e2f4802a2dbf6b3eb9a"
-                      ],
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "couponCode": {
-                      "type": "string",
-                      "example": ""
-                    }
-                  }
                 }
               },
               "xml": {
@@ -1805,7 +1989,7 @@
         "tags": [
           "GoldFlow - 金流 API"
         ],
-        "description": "新增或更新 使用者購物車 - 優惠卷資料",
+        "description": "使用者 新增或更新購物車 - 優惠卷資料",
         "parameters": [
           {
             "name": "body",

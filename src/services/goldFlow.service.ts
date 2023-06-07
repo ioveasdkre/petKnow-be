@@ -4,6 +4,7 @@ import { coverUrl, coverParamsUrl, merchantId, respondType, version } from '../c
 import { CourseHierarchy, PlatformCoupons, ShoppingCart } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import {
+  IGetCart,
   ICheckCartCoursesReturn,
   ICheckCourse as ICheckCartCouponParameter,
   ICheckCourse as ICheckCourseResult,
@@ -28,10 +29,7 @@ class GoldFlowService {
 
     if (!shoppingCart) {
       const courseIds = [courseId];
-      const result = await ShoppingCart.create(
-        { user: userId, courseIds: courseIds },
-        { select: '_id' },
-      );
+      const result = await ShoppingCart.create({ user: userId, courseIds: courseIds });
 
       return result ? result : false;
     }
@@ -51,7 +49,6 @@ class GoldFlowService {
       },
       {
         new: true, // 回傳更新的文檔
-        select: '_id',
       },
     );
 
@@ -89,10 +86,7 @@ class GoldFlowService {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
     if (!shoppingCart) {
-      const result = await ShoppingCart.create(
-        { user: userId, couponCode: couponCode },
-        { select: '_id' },
-      );
+      const result = await ShoppingCart.create({ user: userId, couponCode: couponCode });
 
       return result ? result : false;
     }
@@ -106,13 +100,32 @@ class GoldFlowService {
       },
       {
         new: true, // 回傳更新的文檔
-        select: '_id',
       },
     );
 
     return result ? result : false;
   }
   //#endregion saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+
+  //#region getCart [ 讀取購物車資料 ]
+  /** 讀取購物車資料 */
+  async getCart(_id: Types.ObjectId, isUser: boolean = true) {
+    let filter: Record<string, Types.ObjectId> = {};
+
+    if (isUser) {
+      filter.user = _id;
+    } else {
+      filter.visitor = _id;
+    }
+
+    const shoppingCart = await ShoppingCart.findOne<IGetCart>(filter, {
+      courseIds: 1,
+      couponCode: 1,
+    });
+
+    return shoppingCart ? shoppingCart : false;
+  }
+  //#endregion getCart [ 讀取購物車資料 ]
 
   async checkCartCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();

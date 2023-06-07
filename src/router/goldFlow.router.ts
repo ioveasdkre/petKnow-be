@@ -11,6 +11,7 @@ import {
 const router: Router = express.Router();
 
 router
+  .get('/v1/goldFlow/userCart', verifyJwtToken, controller.getUserCart)
   .post(
     '/v1/goldFlow/userCartCourse',
     verifyJwtToken<ICreateUserCartCourse>,

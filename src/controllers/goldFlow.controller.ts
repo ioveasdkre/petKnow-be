@@ -27,8 +27,8 @@ import {
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
 class GoldFlowController {
-  //#region saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
-  /** 新增或更新 使用者購物車 - 課程資料 */
+  //#region saveOrUpdateUserCartCourse [ 使用者 新增或更新購物車 - 課程資料 ]
+  /** 使用者 新增或更新購物車 - 課程資料 */
   static async saveOrUpdateUserCartCourse(
     req: IRequestJwtBody<ICreateUserCartCourse>,
     res: Response,
@@ -37,7 +37,7 @@ class GoldFlowController {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "新增或更新 使用者購物車 - 課程資料"
+     * #swagger.description = "使用者 新增或更新購物車 - 課程資料"
      * #swagger.security = [
           {
             "apiKeyAuth": []
@@ -57,15 +57,7 @@ class GoldFlowController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "成功",
-            "data": {
-              "courseIds": [
-                "646f7e2f4802a2dbf6b3eb83",
-                "646f7e2f4802a2dbf6b3eb99",
-                "646f7e2f4802a2dbf6b3eb9a"
-              ],
-              "couponCode": ""
-            }
+            "message": "成功"
           }
         }
      * #swagger.responses[500] = {
@@ -95,15 +87,15 @@ class GoldFlowController {
       else if (result === false)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, result);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+  //#endregion saveOrUpdateUserCartCourse [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
-  /** 新增或更新 使用者購物車 - 優惠卷資料 */
+  //#region saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
+  /** 使用者 新增或更新購物車 - 優惠卷資料 */
   static async saveOrUpdateUserCartCoupon(
     req: IRequestJwtBody<ICreateUserCartCoupon>,
     res: Response,
@@ -112,7 +104,7 @@ class GoldFlowController {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "新增或更新 使用者購物車 - 優惠卷資料"
+     * #swagger.description = "使用者 新增或更新購物車 - 優惠卷資料"
      * #swagger.security = [
           {
             "apiKeyAuth": []
@@ -161,12 +153,129 @@ class GoldFlowController {
       else if (result === false)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, result);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+  //#endregion saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
+
+  //#region getUserCart [ 使用者 讀取購物車資料 ]
+  /** 使用者 讀取購物車資料 */
+  static async getUserCart(req: IRequestJwtBody, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "使用者 讀取購物車資料"
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "courseIds": [
+              "646f7e2f4802a2dbf6b3eb83",
+              "646f7e2f4802a2dbf6b3eb84",
+              "646f7e2f4802a2dbf6b3eb85"
+            ],
+            "couponCode": "ugyV1E8P"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "成功",
+            "data": {
+              "totalPrice": 7022,
+              "shoppingCart": [
+                {
+                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "title": "狗狗訓練入門課程",
+                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
+                  "level": "初階課程",
+                  "time": 135.6,
+                  "total": 53,
+                  "instructorName": "RubyTest",
+                  "price": 3148,
+                  "discountPrice": null,
+                  "isFree": false
+                }
+              ],
+              "courseIds": [
+                "646f7e2f4802a2dbf6b3eb83"
+              ],
+              "discountedPrice": 6210,
+              "couponCode": "ugyV1E8P",
+              "couponPrice": 812,
+              "youMightLike": [
+                {
+                  "_id": "646f7e2f4802a2dbf6b3ebcd",
+                  "title": "寵物洗澡的基本知識與技巧",
+                  "cover": "https://thumbs.dreamstime.com/z/cat-dog-under-christmas-tree-pets-plaid-105463936.jpg",
+                  "level": "初階課程",
+                  "time": 48.6,
+                  "total": 26,
+                  "instructorName": "ffffff",
+                  "price": 7907,
+                  "discountPrice": null,
+                  "isFree": false
+                }
+              ]
+            }
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const goldFlowService = new GoldFlowService();
+
+      const user = req.user;
+
+      if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const shoppingCart = await goldFlowService.getCart(user._id);
+
+      if (!shoppingCart)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const { courseIds, couponCode } = shoppingCart;
+      const { courseHierarchy, youMightLike } = await goldFlowService.checkCartCoursesAsync(
+        courseIds,
+      );
+
+      if (!courseHierarchy)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+          youMightLike,
+        });
+      else if (!couponCode) {
+        delete courseHierarchy.uniqueTagNames;
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+          courseHierarchy,
+          youMightLike,
+        });
+      }
+
+      const result = await goldFlowService.checkCartCouponAsync(courseHierarchy, couponCode);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+        ...result,
+        youMightLike,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion getUserCart [ 使用者 讀取購物車資料 ]
 
   //#region postCart [ 讀取購物車資料 ]
   /** 讀取購物車資料 */

@@ -185,7 +185,7 @@ class FakeInformationService {
 
     if (!deleteCourseHierarchy.acknowledged) return false;
 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 31; i++) {
       if (i % 3 === 0)
         newData.push(
           ...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, i),
