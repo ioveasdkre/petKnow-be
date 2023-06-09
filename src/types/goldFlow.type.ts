@@ -1,3 +1,8 @@
+interface IGetCart {
+  courseIds: string[];
+  couponCode: string;
+}
+
 interface ICheckCartCoursesReturn {
   id?: string;
   platformCoupons?: IPlatformCoupon;
@@ -5,6 +10,7 @@ interface ICheckCartCoursesReturn {
   shoppingCart: ShoppingCartItem[];
   uniqueTagNames?: string[] | undefined;
   discountedPrice?: number | undefined;
+  courseIds?: string[];
 }
 
 interface ShoppingCartItem {
@@ -55,9 +61,4 @@ interface IOrderParams {
   merchantOrderNo: string;
 }
 
-export {
-  ICheckCartCoursesReturn,
-  ICheckCourse,
-  IOrderParams,
-  ICreateOrderReturn,
-};
+export { IGetCart, ICheckCartCoursesReturn, ICheckCourse, IOrderParams, ICreateOrderReturn };

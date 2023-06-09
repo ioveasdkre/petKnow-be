@@ -11,6 +11,7 @@ import {
 const router: Router = express.Router();
 
 router
+  .get('/v1/goldFlow/userCart', verifyJwtToken, controller.getUserCart)
   .post(
     '/v1/goldFlow/userCartCourse',
     verifyJwtToken<ICreateUserCartCourse>,
@@ -21,7 +22,7 @@ router
     verifyJwtToken<ICreateUserCartCoupon>,
     controller.saveOrUpdateUserCartCoupon,
   )
-  .post('/v1/goldFlow/cart', verifyObjectIds, controller.postCart)
+  .post('/v1/goldFlow/visitorsCart', verifyObjectIds, controller.postVisitorsCart)
   .post(
     '/v1/goldFlow/createOrder',
     verifyJwtToken<ICreateOrderRequest>,

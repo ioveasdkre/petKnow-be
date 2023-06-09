@@ -1,6 +1,7 @@
 import { Options } from 'swagger-jsdoc';
 import swaggerAutogen from 'swagger-autogen';
 import { port, env } from '../config/env';
+import path from 'path';
 
 const host = env === 'prod' ? 'petknow-be.onrender.com' : `localhost:${port}`;
 
@@ -22,7 +23,8 @@ const options: Options = {
   },
 };
 
-const outputFile = './swagger_output.json';
-const endpointsFiles = ['./src/router/*.router.ts'];
+const rootDir = path.resolve(process.cwd());
+const outputFile = path.join(rootDir, 'swagger_output.json');
+const endpointsFiles = [path.join(rootDir, 'src/router/*.router.ts')];
 
 swaggerAutogen(outputFile, endpointsFiles, options);

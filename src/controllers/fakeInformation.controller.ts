@@ -69,7 +69,7 @@ class FakeInformationController {
             "message": "Success",
             "data": [
               {
-                "_id": "646f7e2f4802a2dbf6b3eb83",
+                "_id": "6482b94965829859fd1d1838",
                 "user": "646b7386c4f79ea9d11ff6e7",
                 "tagNames": [
                   "狗狗訓練"

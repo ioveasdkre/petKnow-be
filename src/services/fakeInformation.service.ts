@@ -1,13 +1,13 @@
 import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { courseHierarchyType } from '../../__tests__/course.type.test';
 import {
   courseHierarchys,
-  courseHierarchyType,
   shortDescriptions,
   descriptions,
   instructors,
-  names,
 } from '../../__tests__/courseHierarchyData.test';
+import { names } from '../../__tests__/userData.test';
 import { a_z, lables } from '../../__tests__/customData.test';
 import { CourseHierarchy, CourseTag, PlatformCoupons, User } from '../connections/mongoDB';
 import { ISubchapter, IChapter, ICourse } from '../models/courseHierarchy.model';
@@ -31,7 +31,7 @@ class FakeInformationService {
   }
 
   private getDiscountDateScope() {
-    return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 30 * 86400000];
+    return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 365 * 86400000];
   }
 
   private generateRandomCourseHierarchy(
@@ -159,10 +159,6 @@ class FakeInformationService {
       }
     }
 
-    const test = tagNameArr.filter((item, index) => tagNameArr.indexOf(item) === index);
-
-    console.log(test);
-
     return newData;
   }
 
@@ -189,9 +185,20 @@ class FakeInformationService {
 
     if (!deleteCourseHierarchy.acknowledged) return false;
 
-    newData.push(...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, 0));
-    newData.push(...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, 1));
-    newData.push(...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, 2));
+    for (let i = 0; i < 31; i++) {
+      if (i % 3 === 0)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, i),
+        );
+      else if (i % 3 === 1)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, i),
+        );
+      else if (i % 3 === 2)
+        newData.push(
+          ...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, i),
+        );
+    }
 
     const result = await CourseHierarchy.insertMany(newData);
 
@@ -216,9 +223,9 @@ class FakeInformationService {
       const discountPrice = this.generateRandomInt(1000) + 1;
       const isEnabled = this.generateRandomInt(10) !== 0 ? true : false;
       const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
-      const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
-      const startDate = this.getRandomDate(createdAt, '2023/06/31');
-      const endDate = this.getRandomDate(startDate, '2023/06/31');
+      const updatedAt = this.getRandomDate(createdAt, '2024/06/31');
+      const startDate = this.getRandomDate(createdAt, '2024/06/31');
+      const endDate = this.getRandomDate(startDate, '2024/06/31');
 
       const labelQuantity = this.generateRandomInt(3);
 
