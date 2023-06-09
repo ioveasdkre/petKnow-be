@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { env } from '../config/env';
 import { authRouter } from './auth.router';
 import { courseTagRouter } from './courseTag.router';
 import { fakeInformationRouter } from './fakeInformation.router';
@@ -9,13 +10,10 @@ import { shoppingCartRouter } from './shoppingCart.router';
 
 const apiRouter = Router();
 
-apiRouter.use(
-  authRouter,
-  courseTagRouter,
-  fakeInformationRouter,
-  goldFlowRouter,
-  homeRouter,
-  shoppingCartRouter,
-);
+if (env !== 'prod') {
+  apiRouter.use(fakeInformationRouter);
+}
+
+apiRouter.use(authRouter, courseTagRouter, goldFlowRouter, homeRouter, shoppingCartRouter);
 
 export { apiRouter, itemsRouter };
