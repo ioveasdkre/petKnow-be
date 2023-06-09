@@ -49,7 +49,7 @@ class GoldFlowController {
           type: "object",
           required: true,
           schema: {
-            "courseId": "646f7e2f4802a2dbf6b3eb83"
+            "courseId": "647ffd767b552c74ea69b726"
           }
         }
      * #swagger.responses[200] = {
@@ -80,7 +80,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.saveOrUpdateUserCartCourse(user._id, courseId);
+      const result = await goldFlowService.saveOrUpdateUserCartCourseAsync(user._id, courseId);
 
       if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
       else if (result === 1) return handleResponse(res, HttpStatusCode.OK, '已儲存在購物車當中');
@@ -145,7 +145,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.saveOrUpdateUserCartCoupon(user._id, couponCode);
+      const result = await goldFlowService.saveOrUpdateUserCartCouponAsync(user._id, couponCode);
 
       if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
       else if (result === 1)
@@ -167,20 +167,11 @@ class GoldFlowController {
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
      * #swagger.description = "使用者 讀取購物車資料"
-     * #swagger.parameters["body"] = {
-          description: "資料格式",
-          in: "body",
-          type: "object",
-          required: true,
-          schema: {
-            "courseIds": [
-              "646f7e2f4802a2dbf6b3eb83",
-              "646f7e2f4802a2dbf6b3eb84",
-              "646f7e2f4802a2dbf6b3eb85"
-            ],
-            "couponCode": "ugyV1E8P"
+     * #swagger.security = [
+          {
+            "apiKeyAuth": []
           }
-        }
+        ]
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -191,7 +182,7 @@ class GoldFlowController {
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "_id": "647ffd767b552c74ea69b726",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -204,7 +195,7 @@ class GoldFlowController {
                 }
               ],
               "courseIds": [
-                "646f7e2f4802a2dbf6b3eb83"
+                "647ffd767b552c74ea69b726"
               ],
               "discountedPrice": 6210,
               "couponCode": "ugyV1E8P",
@@ -237,38 +228,22 @@ class GoldFlowController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const goldFlowService = new GoldFlowService();
-
       const user = req.user;
 
       if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-      const shoppingCart = await goldFlowService.getCart(user._id);
+      const currentDate = new Date();
+      const goldFlowService = new GoldFlowService();
+      const shoppingCart = await goldFlowService.getUserCartAsync(user._id, currentDate);
+      const youMightLike = await goldFlowService.getYouMightLike(currentDate);
 
       if (!shoppingCart)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      const { courseIds, couponCode } = shoppingCart;
-      const { courseHierarchy, youMightLike } = await goldFlowService.checkCartCoursesAsync(
-        courseIds,
-      );
-
-      if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
           youMightLike,
         });
-      else if (!couponCode) {
-        delete courseHierarchy.uniqueTagNames;
-        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
-          courseHierarchy,
-          youMightLike,
-        });
-      }
-
-      const result = await goldFlowService.checkCartCouponAsync(courseHierarchy, couponCode);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
-        ...result,
+        ...shoppingCart,
         youMightLike,
       });
     } catch (err) {
@@ -277,9 +252,13 @@ class GoldFlowController {
   }
   //#endregion getUserCart [ 使用者 讀取購物車資料 ]
 
-  //#region postCart [ 讀取購物車資料 ]
+  //#region postVisitorsCart [ 訪客 讀取購物車資料 ]
   /** 讀取購物車資料 */
-  static async postCart(req: IRequestBody<IPostCartRequest>, res: Response, next: NextFunction) {
+  static async postVisitorsCart(
+    req: IRequestBody<IPostCartRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -291,7 +270,7 @@ class GoldFlowController {
           required: true,
           schema: {
             "courseIds": [
-              "646f7e2f4802a2dbf6b3eb83",
+              "647ffd767b552c74ea69b726",
               "646f7e2f4802a2dbf6b3eb84",
               "646f7e2f4802a2dbf6b3eb85"
             ],
@@ -308,7 +287,7 @@ class GoldFlowController {
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "_id": "647ffd767b552c74ea69b726",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -321,7 +300,7 @@ class GoldFlowController {
                 }
               ],
               "courseIds": [
-                "646f7e2f4802a2dbf6b3eb83"
+                "647ffd767b552c74ea69b726"
               ],
               "discountedPrice": 6210,
               "couponCode": "ugyV1E8P",
@@ -356,34 +335,35 @@ class GoldFlowController {
     try {
       const { courseIds, couponCode } = req.body;
 
+      const currentDate = new Date();
       const goldFlowService = new GoldFlowService();
-      const { courseHierarchy, youMightLike } = await goldFlowService.checkCartCoursesAsync(
+      const youMightLike = await goldFlowService.getYouMightLike(currentDate);
+
+      if (!courseIds)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+          youMightLike,
+        });
+
+      const courseHierarchy = await goldFlowService.getCartAsync(
         courseIds,
+        couponCode,
+        currentDate,
       );
 
       if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
           youMightLike,
         });
-      else if (!couponCode) {
-        delete courseHierarchy.uniqueTagNames;
-        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
-          courseHierarchy,
-          youMightLike,
-        });
-      }
-
-      const result = await goldFlowService.checkCartCouponAsync(courseHierarchy, couponCode);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
-        ...result,
+        ...courseHierarchy,
         youMightLike,
       });
     } catch (err) {
       next(err);
     }
   }
-  //#endregion postCart [ 讀取購物車資料 ]
+  //#endregion postVisitorsCart [ 讀取購物車資料 ]
 
   //#region createOrder [ 新增訂單 ]
   /** 新增訂單 */
@@ -408,7 +388,7 @@ class GoldFlowController {
          required: true,
          schema: {
             "courseIds": [
-              "646f7e2f4802a2dbf6b3eb83",
+              "647ffd767b552c74ea69b726",
               "646f7e2f4802a2dbf6b3eb84",
               "646f7e2f4802a2dbf6b3eb85"
             ],
@@ -423,11 +403,11 @@ class GoldFlowController {
             "message": "成功",
             "data": {
               "amt": 6210,
-              "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+              "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "_id": "647ffd767b552c74ea69b726",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -519,7 +499,7 @@ class GoldFlowController {
           required: true,
           schema: {
             "amt": 6210,
-            "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+            "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
             "timeStamp": 1685802800,
             "merchantOrderNo": "ef59949668ed65c41864ea71f75050562f58f1f372b2e49fdc5b9e7d65274894"
           }
@@ -537,7 +517,7 @@ class GoldFlowController {
               "email": "Abc1231@gmail.com",
               "timeStamp": 1685802800,
               "merchantOrderNo": "647b4f2f41fda7e8d1f78253",
-              "itemDesc": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+              "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
               "aesEncrypted": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad7d89182aef5d12aa625ffbef1e47f6e05157613038cc5437d505aa8e6c9c1c50cbe57a61c51698d43fa32367b1bd4d3b9da0ee2d4df5f35e087cd62d3cf870dd55f4c24fba5391c90dfc7f620f19c680c0e7bdc1ce85fff671232dba401ef2bad292ae5ba31cc024f3738452fedadaf165f4363d9d3b9d3100900402c8c469e824fe341b520390ab88e5c8b68078ae8a6780dd260c7f98c1ab464f3c1f46f157a11b064bd661c72dfd41604506de7e9c7fdc6602b42cf8eaa9f1f8a3021ff2c3",
               "shaEncrypted": "8189C432B9F7BA618F65E246FB5C4E3B09380067C23AD0B8FBD8AC1E999138D3"
             }

@@ -26,7 +26,7 @@ class ShoppingCartController {
                 "_id": "647d509a14f1d0f929617f93",
                 "user": "6475494ecc27da782677290f",
                 "courses": [
-                  "646f7e2f4802a2dbf6b3eb83",
+                  "647ffd767b552c74ea69b726",
                   "646f7e2f4802a2dbf6b3eb84",
                   "646f7e2f4802a2dbf6b3eb85"
                 ],
@@ -91,7 +91,7 @@ class ShoppingCartController {
           required: true,
           schema: {
             "courses": [
-              "646f7e2f4802a2dbf6b3eb83",
+              "647ffd767b552c74ea69b726",
               "646f7e2f4802a2dbf6b3eb84",
               "646f7e2f4802a2dbf6b3eb85"
             ]
@@ -106,7 +106,7 @@ class ShoppingCartController {
             "data": {
               "user": "6475494ecc27da782677290f",
               "courses": [
-                "646f7e2f4802a2dbf6b3eb83",
+                "647ffd767b552c74ea69b726",
                 "646f7e2f4802a2dbf6b3eb84",
                 "646f7e2f4802a2dbf6b3eb85"
               ],

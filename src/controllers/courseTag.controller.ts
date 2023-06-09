@@ -22,7 +22,7 @@ class CourseTagController {
             "data": {
               "carousel": [
                 {
-                  "_id": "646f7e2f4802a2dbf6b3eb83",
+                  "_id": "647ffd767b552c74ea69b726",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "instructorName": "RubyTest"

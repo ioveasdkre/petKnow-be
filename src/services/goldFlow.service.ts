@@ -14,9 +14,9 @@ import {
 } from '../types/goldFlow.type';
 
 class GoldFlowService {
-  //#region saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
-  /** 新增或更新 使用者購物車 - 課程資料 */
-  async saveOrUpdateUserCartCourse(userId: Types.ObjectId, courseId: string) {
+  //#region saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
+  /** 使用者 新增或更新購物車 - 課程資料 */
+  async saveOrUpdateUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
     courseId;
     const courseHierarchy = await CourseHierarchy.findOne({
       _id: courseId,
@@ -52,13 +52,13 @@ class GoldFlowService {
       },
     );
 
-    return result ? result : false;
+    return result;
   }
-  //#endregion saveOrUpdateUserCartCourse [ 新增或更新 使用者購物車 - 課程資料 ]
+  //#endregion saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
-  /** 新增或更新 使用者購物車 - 優惠卷資料 */
-  async saveOrUpdateUserCartCoupon(userId: Types.ObjectId, couponCode: string) {
+  //#region saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
+  /** 使用者 新增或更新購物車 - 優惠卷資料 */
+  async saveOrUpdateUserCartCouponAsync(userId: Types.ObjectId, couponCode: string) {
     const currentDate = new Date();
 
     const shoppingCartCourseIds = await ShoppingCart.findOne({ user: userId }, { courseIds: 1 });
@@ -103,33 +103,45 @@ class GoldFlowService {
       },
     );
 
-    return result ? result : false;
+    return result;
   }
-  //#endregion saveOrUpdateUserCartCoupon [ 新增或更新 使用者購物車 - 優惠卷資料 ]
+  //#endregion saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
-  //#region getCart [ 讀取購物車資料 ]
+  //#region getUserCartAsync [ 使用者 讀取購物車資料 ]
+  /** 使用者 讀取購物車資料 */
+  async getUserCartAsync(_id: Types.ObjectId, currentDate: Date) {
+    const shoppingCart = await ShoppingCart.findOne<IGetCart>(
+      { user: _id },
+      {
+        courseIds: 1,
+        couponCode: 1,
+      },
+    );
+
+    if (!shoppingCart) return false;
+
+    const { courseIds, couponCode } = shoppingCart;
+
+    return await this.getCartAsync(courseIds, couponCode, currentDate);
+  }
+  //#endregion getUserCartAsync [ 使用者 讀取購物車資料 ]
+
+  //#region getCartAsync [ 讀取購物車資料 ]
   /** 讀取購物車資料 */
-  async getCart(_id: Types.ObjectId, isUser: boolean = true) {
-    let filter: Record<string, Types.ObjectId> = {};
+  async getCartAsync(courseIds: string[], couponCode: string, currentDate:Date) {
+    const courseHierarchy = await this.getCartCoursesAsync(courseIds, currentDate);
 
-    if (isUser) {
-      filter.user = _id;
-    } else {
-      filter.visitor = _id;
-    }
+    if (!courseHierarchy) return false;
 
-    const shoppingCart = await ShoppingCart.findOne<IGetCart>(filter, {
-      courseIds: 1,
-      couponCode: 1,
-    });
+    const result = await this.getCartCouponAsync(courseHierarchy, couponCode, currentDate);
 
-    return shoppingCart ? shoppingCart : false;
+    return result;
   }
-  //#endregion getCart [ 讀取購物車資料 ]
+  //#endregion getCartAsync [ 讀取購物車資料 ]
 
-  async checkCartCoursesAsync(courseIds: string[]) {
-    const currentDate = new Date();
-
+  //#region getCartCoursesAsync [ 讀取購物車 - 課程資料 ]
+  /** 讀取購物車 - 課程資料 */
+  async getCartCoursesAsync(courseIds: string[], currentDate: Date) {
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
       {
         $match: {
@@ -219,6 +231,54 @@ class GoldFlowService {
       },
     ]);
 
+    return courseHierarchy;
+  }
+  //#endregion getCartCoursesAsync [ 讀取購物車 - 課程資料 ]
+
+  //#region getCartCouponAsync [ 讀取購物車 - 優惠卷資料 ]
+  /** 讀取購物車 - 優惠卷資料 */
+  async getCartCouponAsync(
+    courseHierarchy: ICheckCartCouponParameter,
+    couponCode: string,
+    currentDate: Date,
+  ): Promise<ICheckCartCoursesReturn> {
+    const [platformCoupons] = await PlatformCoupons.aggregate([
+      {
+        $match: {
+          $and: [
+            { couponCode: couponCode },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            { isEnabled: true },
+            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          couponCode: '$couponCode',
+          couponPrice: '$price',
+        },
+      },
+      {
+        $limit: 1,
+      },
+    ]);
+
+    delete courseHierarchy.uniqueTagNames;
+
+    if (!platformCoupons) return { ...courseHierarchy };
+
+    courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
+
+    return { ...courseHierarchy, ...platformCoupons };
+  }
+  //#endregion getCartCouponAsync [ 讀取購物車 - 優惠卷資料 ]
+
+  //#region getYouMightLike [ 讀取購物車 - 推薦課程 ]
+  /** 讀取購物車 - 推薦課程 */
+  async getYouMightLike(currentDate: Date) {
     const youMightLike = await CourseHierarchy.aggregate([
       {
         $match: {
@@ -273,47 +333,9 @@ class GoldFlowService {
       },
     ]);
 
-    return { courseHierarchy, youMightLike };
+    return youMightLike;
   }
-
-  async checkCartCouponAsync(
-    courseHierarchy: ICheckCartCouponParameter,
-    couponCode: string,
-  ): Promise<ICheckCartCoursesReturn> {
-    const currentDate = new Date();
-
-    const [platformCoupons] = await PlatformCoupons.aggregate([
-      {
-        $match: {
-          $and: [
-            { couponCode: couponCode },
-            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
-            { isEnabled: true },
-            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          couponCode: '$couponCode',
-          couponPrice: '$price',
-        },
-      },
-      {
-        $limit: 1,
-      },
-    ]);
-
-    delete courseHierarchy.uniqueTagNames;
-
-    if (!platformCoupons) return { ...courseHierarchy };
-
-    courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
-
-    return { ...courseHierarchy, ...platformCoupons };
-  }
+  //#endregion getYouMightLike [ 讀取購物車 - 推薦課程 ]
 
   async checkOrderCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();

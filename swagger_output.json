@@ -185,7 +185,7 @@
                     },
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmMzUxM2FlZTNhODBlYmZiNTk0Y2UiLCJpYXQiOjE2ODYwNTgyNzl9.Omcfsqojx_HtagWSEJq7bVOQzhuyAWbXWRK_0Ikxn_8"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmZDVlZTVkNWMxYTNjNTZlYTk0MTQiLCJpYXQiOjE2ODYyODAxMjZ9.t2RGvEU_AICIA38mAekXENBEWWKQl54jeOEztgruZtg"
                     }
                   }
                 }
@@ -581,7 +581,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
+                            "example": "647ffd767b552c74ea69b726"
                           },
                           "title": {
                             "type": "string",
@@ -821,7 +821,7 @@
                     "properties": {
                       "_id": {
                         "type": "string",
-                        "example": "646f7e2f4802a2dbf6b3eb83"
+                        "example": "647ffd767b552c74ea69b726"
                       },
                       "user": {
                         "type": "string",
@@ -1708,34 +1708,7 @@
           "GoldFlow - 金流 API"
         ],
         "description": "使用者 讀取購物車資料",
-        "parameters": [
-          {
-            "name": "body",
-            "description": "資料格式",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "courseIds": {
-                  "type": "array",
-                  "example": [
-                    "646f7e2f4802a2dbf6b3eb83",
-                    "646f7e2f4802a2dbf6b3eb84",
-                    "646f7e2f4802a2dbf6b3eb85"
-                  ],
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "couponCode": {
-                  "type": "string",
-                  "example": "ugyV1E8P"
-                }
-              }
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "成功",
@@ -1768,7 +1741,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
+                            "example": "647ffd767b552c74ea69b726"
                           },
                           "title": {
                             "type": "string",
@@ -1809,7 +1782,7 @@
                     "courseIds": {
                       "type": "array",
                       "example": [
-                        "646f7e2f4802a2dbf6b3eb83"
+                        "647ffd767b552c74ea69b726"
                       ],
                       "items": {
                         "type": "string"
@@ -1903,7 +1876,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/v1/goldFlow/userCartCourse": {
@@ -1923,7 +1901,7 @@
               "properties": {
                 "courseId": {
                   "type": "string",
-                  "example": "646f7e2f4802a2dbf6b3eb83"
+                  "example": "647ffd767b552c74ea69b726"
                 }
               }
             }
@@ -2062,7 +2040,7 @@
         ]
       }
     },
-    "/v1/goldFlow/cart": {
+    "/v1/goldFlow/visitorsCart": {
       "post": {
         "tags": [
           "GoldFlow - 金流 API"
@@ -2080,7 +2058,7 @@
                 "courseIds": {
                   "type": "array",
                   "example": [
-                    "646f7e2f4802a2dbf6b3eb83",
+                    "647ffd767b552c74ea69b726",
                     "646f7e2f4802a2dbf6b3eb84",
                     "646f7e2f4802a2dbf6b3eb85"
                   ],
@@ -2128,7 +2106,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
+                            "example": "647ffd767b552c74ea69b726"
                           },
                           "title": {
                             "type": "string",
@@ -2169,7 +2147,7 @@
                     "courseIds": {
                       "type": "array",
                       "example": [
-                        "646f7e2f4802a2dbf6b3eb83"
+                        "647ffd767b552c74ea69b726"
                       ],
                       "items": {
                         "type": "string"
@@ -2284,7 +2262,7 @@
                 "courseIds": {
                   "type": "array",
                   "example": [
-                    "646f7e2f4802a2dbf6b3eb83",
+                    "647ffd767b552c74ea69b726",
                     "646f7e2f4802a2dbf6b3eb84",
                     "646f7e2f4802a2dbf6b3eb85"
                   ],
@@ -2327,7 +2305,7 @@
                     },
                     "itemDesc": {
                       "type": "string",
-                      "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                      "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                     },
                     "totalPrice": {
                       "type": "number",
@@ -2340,7 +2318,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
+                            "example": "647ffd767b552c74ea69b726"
                           },
                           "title": {
                             "type": "string",
@@ -2477,7 +2455,7 @@
                 },
                 "itemDesc": {
                   "type": "string",
-                  "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                  "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                 },
                 "timeStamp": {
                   "type": "number",
@@ -2538,7 +2516,7 @@
                     },
                     "itemDesc": {
                       "type": "string",
-                      "example": "646f7e2f4802a2dbf6b3eb83,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                      "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                     },
                     "aesEncrypted": {
                       "type": "string",
@@ -2645,7 +2623,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "646f7e2f4802a2dbf6b3eb83"
+                            "example": "647ffd767b552c74ea69b726"
                           },
                           "title": {
                             "type": "string",
@@ -3189,7 +3167,7 @@
                       "courses": {
                         "type": "array",
                         "example": [
-                          "646f7e2f4802a2dbf6b3eb83",
+                          "647ffd767b552c74ea69b726",
                           "646f7e2f4802a2dbf6b3eb84",
                           "646f7e2f4802a2dbf6b3eb85"
                         ],
@@ -3279,7 +3257,7 @@
                 "courses": {
                   "type": "array",
                   "example": [
-                    "646f7e2f4802a2dbf6b3eb83",
+                    "647ffd767b552c74ea69b726",
                     "646f7e2f4802a2dbf6b3eb84",
                     "646f7e2f4802a2dbf6b3eb85"
                   ],
@@ -3319,7 +3297,7 @@
                     "courses": {
                       "type": "array",
                       "example": [
-                        "646f7e2f4802a2dbf6b3eb83",
+                        "647ffd767b552c74ea69b726",
                         "646f7e2f4802a2dbf6b3eb84",
                         "646f7e2f4802a2dbf6b3eb85"
                       ],

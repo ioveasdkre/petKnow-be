@@ -22,7 +22,7 @@ router
     verifyJwtToken<ICreateUserCartCoupon>,
     controller.saveOrUpdateUserCartCoupon,
   )
-  .post('/v1/goldFlow/cart', verifyObjectIds, controller.postCart)
+  .post('/v1/goldFlow/visitorsCart', verifyObjectIds, controller.postVisitorsCart)
   .post(
     '/v1/goldFlow/createOrder',
     verifyJwtToken<ICreateOrderRequest>,
