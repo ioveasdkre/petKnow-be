@@ -31,7 +31,7 @@ class FakeInformationService {
   }
 
   private getDiscountDateScope() {
-    return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 30 * 86400000];
+    return [new Date().getTime() + 15 * 86400000, new Date().getTime() + 365 * 86400000];
   }
 
   private generateRandomCourseHierarchy(
@@ -223,9 +223,9 @@ class FakeInformationService {
       const discountPrice = this.generateRandomInt(1000) + 1;
       const isEnabled = this.generateRandomInt(10) !== 0 ? true : false;
       const createdAt = this.getRandomDate('2022/01/01', '2023/05/31');
-      const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
-      const startDate = this.getRandomDate(createdAt, '2023/06/31');
-      const endDate = this.getRandomDate(startDate, '2023/06/31');
+      const updatedAt = this.getRandomDate(createdAt, '2024/06/31');
+      const startDate = this.getRandomDate(createdAt, '2024/06/31');
+      const endDate = this.getRandomDate(startDate, '2024/06/31');
 
       const labelQuantity = this.generateRandomInt(3);
 

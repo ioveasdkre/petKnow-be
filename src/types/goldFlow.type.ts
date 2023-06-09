@@ -10,6 +10,7 @@ interface ICheckCartCoursesReturn {
   shoppingCart: ShoppingCartItem[];
   uniqueTagNames?: string[] | undefined;
   discountedPrice?: number | undefined;
+  courseIds?: string[];
 }
 
 interface ShoppingCartItem {

@@ -49,7 +49,7 @@ class GoldFlowController {
           type: "object",
           required: true,
           schema: {
-            "courseId": "647ffd767b552c74ea69b726"
+            "courseId": "6482b94965829859fd1d1838"
           }
         }
      * #swagger.responses[200] = {
@@ -182,7 +182,7 @@ class GoldFlowController {
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "647ffd767b552c74ea69b726",
+                  "_id": "6482b94965829859fd1d1838",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -195,7 +195,7 @@ class GoldFlowController {
                 }
               ],
               "courseIds": [
-                "647ffd767b552c74ea69b726"
+                "6482b94965829859fd1d1838"
               ],
               "discountedPrice": 6210,
               "couponCode": "ugyV1E8P",
@@ -270,11 +270,11 @@ class GoldFlowController {
           required: true,
           schema: {
             "courseIds": [
-              "647ffd767b552c74ea69b726",
-              "646f7e2f4802a2dbf6b3eb84",
-              "646f7e2f4802a2dbf6b3eb85"
+              "6482b95a65829859fd1d1a74",
+              "6482b94865829859fd1d16dd",
+              "6482b94965829859fd1d185e"
             ],
-            "couponCode": "ugyV1E8P"
+            "couponCode": "YaN9gxlr"
           }
         }
      * #swagger.responses[200] = {
@@ -287,7 +287,7 @@ class GoldFlowController {
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "647ffd767b552c74ea69b726",
+                  "_id": "6482b94965829859fd1d1838",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -300,7 +300,7 @@ class GoldFlowController {
                 }
               ],
               "courseIds": [
-                "647ffd767b552c74ea69b726"
+                "6482b94965829859fd1d1838"
               ],
               "discountedPrice": 6210,
               "couponCode": "ugyV1E8P",
@@ -388,7 +388,7 @@ class GoldFlowController {
          required: true,
          schema: {
             "courseIds": [
-              "647ffd767b552c74ea69b726",
+              "6482b94965829859fd1d1838",
               "646f7e2f4802a2dbf6b3eb84",
               "646f7e2f4802a2dbf6b3eb85"
             ],
@@ -403,11 +403,11 @@ class GoldFlowController {
             "message": "成功",
             "data": {
               "amt": 6210,
-              "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+              "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
               "totalPrice": 7022,
               "shoppingCart": [
                 {
-                  "_id": "647ffd767b552c74ea69b726",
+                  "_id": "6482b94965829859fd1d1838",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "level": "初階課程",
@@ -499,7 +499,7 @@ class GoldFlowController {
           required: true,
           schema: {
             "amt": 6210,
-            "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+            "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
             "timeStamp": 1685802800,
             "merchantOrderNo": "ef59949668ed65c41864ea71f75050562f58f1f372b2e49fdc5b9e7d65274894"
           }
@@ -517,7 +517,7 @@ class GoldFlowController {
               "email": "Abc1231@gmail.com",
               "timeStamp": 1685802800,
               "merchantOrderNo": "647b4f2f41fda7e8d1f78253",
-              "itemDesc": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
+              "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
               "aesEncrypted": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad7d89182aef5d12aa625ffbef1e47f6e05157613038cc5437d505aa8e6c9c1c50cbe57a61c51698d43fa32367b1bd4d3b9da0ee2d4df5f35e087cd62d3cf870dd55f4c24fba5391c90dfc7f620f19c680c0e7bdc1ce85fff671232dba401ef2bad292ae5ba31cc024f3738452fedadaf165f4363d9d3b9d3100900402c8c469e824fe341b520390ab88e5c8b68078ae8a6780dd260c7f98c1ab464f3c1f46f157a11b064bd661c72dfd41604506de7e9c7fdc6602b42cf8eaa9f1f8a3021ff2c3",
               "shaEncrypted": "8189C432B9F7BA618F65E246FB5C4E3B09380067C23AD0B8FBD8AC1E999138D3"
             }

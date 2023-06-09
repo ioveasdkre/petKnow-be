@@ -581,7 +581,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "647ffd767b552c74ea69b726"
+                            "example": "6482b94965829859fd1d1838"
                           },
                           "title": {
                             "type": "string",
@@ -821,7 +821,7 @@
                     "properties": {
                       "_id": {
                         "type": "string",
-                        "example": "647ffd767b552c74ea69b726"
+                        "example": "6482b94965829859fd1d1838"
                       },
                       "user": {
                         "type": "string",
@@ -1741,7 +1741,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "647ffd767b552c74ea69b726"
+                            "example": "6482b94965829859fd1d1838"
                           },
                           "title": {
                             "type": "string",
@@ -1782,7 +1782,7 @@
                     "courseIds": {
                       "type": "array",
                       "example": [
-                        "647ffd767b552c74ea69b726"
+                        "6482b94965829859fd1d1838"
                       ],
                       "items": {
                         "type": "string"
@@ -1901,7 +1901,7 @@
               "properties": {
                 "courseId": {
                   "type": "string",
-                  "example": "647ffd767b552c74ea69b726"
+                  "example": "6482b94965829859fd1d1838"
                 }
               }
             }
@@ -2058,9 +2058,9 @@
                 "courseIds": {
                   "type": "array",
                   "example": [
-                    "647ffd767b552c74ea69b726",
-                    "646f7e2f4802a2dbf6b3eb84",
-                    "646f7e2f4802a2dbf6b3eb85"
+                    "6482b95a65829859fd1d1a74",
+                    "6482b94865829859fd1d16dd",
+                    "6482b94965829859fd1d185e"
                   ],
                   "items": {
                     "type": "string"
@@ -2068,7 +2068,7 @@
                 },
                 "couponCode": {
                   "type": "string",
-                  "example": "ugyV1E8P"
+                  "example": "YaN9gxlr"
                 }
               }
             }
@@ -2106,7 +2106,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "647ffd767b552c74ea69b726"
+                            "example": "6482b94965829859fd1d1838"
                           },
                           "title": {
                             "type": "string",
@@ -2147,7 +2147,7 @@
                     "courseIds": {
                       "type": "array",
                       "example": [
-                        "647ffd767b552c74ea69b726"
+                        "6482b94965829859fd1d1838"
                       ],
                       "items": {
                         "type": "string"
@@ -2262,7 +2262,7 @@
                 "courseIds": {
                   "type": "array",
                   "example": [
-                    "647ffd767b552c74ea69b726",
+                    "6482b94965829859fd1d1838",
                     "646f7e2f4802a2dbf6b3eb84",
                     "646f7e2f4802a2dbf6b3eb85"
                   ],
@@ -2305,7 +2305,7 @@
                     },
                     "itemDesc": {
                       "type": "string",
-                      "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                      "example": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                     },
                     "totalPrice": {
                       "type": "number",
@@ -2318,7 +2318,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "647ffd767b552c74ea69b726"
+                            "example": "6482b94965829859fd1d1838"
                           },
                           "title": {
                             "type": "string",
@@ -2455,7 +2455,7 @@
                 },
                 "itemDesc": {
                   "type": "string",
-                  "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                  "example": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                 },
                 "timeStamp": {
                   "type": "number",
@@ -2516,7 +2516,7 @@
                     },
                     "itemDesc": {
                       "type": "string",
-                      "example": "647ffd767b552c74ea69b726,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
+                      "example": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85"
                     },
                     "aesEncrypted": {
                       "type": "string",
@@ -2623,7 +2623,7 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "example": "647ffd767b552c74ea69b726"
+                            "example": "6482b94965829859fd1d1838"
                           },
                           "title": {
                             "type": "string",
@@ -3126,7 +3126,7 @@
         }
       }
     },
-    "/v1/Caghinopprst": {
+    "/v1/ShoppingCart": {
       "get": {
         "tags": [
           "ShoppingCart - 購物車資料表 API"
@@ -3167,7 +3167,7 @@
                       "courses": {
                         "type": "array",
                         "example": [
-                          "647ffd767b552c74ea69b726",
+                          "6482b94965829859fd1d1838",
                           "646f7e2f4802a2dbf6b3eb84",
                           "646f7e2f4802a2dbf6b3eb85"
                         ],
@@ -3257,7 +3257,7 @@
                 "courses": {
                   "type": "array",
                   "example": [
-                    "647ffd767b552c74ea69b726",
+                    "6482b94965829859fd1d1838",
                     "646f7e2f4802a2dbf6b3eb84",
                     "646f7e2f4802a2dbf6b3eb85"
                   ],
@@ -3297,7 +3297,7 @@
                     "courses": {
                       "type": "array",
                       "example": [
-                        "647ffd767b552c74ea69b726",
+                        "6482b94965829859fd1d1838",
                         "646f7e2f4802a2dbf6b3eb84",
                         "646f7e2f4802a2dbf6b3eb85"
                       ],
@@ -3377,6 +3377,84 @@
             "apiKeyAuth": []
           }
         ]
+      },
+      "delete": {
+        "tags": [
+          "ShoppingCart - 購物車資料表 API"
+        ],
+        "description": "刪除所有資料",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "刪除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "錯誤的請求",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "statusCode": {
+                  "type": "number",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "錯誤的請求"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "伺服器發生錯誤",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "number",
+                  "example": 500
+                },
+                "isSuccess": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "系統發生錯誤，請聯繫系統管理員"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     }
   }

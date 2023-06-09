@@ -19,11 +19,6 @@ const shoppingCartSchema = new Schema<IShoppingCartModel>(
       unique: true,
       index: true,
     },
-    visitor: {
-      type: Schema.Types.ObjectId,
-      unique: true,
-      index: true,
-    },
     courseIds: {
       type: [String],
       required: [true, '課程id為必填欄位'],

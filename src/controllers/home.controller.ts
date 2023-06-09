@@ -22,7 +22,7 @@ class HomeController {
             "data": {
               "carousel": [
                 {
-                  "_id": "647ffd767b552c74ea69b726",
+                  "_id": "6482b94965829859fd1d1838",
                   "title": "狗狗訓練入門課程",
                   "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
                   "instructorName": "RubyTest"

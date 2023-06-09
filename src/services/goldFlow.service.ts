@@ -17,7 +17,6 @@ class GoldFlowService {
   //#region saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
   /** 使用者 新增或更新購物車 - 課程資料 */
   async saveOrUpdateUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
-    courseId;
     const courseHierarchy = await CourseHierarchy.findOne({
       _id: courseId,
       isPublished: true, // 判斷已上架
@@ -71,17 +70,19 @@ class GoldFlowService {
       isPublished: true,
     }).distinct('tagNames');
 
-    const platformCoupons = await PlatformCoupons.findOne({
-      $and: [
-        { couponCode: couponCode },
-        { tagNames: { $in: courseHierarchy } },
-        { isEnabled: true },
-        { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-        { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-      ],
-    });
+    if (!courseHierarchy) return 0;
 
-    if (!platformCoupons) return 0;
+      const platformCoupons = await PlatformCoupons.findOne({
+        $and: [
+          { couponCode: couponCode },
+          { tagNames: { $in: courseHierarchy } },
+          { isEnabled: true },
+          { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+          { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+        ],
+      });
+
+    if (!platformCoupons) return 1;
 
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
