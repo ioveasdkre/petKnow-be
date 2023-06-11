@@ -302,7 +302,7 @@ class HomeController {
     //#endregion [ swagger說明文件 ]
     try {
       // const courseId = req.params.courseId;
-
+      // const currentDate = new Date();
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess);
     } catch (err) {
       next(err);

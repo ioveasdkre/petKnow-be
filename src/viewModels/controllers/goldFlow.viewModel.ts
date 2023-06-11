@@ -19,8 +19,9 @@ interface IPostCheckRequest {
 }
 
 export {
-  ICreateCartCourse as ICreateUserCartCourse,
-  ICreateCartCoupon as ICreateUserCartCoupon,
+  ICreateCartCourse as ISaveOrUpdateUserCartCourse,
+  ICreateCartCourse as IUpdateUserCartCourse,
+  ICreateCartCoupon as ISaveOrUpdateUserCartCoupon,
   ICourseIdsAndCouponCodeRequest as IPostCartRequest,
   ICourseIdsAndCouponCodeRequest as ICreateOrderRequest,
   IPostCheckRequest,
