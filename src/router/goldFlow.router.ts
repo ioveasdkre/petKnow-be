@@ -2,8 +2,9 @@ import express, { Router } from 'express';
 import { GoldFlowController as controller } from '../controllers/goldFlow.controller';
 import { verifyJwtToken, verifyObjectIds } from '../middlewares/verifyType.middewaes';
 import {
-  ICreateUserCartCourse,
-  ICreateUserCartCoupon,
+  ISaveOrUpdateUserCartCourse,
+  IUpdateUserCartCourse,
+  ISaveOrUpdateUserCartCoupon,
   ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
@@ -14,14 +15,20 @@ router
   .get('/v1/goldFlow/userCart', verifyJwtToken, controller.getUserCart)
   .post(
     '/v1/goldFlow/userCartCourse',
-    verifyJwtToken<ICreateUserCartCourse>,
+    verifyJwtToken<ISaveOrUpdateUserCartCourse>,
     controller.saveOrUpdateUserCartCourse,
+  )
+  .put(
+    '/v1/goldFlow/userCartCourse',
+    verifyJwtToken<IUpdateUserCartCourse>,
+    controller.updateUserCartCourse,
   )
   .post(
     '/v1/goldFlow/userCartCoupon',
-    verifyJwtToken<ICreateUserCartCoupon>,
+    verifyJwtToken<ISaveOrUpdateUserCartCoupon>,
     controller.saveOrUpdateUserCartCoupon,
   )
+  .put('/v1/goldFlow/userCartCoupon', verifyJwtToken, controller.updateUserCartCoupon)
   .post('/v1/goldFlow/visitorsCart', verifyObjectIds, controller.postVisitorsCart)
   .post(
     '/v1/goldFlow/createOrder',

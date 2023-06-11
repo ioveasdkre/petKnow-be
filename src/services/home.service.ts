@@ -387,9 +387,7 @@ class HomeService {
   //#endregion getSearchComboPack [ 搜尋關鍵字 - 組合包 ]
 
   //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
-  async getVisitorCourseDetails(courseId: string) {
-    const currentDate = new Date();
-
+  async getVisitorCourseDetails(courseId: string, currentDate: Date) {
     const [courses] = await CourseHierarchy.aggregate<ISearchCourses>([
       {
         $match: {
@@ -407,7 +405,7 @@ class HomeService {
       {
         $group: {
           _id: null,
-          courses: {
+          chapters: {
             $push: {
               _id: '$_id',
               title: '$title',

@@ -59,7 +59,7 @@ class ShoppingCartController {
       const result: IShoppingCart[] = await _CRUDService.getAll();
 
       if (result.length === 0)
-        return handleResponse(res, HttpStatusCode.NotFound, HttpMessage.NotFound);
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.NotFound);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
