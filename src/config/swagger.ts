@@ -4,6 +4,7 @@ import { port, env } from '../config/env';
 import path from 'path';
 
 const host = env === 'prod' ? 'petknow-be.onrender.com' : `localhost:${port}`;
+const schemes = env === 'prod' ? 'https' : 'http';
 
 const options: Options = {
   info: {
@@ -12,7 +13,7 @@ const options: Options = {
     description: 'API 文件',
   },
   host: host,
-  schemes: ['http', 'https'],
+  schemes: [schemes],
   securityDefinitions: {
     apiKeyAuth: {
       type: 'apiKey',

@@ -2,7 +2,6 @@ import { Schema, Types, Document } from 'mongoose';
 
 interface IShoppingCart {
   user?: Types.ObjectId;
-  visitor?: Types.ObjectId;
   courseIds: string[];
   couponCode?: string;
   createdAt?: Date;
