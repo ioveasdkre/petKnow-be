@@ -55,6 +55,37 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
 
+  //#region updateUserCartCourseAsync [ 使用者 更新購物車 - 課程資料 ]
+  /** 使用者 更新購物車 - 課程資料 */
+  async updateUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
+    const shoppingCart = await ShoppingCart.findOne({ user: userId });
+
+    if (!shoppingCart) {
+      return false;
+    }
+
+    const courseIds = shoppingCart.courseIds;
+
+    if (!courseIds.includes(courseId)) return 1;
+
+    const newCourseIds = courseIds.filter((item) => item !== courseId);
+
+    const result = await ShoppingCart.findOneAndUpdate(
+      {
+        user: userId,
+      },
+      {
+        $set: { courseIds: newCourseIds, updatedAt: new Date() }, // 更新部分欄位
+      },
+      {
+        new: true, // 回傳更新的文檔
+      },
+    );
+
+    return result;
+  }
+  //#endregion updateUserCartCourseAsync [ 使用者 更新購物車 - 課程資料 ]
+
   //#region saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
   /** 使用者 新增或更新購物車 - 優惠卷資料 */
   async saveOrUpdateUserCartCouponAsync(userId: Types.ObjectId, couponCode: string) {
@@ -72,15 +103,15 @@ class GoldFlowService {
 
     if (!courseHierarchy) return 0;
 
-      const platformCoupons = await PlatformCoupons.findOne({
-        $and: [
-          { couponCode: couponCode },
-          { tagNames: { $in: courseHierarchy } },
-          { isEnabled: true },
-          { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-          { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-        ],
-      });
+    const platformCoupons = await PlatformCoupons.findOne({
+      $and: [
+        { couponCode: couponCode },
+        { tagNames: { $in: courseHierarchy } },
+        { isEnabled: true },
+        { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+        { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+      ],
+    });
 
     if (!platformCoupons) return 1;
 
@@ -108,6 +139,31 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
+  //#region updateUserCartCouponAsync [ 使用者 更新購物車 - 優惠卷資料 ]
+  /** 使用者 更新購物車 - 優惠卷資料 */
+  async updateUserCartCouponAsync(userId: Types.ObjectId) {
+    const shoppingCart = await ShoppingCart.findOne({ user: userId });
+
+    if (!shoppingCart) {
+      return false;
+    }
+    
+    const result = await ShoppingCart.findOneAndUpdate(
+      {
+        user: userId,
+      },
+      {
+        $set: { couponCode: '', updatedAt: new Date() }, // 更新部分欄位
+      },
+      {
+        new: true, // 回傳更新的文檔
+      },
+    );
+
+    return result;
+  }
+  //#endregion updateUserCartCouponAsync [ 使用者 更新購物車 - 優惠卷資料 ]
+
   //#region getUserCartAsync [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */
   async getUserCartAsync(_id: Types.ObjectId, currentDate: Date) {
@@ -129,7 +185,7 @@ class GoldFlowService {
 
   //#region getCartAsync [ 讀取購物車資料 ]
   /** 讀取購物車資料 */
-  async getCartAsync(courseIds: string[], couponCode: string, currentDate:Date) {
+  async getCartAsync(courseIds: string[], couponCode: string, currentDate: Date) {
     const courseHierarchy = await this.getCartCoursesAsync(courseIds, currentDate);
 
     if (!courseHierarchy) return false;
