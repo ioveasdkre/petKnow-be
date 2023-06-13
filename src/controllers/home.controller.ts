@@ -70,7 +70,7 @@ class HomeController {
     //#endregion [ swagger說明文件 ]
     try {
       const homeService = new HomeService();
-      const { carousel, popular, tagNames } = await homeService.getIndex();
+      const { carousel, popular, tagNames } = await homeService.getIndexAsync();
 
       if (!carousel || popular.length === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
@@ -208,20 +208,13 @@ class HomeController {
 
   //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
   /** 訪客 課程介紹 */
-  static async getVisitorCourseDetails(_req: Request, res: Response, next: NextFunction) {
+  static async getVisitorCourseDetails(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["Home - 基本 API"]
      * #swagger.description = "訪客 課程介紹"
-     * #swagger.parameters['q'] = {
-          in: 'query',
-          description: '關鍵字',
-          required: true,
-          type: 'string',
-          default: '狗狗'
-        }
      * #swagger.responses[200] = {
-          description: "成功",
+          description: "查詢成功",
           schema: {
             "statusCode": 200,
             "isSuccess": true,
@@ -301,9 +294,15 @@ class HomeController {
      */
     //#endregion [ swagger說明文件 ]
     try {
-      // const courseId = req.params.courseId;
-      // const currentDate = new Date();
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess);
+      const courseId = req.params.courseId;
+
+      const homeService = new HomeService();
+      const result = await homeService.getVisitorCourseDetailsAsync(courseId);
+
+      if (!result)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
       next(err);
     }
