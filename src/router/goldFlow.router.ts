@@ -21,15 +21,16 @@ router
   .delete(
     '/v1/goldFlow/userCartCourse',
     verifyJwtToken<IUpdateUserCartCourse>,
-    controller.updateUserCartCourse,
+    controller.deleteUserCartCourse,
   )
   .post(
     '/v1/goldFlow/userCartCoupon',
     verifyJwtToken<ISaveOrUpdateUserCartCoupon>,
     controller.saveOrUpdateUserCartCoupon,
   )
-  .delete('/v1/goldFlow/userCartCoupon', verifyJwtToken, controller.updateUserCartCoupon)
+  .delete('/v1/goldFlow/userCartCoupon', verifyJwtToken, controller.deleteUserCartCoupon)
   .post('/v1/goldFlow/visitorsCart', verifyObjectIds, controller.postVisitorsCart)
+  .get('/v1/goldFlow/validCoupon', controller.getValidCoupon)
   .post(
     '/v1/goldFlow/createOrder',
     verifyJwtToken<ICreateOrderRequest>,

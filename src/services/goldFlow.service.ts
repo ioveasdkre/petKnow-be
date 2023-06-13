@@ -55,9 +55,9 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region updateUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
+  //#region deleteUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
   /** 使用者 移除購物車 - 課程資料 */
-  async updateUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
+  async deleteUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
     if (!shoppingCart) {
@@ -68,7 +68,7 @@ class GoldFlowService {
 
     if (!courseIds.includes(courseId)) return 1;
 
-    const newCourseIds = courseIds.filter((item) => item !== courseId);
+    const newCourseIds = courseIds.filter(item => item !== courseId);
 
     const result = await ShoppingCart.findOneAndUpdate(
       {
@@ -84,7 +84,7 @@ class GoldFlowService {
 
     return result;
   }
-  //#endregion updateUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
+  //#endregion deleteUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
 
   //#region saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
   /** 使用者 新增或更新購物車 - 優惠卷資料 */
@@ -139,15 +139,15 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
-  //#region updateUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
+  //#region deleteUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
   /** 使用者 移除購物車 - 優惠卷資料 */
-  async updateUserCartCouponAsync(userId: Types.ObjectId) {
+  async deleteUserCartCouponAsync(userId: Types.ObjectId) {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
     if (!shoppingCart) {
       return false;
     }
-    
+
     const result = await ShoppingCart.findOneAndUpdate(
       {
         user: userId,
@@ -162,7 +162,7 @@ class GoldFlowService {
 
     return result;
   }
-  //#endregion updateUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
+  //#endregion deleteUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
 
   //#region getUserCartAsync [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */
@@ -196,6 +196,7 @@ class GoldFlowService {
   }
   //#endregion getCartAsync [ 讀取購物車資料 ]
 
+  //#region  [ 共用邏輯 ]
   //#region getCartCoursesAsync [ 讀取購物車 - 課程資料 ]
   /** 讀取購物車 - 課程資料 */
   async getCartCoursesAsync(courseIds: string[], currentDate: Date) {
@@ -393,6 +394,32 @@ class GoldFlowService {
     return youMightLike;
   }
   //#endregion getYouMightLike [ 讀取購物車 - 推薦課程 ]
+  //#endregion  [ 共用邏輯 ]
+
+  //#region getValidCouponAsync [ 讀取有效優惠卷 ]
+  /** 讀取有效優惠卷 */
+  async getValidCouponAsync() {
+    const currentDate = new Date();
+
+    const platformCoupons = await PlatformCoupons.find(
+      {
+        isEnabled: true,
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+      },
+      {
+        _id: 0,
+        tagNames: 1,
+        couponCode: 1,
+        price: 1,
+        startDate: 1,
+        endDate: 1,
+      },
+    );
+
+    return platformCoupons;
+  }
+  //#endregion getValidCouponAsync [ 讀取有效優惠卷 ]
 
   async checkOrderCoursesAsync(courseIds: string[]) {
     const currentDate = new Date();
