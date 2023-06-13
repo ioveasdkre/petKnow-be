@@ -1,8 +1,21 @@
 import { Types } from 'mongoose';
 import crypto from 'crypto';
-import { coverUrl, coverParamsUrl, merchantId, respondType, version } from '../config/env';
-import { CourseHierarchy, PlatformCoupons, ShoppingCart } from '../connections/mongoDB';
+import { coverUrl, coverParamsUrl, merchantId, respondType, version,
+  orderHasKey,
+  orderHasIv,
+  orderSalt,
+  orderalgorithm, } from '../config/env';
+import {
+  CourseHierarchy,
+  Order,
+  OrderDetails,
+  PlatformCoupons,
+  ShoppingCart,
+} from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
+import { IOrderModel } from '../models/order.model';
+import { IOrderDetails } from '../models/orderDetails.model';
+import { CRUDService } from '../services/shares/crud.service';
 import {
   IGetCart,
   ICheckCartCoursesReturn,
@@ -196,7 +209,7 @@ class GoldFlowService {
   }
   //#endregion getCartAsync [ 讀取購物車資料 ]
 
-  //#region  [ 共用邏輯 ]
+  //#region [ 共用邏輯 ]
   //#region getCartCoursesAsync [ 讀取購物車 - 課程資料 ]
   /** 讀取購物車 - 課程資料 */
   async getCartCoursesAsync(courseIds: string[], currentDate: Date) {
@@ -394,7 +407,7 @@ class GoldFlowService {
     return youMightLike;
   }
   //#endregion getYouMightLike [ 讀取購物車 - 推薦課程 ]
-  //#endregion  [ 共用邏輯 ]
+  //#endregion [ 共用邏輯 ]
 
   //#region getValidCouponAsync [ 讀取有效優惠卷 ]
   /** 讀取有效優惠卷 */
@@ -530,9 +543,11 @@ class GoldFlowService {
   }
 
   async createOrderAsync(
+    userId: Types.ObjectId,
+    email: string,
     courseHierarchy: ICheckCourseParameter,
     couponCode: string,
-  ): Promise<ICreateOrderReturn> {
+  ) {
     const currentDate = new Date();
 
     const [platformCoupons] = await PlatformCoupons.aggregate([
@@ -563,10 +578,27 @@ class GoldFlowService {
     delete courseHierarchy.courseIds;
     delete courseHierarchy.courseIdsStr;
 
+    const _CRUDService = new CRUDService<IOrderModel>(Order);
+      const orderId = new Types.ObjectId().toString();
+
     if (!platformCoupons) {
       const amt = courseHierarchy.totalPrice;
 
-      return { amt, itemDesc, ...courseHierarchy };
+      // Order, OrderDetails;
+
+      const newOrder = await _CRUDService.create({
+        user: userId,
+        merchantOrderNo: orderId,
+        tradeSha: '',
+        tradeInfo: '',
+        merchantID: merchantId,
+        version: version,
+        amt: amt,
+        itemDesc: '',
+        email: '',
+      });
+
+      return { newOrder, ...courseHierarchy };
     }
 
     courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
