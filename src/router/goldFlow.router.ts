@@ -18,7 +18,7 @@ router
     verifyJwtToken<ISaveOrUpdateUserCartCourse>,
     controller.saveOrUpdateUserCartCourse,
   )
-  .put(
+  .delete(
     '/v1/goldFlow/userCartCourse',
     verifyJwtToken<IUpdateUserCartCourse>,
     controller.updateUserCartCourse,
@@ -28,7 +28,7 @@ router
     verifyJwtToken<ISaveOrUpdateUserCartCoupon>,
     controller.saveOrUpdateUserCartCoupon,
   )
-  .put('/v1/goldFlow/userCartCoupon', verifyJwtToken, controller.updateUserCartCoupon)
+  .delete('/v1/goldFlow/userCartCoupon', verifyJwtToken, controller.updateUserCartCoupon)
   .post('/v1/goldFlow/visitorsCart', verifyObjectIds, controller.postVisitorsCart)
   .post(
     '/v1/goldFlow/createOrder',
