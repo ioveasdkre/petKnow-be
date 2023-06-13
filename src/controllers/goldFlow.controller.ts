@@ -95,9 +95,9 @@ class GoldFlowController {
   }
   //#endregion saveOrUpdateUserCartCourse [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region updateUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
+  //#region deleteUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
   /** 使用者 移除購物車 - 課程資料 */
-  static async updateUserCartCourse(
+  static async deleteUserCartCourse(
     req: IRequestJwtBody<IUpdateUserCartCourse>,
     res: Response,
     next: NextFunction,
@@ -148,7 +148,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.BadRequest, '無此課程');
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.updateUserCartCourseAsync(user._id, courseId);
+      const result = await goldFlowService.deleteUserCartCourseAsync(user._id, courseId);
 
       if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '不存在於購物車');
       else if (result === false)
@@ -159,7 +159,7 @@ class GoldFlowController {
       next(err);
     }
   }
-  //#endregion updateUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
+  //#endregion deleteUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
 
   //#region saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
   /** 使用者 新增或更新購物車 - 優惠卷資料 */
@@ -227,13 +227,9 @@ class GoldFlowController {
   }
   //#endregion saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
-  //#region updateUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
+  //#region deleteUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
   /** 使用者 移除購物車 - 優惠卷資料 */
-  static async updateUserCartCoupon(
-    req: IRequestJwtBody,
-    res: Response,
-    next: NextFunction,
-  ) {
+  static async deleteUserCartCoupon(req: IRequestJwtBody, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -267,7 +263,7 @@ class GoldFlowController {
       if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.updateUserCartCouponAsync(user._id);
+      const result = await goldFlowService.deleteUserCartCouponAsync(user._id);
 
       if (result === false)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.DeleteFailure);
@@ -277,8 +273,8 @@ class GoldFlowController {
       next(err);
     }
   }
-  //#endregion updateUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
-  
+  //#endregion deleteUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
+
   //#region getUserCart [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */
   static async getUserCart(req: IRequestJwtBody, res: Response, next: NextFunction) {
@@ -370,7 +366,7 @@ class GoldFlowController {
   //#endregion getUserCart [ 使用者 讀取購物車資料 ]
 
   //#region postVisitorsCart [ 訪客 讀取購物車資料 ]
-  /** 讀取購物車資料 */
+  /** 訪客 讀取購物車資料 */
   static async postVisitorsCart(
     req: IRequestBody<IPostCartRequest>,
     res: Response,
@@ -475,7 +471,60 @@ class GoldFlowController {
       next(err);
     }
   }
-  //#endregion postVisitorsCart [ 讀取購物車資料 ]
+  //#endregion postVisitorsCart [ 訪客 讀取購物車資料 ]
+
+  //#region getValidCoupon [ 讀取有效優惠卷 ]
+  /** 讀取有效優惠卷 */
+  static async getValidCoupon(_req: IRequestBody, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "讀取有效優惠卷"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "查詢成功",
+            "data": {
+              "coupons": [
+                {
+                  "tagNames": [
+                    "貓咪行為訓練",
+                    "寵物零食手作"
+                  ],
+                  "couponCode": "MD4kEFNL",
+                  "price": 143,
+                  "startDate": "2023-05-23T11:02:05.034Z",
+                  "endDate": "2023-08-09T03:41:28.189Z"
+                }
+              ]
+            }
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const goldFlowService = new GoldFlowService();
+      const coupons = await goldFlowService.getValidCouponAsync();
+
+      if (coupons.length === 0)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, { coupons });
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion getValidCoupon [ 讀取有效優惠卷 ]
 
   //#region createOrder [ 新增訂單 ]
   /** 新增訂單 */
