@@ -614,23 +614,23 @@ class GoldFlowController {
       if (!courseHierarchy)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
-      const timeStamp = Math.round(new Date().getTime() / 1000);
-      const orderId = new Types.ObjectId().toString();
+      // const timeStamp = Math.round(new Date().getTime() / 1000);
+      // const orderId = new Types.ObjectId().toString();
 
-      const orderIdAesEncrypt = goldFlowService.orderIdAesEncrypt(
-        orderId,
-        orderHasKey,
-        orderHasIv,
-        orderSalt,
-        orderalgorithm,
-      );
+      // const orderIdAesEncrypt = goldFlowService.orderIdAesEncrypt(
+      //   orderId,
+      //   orderHasKey,
+      //   orderHasIv,
+      //   orderSalt,
+      //   orderalgorithm,
+      // );
 
-      const order = await goldFlowService.createOrderAsync(courseHierarchy, couponCode);
+      // const order = await goldFlowService.createOrderAsync(courseHierarchy, couponCode);
 
-      order.timeStamp = timeStamp;
-      order.merchantOrderNo = orderIdAesEncrypt;
+      // order.timeStamp = timeStamp;
+      // order.merchantOrderNo = orderIdAesEncrypt;
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, order);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
     } catch (err) {
       next(err);
     }
