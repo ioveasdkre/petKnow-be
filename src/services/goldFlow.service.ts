@@ -1,10 +1,19 @@
 import { Types } from 'mongoose';
 import crypto from 'crypto';
-import { coverUrl, coverParamsUrl, merchantId, respondType, version,
+import {
+  coverUrl,
+  coverParamsUrl,
+  merchantId,
+  respondType,
+  version,
+  goldFlowHashKey,
+  goldFlowHashIv,
+  goldFlowalgorithm,
   orderHasKey,
   orderHasIv,
   orderSalt,
-  orderalgorithm, } from '../config/env';
+  orderalgorithm,
+} from '../config/env';
 import {
   CourseHierarchy,
   Order,
@@ -542,7 +551,7 @@ class GoldFlowService {
     return courseHierarchy ? courseHierarchy : false;
   }
 
-  async createOrderAsync(
+  async orderProcessingAsync(
     userId: Types.ObjectId,
     email: string,
     courseHierarchy: ICheckCourseParameter,
@@ -579,24 +588,34 @@ class GoldFlowService {
     delete courseHierarchy.courseIdsStr;
 
     const _CRUDService = new CRUDService<IOrderModel>(Order);
-      const orderId = new Types.ObjectId().toString();
+    const orderId = new Types.ObjectId().toString();
+    const currentTime = new Date();
+    const timeStamp = Math.round(currentTime.getTime() / 1000);
+    const neweBpay: IOrderParams = {
+      email: email,
+      merchantOrderNo: orderId,
+      timeStamp: timeStamp,
+      itemDesc: itemDesc,
+    };
+
+    const order = await _CRUDService.create({
+      user: userId,
+      merchantOrderNo: orderId,
+      merchantID: merchantId,
+      version: version,
+      itemDesc: itemDesc,
+      email: email,
+      createdAt: currentTime,
+      updatedAt: currentTime,
+    });
 
     if (!platformCoupons) {
-      const amt = courseHierarchy.totalPrice;
+      neweBpay.amt = courseHierarchy.totalPrice;
+      order.amt = courseHierarchy.totalPrice;
 
       // Order, OrderDetails;
 
-      const newOrder = await _CRUDService.create({
-        user: userId,
-        merchantOrderNo: orderId,
-        tradeSha: '',
-        tradeInfo: '',
-        merchantID: merchantId,
-        version: version,
-        amt: amt,
-        itemDesc: '',
-        email: '',
-      });
+      const newOrder = this.createOrder(neweBpay, order);
 
       return { newOrder, ...courseHierarchy };
     }
@@ -608,6 +627,25 @@ class GoldFlowService {
       : courseHierarchy.totalPrice;
 
     return { amt, itemDesc, ...courseHierarchy, ...platformCoupons };
+  }
+
+  async createOrder(neweBpay: IOrderParams, order: IOrderModel) {
+    const aesEncrypted = this.createMpgAesEncrypt(
+      neweBpay,
+      goldFlowHashKey,
+      goldFlowHashIv,
+      goldFlowalgorithm,
+    );
+
+    const shaEncrypted = this.createMpgShaEncrypt(aesEncrypted, goldFlowHashKey, goldFlowHashIv);
+
+    order.tradeInfo = aesEncrypted;
+    order.tradeSha = shaEncrypted;
+
+    const _CRUDService = new CRUDService<IOrderModel>(Order);
+    const newOrder = await _CRUDService.create(order);
+
+    return newOrder;
   }
 
   orderIdAesEncrypt(
