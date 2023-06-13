@@ -55,8 +55,8 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region updateUserCartCourseAsync [ 使用者 更新購物車 - 課程資料 ]
-  /** 使用者 更新購物車 - 課程資料 */
+  //#region updateUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
+  /** 使用者 移除購物車 - 課程資料 */
   async updateUserCartCourseAsync(userId: Types.ObjectId, courseId: string) {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
@@ -84,7 +84,7 @@ class GoldFlowService {
 
     return result;
   }
-  //#endregion updateUserCartCourseAsync [ 使用者 更新購物車 - 課程資料 ]
+  //#endregion updateUserCartCourseAsync [ 使用者 移除購物車 - 課程資料 ]
 
   //#region saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
   /** 使用者 新增或更新購物車 - 優惠卷資料 */
@@ -139,8 +139,8 @@ class GoldFlowService {
   }
   //#endregion saveOrUpdateUserCartCouponAsync [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
-  //#region updateUserCartCouponAsync [ 使用者 更新購物車 - 優惠卷資料 ]
-  /** 使用者 更新購物車 - 優惠卷資料 */
+  //#region updateUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
+  /** 使用者 移除購物車 - 優惠卷資料 */
   async updateUserCartCouponAsync(userId: Types.ObjectId) {
     const shoppingCart = await ShoppingCart.findOne({ user: userId });
 
@@ -162,7 +162,7 @@ class GoldFlowService {
 
     return result;
   }
-  //#endregion updateUserCartCouponAsync [ 使用者 更新購物車 - 優惠卷資料 ]
+  //#endregion updateUserCartCouponAsync [ 使用者 移除購物車 - 優惠卷資料 ]
 
   //#region getUserCartAsync [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */

@@ -95,8 +95,8 @@ class GoldFlowController {
   }
   //#endregion saveOrUpdateUserCartCourse [ 使用者 新增或更新購物車 - 課程資料 ]
 
-  //#region updateUserCartCourse [ 使用者 更新購物車 - 課程資料 ]
-  /** 使用者 更新購物車 - 課程資料 */
+  //#region updateUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
+  /** 使用者 移除購物車 - 課程資料 */
   static async updateUserCartCourse(
     req: IRequestJwtBody<IUpdateUserCartCourse>,
     res: Response,
@@ -105,7 +105,7 @@ class GoldFlowController {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "使用者 更新購物車 - 課程資料"
+     * #swagger.description = "使用者 移除購物車 - 課程資料"
      * #swagger.security = [
           {
             "apiKeyAuth": []
@@ -152,14 +152,14 @@ class GoldFlowController {
 
       if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '不存在於購物車');
       else if (result === false)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.ModifyFailure);
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.DeleteFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.ModifySuccess);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.DeleteSuccess);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion updateUserCartCourse [ 使用者 更新購物車 - 課程資料 ]
+  //#endregion updateUserCartCourse [ 使用者 移除購物車 - 課程資料 ]
 
   //#region saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
   /** 使用者 新增或更新購物車 - 優惠卷資料 */
@@ -227,8 +227,8 @@ class GoldFlowController {
   }
   //#endregion saveOrUpdateUserCartCoupon [ 使用者 新增或更新購物車 - 優惠卷資料 ]
 
-  //#region updateUserCartCoupon [ 使用者 更新購物車 - 優惠卷資料 ]
-  /** 使用者 更新購物車 - 優惠卷資料 */
+  //#region updateUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
+  /** 使用者 移除購物車 - 優惠卷資料 */
   static async updateUserCartCoupon(
     req: IRequestJwtBody,
     res: Response,
@@ -237,18 +237,18 @@ class GoldFlowController {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "使用者 更新購物車 - 優惠卷資料"
+     * #swagger.description = "使用者 移除購物車 - 優惠卷資料"
      * #swagger.security = [
           {
             "apiKeyAuth": []
           }
         ]
      * #swagger.responses[200] = {
-          description: "更新成功",
+          description: "刪除成功",
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "更新成功"
+            "message": "刪除成功"
           }
         }
      * #swagger.responses[500] = {
@@ -264,21 +264,20 @@ class GoldFlowController {
     try {
       const user = req.user;
 
-      if (!user)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const goldFlowService = new GoldFlowService();
       const result = await goldFlowService.updateUserCartCouponAsync(user._id);
 
       if (result === false)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.ModifyFailure);
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.DeleteFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.ModifySuccess);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.DeleteSuccess);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion updateUserCartCoupon [ 使用者 更新購物車 - 優惠卷資料 ]
+  //#endregion updateUserCartCoupon [ 使用者 移除購物車 - 優惠卷資料 ]
   
   //#region getUserCart [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */
