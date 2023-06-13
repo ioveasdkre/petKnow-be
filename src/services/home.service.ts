@@ -1,12 +1,13 @@
+import { Types } from 'mongoose';
 import { coverUrl, coverParamsUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { ISearchCourses } from '../types/home.type';
 
 class HomeService {
-  //#region getIndex [ 首頁 ]
+  //#region getIndexAsync [ 首頁 ]
   /** 首頁 */
-  async getIndex() {
+  async getIndexAsync() {
     const currentDate = new Date();
 
     const [carousel] = await CourseHierarchy.aggregate([
@@ -141,9 +142,9 @@ class HomeService {
 
     return { carousel, popular, tagNames: tagNames.tagNames };
   }
-  //#endregion getIndex [ 首頁 ]
+  //#endregion getIndexAsync [ 首頁 ]
 
-  //#region getSearchCourses [ 搜尋關鍵字 - 相關課程 ]
+  //#region getSearchCoursesAsync [ 搜尋關鍵字 - 相關課程 ]
   /** 搜尋關鍵字 - 相關課程 */
   async getSearchCoursesAsync(q: string) {
     const currentDate = new Date();
@@ -232,9 +233,9 @@ class HomeService {
 
     return courses;
   }
-  //#endregion getSearchCourses [ 搜尋關鍵字 - 相關課程 ]
+  //#endregion getSearchCoursesAsync [ 搜尋關鍵字 - 相關課程 ]
 
-  //#region getSearchComboPack [ 搜尋關鍵字 - 組合包 ]
+  //#region getSearchComboPackAsync [ 搜尋關鍵字 - 組合包 ]
   async getSearchComboPackAsync(tagNameArr: string[]) {
     const currentDate = new Date();
 
@@ -384,14 +385,14 @@ class HomeService {
 
     return { comboPack, courseCards };
   }
-  //#endregion getSearchComboPack [ 搜尋關鍵字 - 組合包 ]
+  //#endregion getSearchComboPackAsync [ 搜尋關鍵字 - 組合包 ]
 
-  //#region getVisitorCourseDetails [ 訪客 課程介紹 ]
-  async getVisitorCourseDetails(courseId: string, currentDate: Date) {
-    const [courses] = await CourseHierarchy.aggregate<ISearchCourses>([
+  //#region getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
+  async getVisitorCourseDetailsAsync(courseId: string) {
+    const courses = await CourseHierarchy.aggregate([
       {
         $match: {
-          $and: [{ isPublished: true }, { _id: courseId }],
+          $and: [{ isPublished: true }, { _id: new Types.ObjectId(courseId) }],
         },
       },
       {
@@ -407,38 +408,22 @@ class HomeService {
           _id: null,
           chapters: {
             $push: {
-              _id: '$_id',
-              title: '$title',
-              description: '$description',
-              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
-              level: {
-                $switch: {
-                  branches: Object.entries(Level).map(([level, levelName]) => ({
-                    case: { $eq: ['$level', parseInt(level)] },
-                    then: levelName,
-                  })),
-                  default: null,
+              title: '$chapters.title',
+              time: { $divide: ['$chapters.totalTime', 3600] },
+              total: '$chapters.totalNumber',
+              subchapters: {
+                $map: {
+                  input: '$chapters.subchapters',
+                  as: 'subchapter',
+                  in: {
+                    _id: '$$subchapter._id',
+                    title: '$$subchapter.title',
+                    time: { $divide: ['$$subchapter.time', 3600] },
+                  },
                 },
               },
-              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
-              total: '$totalNumber',
-              instructorName: { $arrayElemAt: ['$user.name', 0] },
-              price: '$price',
-              discountPrice: {
-                $cond: [
-                  {
-                    $and: [
-                      { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
-                      { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
-                    ],
-                  },
-                  '$discountPrice',
-                  null,
-                ],
-              },
-              isFree: '$isFree',
             },
-          },
+          }
         },
       },
       {
@@ -450,7 +435,7 @@ class HomeService {
 
     return courses;
   }
-  //#endregion getVisitorCourseDetails [ 訪客 課程介紹 ]
+  //#endregion getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
 }
 
 export { HomeService };
