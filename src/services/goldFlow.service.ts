@@ -528,11 +528,13 @@ class GoldFlowService {
           courseIds: { $push: { $toString: '$_id' } },
         },
       },
+      { $count: 'total' },
       {
         $project: {
           _id: 0, // 排除 _id 欄位
           totalPrice: 1,
           shoppingCart: 1,
+          courseCount: { $size: '$shoppingCart' },
           uniqueTagNames: 1,
           courseIds: 1,
           courseIdsStr: {
@@ -582,7 +584,7 @@ class GoldFlowService {
       },
     ]);
 
-    const itemDesc = courseHierarchy.courseIdsStr;
+    const itemDesc = `${courseHierarchy.courseCount}`;
     delete courseHierarchy.uniqueTagNames;
     delete courseHierarchy.courseIds;
     delete courseHierarchy.courseIdsStr;
@@ -592,6 +594,7 @@ class GoldFlowService {
     const currentTime = new Date();
     const timeStamp = Math.round(currentTime.getTime() / 1000);
     const neweBpay: IOrderParams = {
+      amt: -1,
       email: email,
       merchantOrderNo: orderId,
       timeStamp: timeStamp,
@@ -641,6 +644,17 @@ class GoldFlowService {
 
     order.tradeInfo = aesEncrypted;
     order.tradeSha = shaEncrypted;
+
+    const _CRUDService = new CRUDService<IOrderModel>(Order);
+    const newOrder = await _CRUDService.create(order);
+
+    return newOrder;
+  }
+
+  async createOrderDetails(_id: string, neweBpay: IOrderDetails) {
+    const test = courseHierarchy.shoppingCart.map(obj => {
+      return { tiele: obj.title };
+    });
 
     const _CRUDService = new CRUDService<IOrderModel>(Order);
     const newOrder = await _CRUDService.create(order);

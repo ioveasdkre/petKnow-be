@@ -29,6 +29,7 @@ interface ShoppingCartItem {
 interface ICheckCourse {
   totalPrice: number;
   shoppingCart: ShoppingCartItem[];
+  courseCount: number;
   uniqueTagNames?: string[];
   courseIds?: string[];
   courseIdsStr?: string;
