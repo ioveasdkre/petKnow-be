@@ -1,5 +1,4 @@
 import { Response, NextFunction } from 'express';
-import { Types } from 'mongoose';
 import {
   merchantId,
   version,
@@ -22,7 +21,7 @@ import {
   IUpdateUserCartCourse,
   ISaveOrUpdateUserCartCoupon,
   IPostCartRequest,
-  ICreateOrderRequest,
+  // ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
@@ -451,7 +450,8 @@ class GoldFlowController {
       const currentDate = new Date();
       const goldFlowService = new GoldFlowService();
 
-      if (!courseIds) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      if (!courseIds || courseIds.length === 0)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const courseHierarchy = await goldFlowService.getCartAsync(
         courseIds,
@@ -459,7 +459,8 @@ class GoldFlowController {
         currentDate,
       );
 
-      if (!courseHierarchy) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      if (!courseHierarchy)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const youMightLike = await goldFlowService.getYouMightLike(currentDate);
 
@@ -529,7 +530,7 @@ class GoldFlowController {
   //#region createOrder [ 新增訂單 ]
   /** 新增訂單 */
   static async createOrder(
-    req: IRequestJwtBody<ICreateOrderRequest>,
+    req: IRequestJwtBody,
     res: Response,
     next: NextFunction,
   ) {
@@ -542,20 +543,6 @@ class GoldFlowController {
             "apiKeyAuth": []
           }
         ]
-     * #swagger.parameters["body"] = {
-         description: "資料格式",
-         in: "body",
-         type: "object",
-         required: true,
-         schema: {
-            "courseIds": [
-              "6482b94965829859fd1d1838",
-              "646f7e2f4802a2dbf6b3eb84",
-              "646f7e2f4802a2dbf6b3eb85"
-            ],
-            "couponCode": "bvCyXjGL"
-          }
-        }
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -606,31 +593,23 @@ class GoldFlowController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const { courseIds, couponCode } = req.body;
+      const user = req.user;
+
+      if (!user)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.InvalidCredentials);
 
       const goldFlowService = new GoldFlowService();
-      const courseHierarchy = await goldFlowService.checkOrderCoursesAsync(courseIds);
+      const result = await goldFlowService.orderProcessingAsync(
+        user._id,
+        user.email,
+      );
 
-      if (!courseHierarchy)
+      if (result === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
-      // const timeStamp = Math.round(new Date().getTime() / 1000);
-      // const orderId = new Types.ObjectId().toString();
-
-      // const orderIdAesEncrypt = goldFlowService.orderIdAesEncrypt(
-      //   orderId,
-      //   orderHasKey,
-      //   orderHasIv,
-      //   orderSalt,
-      //   orderalgorithm,
-      // );
-
-      // const order = await goldFlowService.createOrderAsync(courseHierarchy, couponCode);
-
-      // order.timeStamp = timeStamp;
-      // order.merchantOrderNo = orderIdAesEncrypt;
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, result);
     } catch (err) {
       next(err);
     }

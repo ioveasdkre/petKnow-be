@@ -17,7 +17,6 @@ const orderDetailsSchema = new Schema<IOrderDetailsModel>(
     order: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      index: true,
       required: [true, '請填寫必填欄位'],
     },
     title: {

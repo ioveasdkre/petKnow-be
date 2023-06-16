@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import {
   coverUrl,
   coverParamsUrl,
@@ -22,9 +23,6 @@ import {
   ShoppingCart,
 } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
-import { IOrderModel } from '../models/order.model';
-import { IOrderDetails } from '../models/orderDetails.model';
-import { CRUDService } from '../services/shares/crud.service';
 import {
   IGetCart,
   ICheckCartCoursesReturn,
@@ -32,7 +30,7 @@ import {
   ICheckCourse as ICheckCourseResult,
   ICheckCourse as ICheckCourseParameter,
   IOrderParams,
-  ICreateOrderReturn,
+  ICreateOrderParams
 } from '../types/goldFlow.type';
 
 class GoldFlowService {
@@ -189,13 +187,7 @@ class GoldFlowService {
   //#region getUserCartAsync [ 使用者 讀取購物車資料 ]
   /** 使用者 讀取購物車資料 */
   async getUserCartAsync(_id: Types.ObjectId, currentDate: Date) {
-    const shoppingCart = await ShoppingCart.findOne<IGetCart>(
-      { user: _id },
-      {
-        courseIds: 1,
-        couponCode: 1,
-      },
-    );
+    const shoppingCart = await this.getUserCartCourseIdsAsync(_id);
 
     if (!shoppingCart) return false;
 
@@ -416,6 +408,21 @@ class GoldFlowService {
     return youMightLike;
   }
   //#endregion getYouMightLike [ 讀取購物車 - 推薦課程 ]
+
+  //#region getUserCartCourseIdsAsync [ 使用者 讀取購物車 - 課程 id ]
+  /** 使用者 讀取購物車 - 課程 id */
+  async getUserCartCourseIdsAsync(_id: Types.ObjectId) {
+    const shoppingCart = await ShoppingCart.findOne<IGetCart>(
+      { user: _id },
+      {
+        courseIds: 1,
+        couponCode: 1,
+      },
+    );
+
+    return shoppingCart;
+  }
+  //#endregion getUserCartCourseIdsAsync [ 使用者 讀取購物車 - 課程 id ]
   //#endregion [ 共用邏輯 ]
 
   //#region getValidCouponAsync [ 讀取有效優惠卷 ]
@@ -443,9 +450,94 @@ class GoldFlowService {
   }
   //#endregion getValidCouponAsync [ 讀取有效優惠卷 ]
 
-  async checkOrderCoursesAsync(courseIds: string[]) {
-    const currentDate = new Date();
+  async orderProcessingAsync(userId: Types.ObjectId, email: string) {
+    const shoppingCart = await this.getUserCartCourseIdsAsync(userId);
 
+    if (!shoppingCart) return 0;
+
+    const currentDate = new Date();
+    const { courseIds, couponCode } = shoppingCart;
+
+    const courseHierarchy = await this.checkOrderCoursesAsync(courseIds, currentDate);
+    const shoppingCartCount = courseHierarchy.shoppingCart.length
+
+    if (!courseHierarchy || shoppingCartCount === 0) return 0;
+
+    const [platformCoupons] = await PlatformCoupons.aggregate([
+      {
+        $match: {
+          $and: [
+            { couponCode: couponCode },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            { isEnabled: true },
+            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          couponPrice: '$price',
+        },
+      },
+      {
+        $limit: 1,
+      },
+    ]);
+
+    const itemDesc = `${shoppingCartCount}`;
+    delete courseHierarchy.uniqueTagNames;
+    delete courseHierarchy.courseIds;
+    delete courseHierarchy.courseIdsStr;
+
+    const uuid = uuidv4();
+    const withoutHyphens = uuid.replace(/-/g, "");
+    const shortenedUUID = withoutHyphens.substring(0, 20);
+    const timeStamp = Math.round(currentDate.getTime() / 1000);
+    const orderId = `${shortenedUUID}${timeStamp}`;
+    const neweBpay: IOrderParams = {
+      amt: -1,
+      email: email,
+      merchantOrderNo: orderId,
+      timeStamp: timeStamp,
+      itemDesc: itemDesc,
+    };
+
+    const order: ICreateOrderParams = {
+      user: userId,
+      merchantOrderNo: orderId,
+      merchantID: merchantId,
+      version: version,
+      itemDesc: itemDesc,
+      email: email,
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    };
+
+    if (!platformCoupons.couponPrice) {
+      neweBpay.amt = courseHierarchy.totalPrice;
+      order.amt = courseHierarchy.totalPrice;
+
+      const newOrder = await this.createOrderAsync(neweBpay, order, courseHierarchy);
+
+      return newOrder;
+    }
+
+    courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
+
+    const amt = courseHierarchy.discountedPrice;
+
+    neweBpay.amt = amt;
+    order.amt = amt;
+    order.couponPrice = platformCoupons.couponPrice;
+
+    const newOrder = await this.createOrderAsync(neweBpay, order, courseHierarchy);
+
+    return newOrder;
+  }
+
+  async checkOrderCoursesAsync(courseIds: string[], currentDate: Date) {
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
       {
         $match: {
@@ -528,13 +620,11 @@ class GoldFlowService {
           courseIds: { $push: { $toString: '$_id' } },
         },
       },
-      { $count: 'total' },
       {
         $project: {
           _id: 0, // 排除 _id 欄位
           totalPrice: 1,
           shoppingCart: 1,
-          courseCount: { $size: '$shoppingCart' },
           uniqueTagNames: 1,
           courseIds: 1,
           courseIdsStr: {
@@ -550,89 +640,14 @@ class GoldFlowService {
       },
     ]);
 
-    return courseHierarchy ? courseHierarchy : false;
+    return courseHierarchy;
   }
 
-  async orderProcessingAsync(
-    userId: Types.ObjectId,
-    email: string,
+  async createOrderAsync(
+    neweBpay: IOrderParams,
+    order: ICreateOrderParams,
     courseHierarchy: ICheckCourseParameter,
-    couponCode: string,
   ) {
-    const currentDate = new Date();
-
-    const [platformCoupons] = await PlatformCoupons.aggregate([
-      {
-        $match: {
-          $and: [
-            { couponCode: couponCode },
-            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
-            { isEnabled: true },
-            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          couponPrice: '$price',
-        },
-      },
-      {
-        $limit: 1,
-      },
-    ]);
-
-    const itemDesc = `${courseHierarchy.courseCount}`;
-    delete courseHierarchy.uniqueTagNames;
-    delete courseHierarchy.courseIds;
-    delete courseHierarchy.courseIdsStr;
-
-    const _CRUDService = new CRUDService<IOrderModel>(Order);
-    const orderId = new Types.ObjectId().toString();
-    const currentTime = new Date();
-    const timeStamp = Math.round(currentTime.getTime() / 1000);
-    const neweBpay: IOrderParams = {
-      amt: -1,
-      email: email,
-      merchantOrderNo: orderId,
-      timeStamp: timeStamp,
-      itemDesc: itemDesc,
-    };
-
-    const order = await _CRUDService.create({
-      user: userId,
-      merchantOrderNo: orderId,
-      merchantID: merchantId,
-      version: version,
-      itemDesc: itemDesc,
-      email: email,
-      createdAt: currentTime,
-      updatedAt: currentTime,
-    });
-
-    if (!platformCoupons) {
-      neweBpay.amt = courseHierarchy.totalPrice;
-      order.amt = courseHierarchy.totalPrice;
-
-      // Order, OrderDetails;
-
-      const newOrder = this.createOrder(neweBpay, order);
-
-      return { newOrder, ...courseHierarchy };
-    }
-
-    courseHierarchy.discountedPrice = courseHierarchy.totalPrice - platformCoupons.couponPrice;
-
-    const amt = courseHierarchy.discountedPrice
-      ? courseHierarchy.discountedPrice
-      : courseHierarchy.totalPrice;
-
-    return { amt, itemDesc, ...courseHierarchy, ...platformCoupons };
-  }
-
-  async createOrder(neweBpay: IOrderParams, order: IOrderModel) {
     const aesEncrypted = this.createMpgAesEncrypt(
       neweBpay,
       goldFlowHashKey,
@@ -645,21 +660,45 @@ class GoldFlowService {
     order.tradeInfo = aesEncrypted;
     order.tradeSha = shaEncrypted;
 
-    const _CRUDService = new CRUDService<IOrderModel>(Order);
-    const newOrder = await _CRUDService.create(order);
+    if (!aesEncrypted || !shaEncrypted ) return 0;
 
-    return newOrder;
+    const newOrder = await Order.create(order);
+    const _id = newOrder._id;
+
+    if (!_id) return 1;
+
+    const newOrderDetails = await this.createOrderDetailsAsync(_id, courseHierarchy);
+
+    if (!newOrderDetails) return 1;
+
+    const _idEncrypt = this.orderIdAesEncrypt(
+      _id,
+      orderHasKey,
+      orderHasIv,
+      orderSalt,
+      orderalgorithm,
+    );
+
+    return {
+      _id: _idEncrypt,
+      ...courseHierarchy,
+    };
   }
 
-  async createOrderDetails(_id: string, neweBpay: IOrderDetails) {
-    const test = courseHierarchy.shoppingCart.map(obj => {
-      return { tiele: obj.title };
+  async createOrderDetailsAsync(_id: Types.ObjectId, courseHierarchy: ICheckCourseParameter) {
+    const orderDetails = courseHierarchy.shoppingCart.map(obj => {
+      return {
+        order: _id,
+        title: obj.title,
+        price: obj.price,
+        discountPrice: obj.discountPrice,
+        isFree: obj.isFree,
+      };
     });
 
-    const _CRUDService = new CRUDService<IOrderModel>(Order);
-    const newOrder = await _CRUDService.create(order);
+    const newOrderDetails = await OrderDetails.insertMany(orderDetails);
 
-    return newOrder;
+    return newOrderDetails;
   }
 
   orderIdAesEncrypt(
