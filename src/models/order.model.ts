@@ -15,6 +15,7 @@ interface IOrder {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
 interface IOrderModel extends IOrder, Document {}
 
 const orderSchema = new Schema<IOrderModel>(
@@ -22,7 +23,6 @@ const orderSchema = new Schema<IOrderModel>(
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      index: true,
       required: [true, '請填寫必填欄位'],
     },
     merchantOrderNo: {

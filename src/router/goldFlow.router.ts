@@ -5,7 +5,6 @@ import {
   ISaveOrUpdateUserCartCourse,
   IUpdateUserCartCourse,
   ISaveOrUpdateUserCartCoupon,
-  ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
 
@@ -33,8 +32,7 @@ router
   .get('/v1/goldFlow/validCoupon', controller.getValidCoupon)
   .post(
     '/v1/goldFlow/createOrder',
-    verifyJwtToken<ICreateOrderRequest>,
-    verifyObjectIds,
+    verifyJwtToken,
     controller.createOrder,
   )
   .post('/v1/goldFlow/checkOrder', verifyJwtToken<IPostCheckRequest>, controller.postCheckOrder);
