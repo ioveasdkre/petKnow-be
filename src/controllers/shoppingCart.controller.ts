@@ -173,7 +173,7 @@ class ShoppingCartController {
      * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
      * #swagger.description = "刪除所有資料"
      * #swagger.responses[200] = {
-          description: "成功",
+          description: "刪除成功",
           schema: {
             "statusCode": 200,
             "isSuccess": true,

@@ -17,6 +17,7 @@ const shoppingCartSchema = new Schema<IShoppingCartModel>(
       ref: 'User',
       unique: true,
       index: true,
+      required: [true, '請填寫必填欄位'],
     },
     courseIds: {
       type: [String],

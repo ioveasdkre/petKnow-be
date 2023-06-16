@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 interface IGetCart {
   courseIds: string[];
   couponCode: string;
@@ -40,17 +42,20 @@ interface IPlatformCoupon {
   couponPrice: number;
 }
 
-interface ICreateOrderReturn {
-  platformCoupons?: IPlatformCoupon;
-  totalPrice: number;
-  shoppingCart: ShoppingCartItem[];
-  uniqueTagNames?: string[] | undefined;
-  courseIdsStr?: string;
-  discountedPrice?: number | undefined;
+interface ICreateOrderParams {
+  user: Types.ObjectId;
+  merchantOrderNo: string;
+  tradeSha?: string;
+  tradeInfo?: string;
+  merchantID: string;
+  version: number;
   amt?: number;
-  itemDesc?: string;
-  timeStamp?: number;
-  merchantOrderNo?: string;
+  couponCode?: string;
+  couponPrice?: number;
+  itemDesc: string;
+  email: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface IOrderParams {
@@ -61,4 +66,4 @@ interface IOrderParams {
   merchantOrderNo: string;
 }
 
-export { IGetCart, ICheckCartCoursesReturn, ICheckCourse, IOrderParams, ICreateOrderReturn };
+export { IGetCart, ICheckCartCoursesReturn, ICheckCourse, IOrderParams, ICreateOrderParams };
