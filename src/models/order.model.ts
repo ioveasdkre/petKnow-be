@@ -12,6 +12,7 @@ interface IOrder {
   couponPrice?: number;
   itemDesc: string;
   email: string;
+  timeStamp: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,7 +30,7 @@ const orderSchema = new Schema<IOrderModel>(
       type: String,
       unique: true,
       index: true,
-      maxlength: 255,
+      maxlength: 30,
       required: [true, '請填寫必填欄位'],
     },
     tradeSha: {
@@ -42,14 +43,17 @@ const orderSchema = new Schema<IOrderModel>(
     },
     merchantID: {
       type: String,
+      maxlength: 20,
       required: [true, '請填寫必填欄位'],
     },
     version: {
       type: Number,
+      maxlength: 5,
       required: [true, '請填寫必填欄位'],
     },
     amt: {
       type: Number,
+      maxlength: 10,
       required: [true, '請填寫必填欄位'],
     },
     couponCode: {
@@ -61,13 +65,17 @@ const orderSchema = new Schema<IOrderModel>(
     },
     itemDesc: {
       type: String,
-      unique: true,
-      index: true,
       maxlength: 50,
       required: [true, '請填寫必填欄位'],
     },
     email: {
       type: String,
+      maxlength: 50,
+      required: [true, '請填寫必填欄位'],
+    },
+    timeStamp: {
+      type: Number,
+      maxlength: 50,
       required: [true, '請填寫必填欄位'],
     },
     createdAt: {

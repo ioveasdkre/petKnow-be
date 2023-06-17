@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
+import { Types } from 'mongoose';
 import { jwtSecret } from '../config/env';
 import { User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
@@ -37,6 +38,7 @@ const verifyJwtToken = async <T = void>(
       return handleResponse(res, HttpStatusCode.BadRequest, 'user 查詢不到資料');
     }
 
+    user._id = new Types.ObjectId(user._id);
     req.user = user;
 
     next();
