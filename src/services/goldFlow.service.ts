@@ -511,6 +511,7 @@ class GoldFlowService {
       version: version,
       itemDesc: itemDesc,
       email: email,
+      timeStamp: timeStamp,
       createdAt: currentDate,
       updatedAt: currentDate,
     };
