@@ -54,6 +54,7 @@ interface ICreateOrderParams {
   couponPrice?: number;
   itemDesc: string;
   email: string;
+  timeStamp: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
