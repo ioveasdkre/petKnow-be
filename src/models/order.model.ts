@@ -13,6 +13,7 @@ interface IOrder {
   itemDesc: string;
   email: string;
   timeStamp: number;
+  isPayment?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -77,6 +78,10 @@ const orderSchema = new Schema<IOrderModel>(
       type: Number,
       maxlength: 50,
       required: [true, '請填寫必填欄位'],
+    },
+    isPayment: {
+      type: Boolean,
+      default: false,
     },
     createdAt: {
       type: Date,
