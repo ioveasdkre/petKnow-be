@@ -11,11 +11,7 @@ interface ICreateCartCoupon {
 interface ICourseIdsAndCouponCodeRequest extends ICourseIdsRequest, ICreateCartCoupon {}
 
 interface IPostCheckRequest {
-  amt: number;
-  itemDesc: string;
-  email: string;
-  timeStamp: number;
-  merchantOrderNo: string;
+  _id: string;
 }
 
 export {
