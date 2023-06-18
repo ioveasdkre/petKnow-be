@@ -30,8 +30,9 @@ import {
   ICheckCourse as ICheckCourseResult,
   ICheckCourse as ICheckCourseParameter,
   IOrderParams,
-  ICreateOrderParams
+  ICreateOrderParams,
 } from '../types/goldFlow.type';
+import { isValidObjectId } from '../utils/mongoose.util';
 
 class GoldFlowService {
   //#region saveOrUpdateUserCartCourseAsync [ 使用者 新增或更新購物車 - 課程資料 ]
@@ -450,6 +451,8 @@ class GoldFlowService {
   }
   //#endregion getValidCouponAsync [ 讀取有效優惠卷 ]
 
+  //#region orderProcessingAsync [ 訂單處理 ]
+  /** 訂單處理 */
   async orderProcessingAsync(userId: Types.ObjectId, email: string) {
     const shoppingCart = await this.getUserCartCourseIdsAsync(userId);
 
@@ -459,7 +462,7 @@ class GoldFlowService {
     const { courseIds, couponCode } = shoppingCart;
 
     const courseHierarchy = await this.checkOrderCoursesAsync(courseIds, currentDate);
-    const shoppingCartCount = courseHierarchy.shoppingCart.length
+    const shoppingCartCount = courseHierarchy.shoppingCart.length;
 
     if (!courseHierarchy || shoppingCartCount === 0) return 0;
 
@@ -492,7 +495,7 @@ class GoldFlowService {
     delete courseHierarchy.courseIdsStr;
 
     const uuid = uuidv4();
-    const withoutHyphens = uuid.replace(/-/g, "");
+    const withoutHyphens = uuid.replace(/-/g, '');
     const shortenedUUID = withoutHyphens.substring(0, 20);
     const timeStamp = Math.round(currentDate.getTime() / 1000);
     const orderId = `${shortenedUUID}${timeStamp}`;
@@ -537,7 +540,10 @@ class GoldFlowService {
 
     return newOrder;
   }
+  //#endregion orderProcessingAsync [ 訂單處理 ]
 
+  //#region checkOrderCoursesAsync [ 確認訂單課程 ]
+  /** 確認訂單課程 */
   async checkOrderCoursesAsync(courseIds: string[], currentDate: Date) {
     const [courseHierarchy] = await CourseHierarchy.aggregate<ICheckCourseResult>([
       {
@@ -588,19 +594,7 @@ class GoldFlowService {
             $push: {
               _id: '$_id',
               title: '$title',
-              cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
-              level: {
-                $switch: {
-                  branches: Object.entries(Level).map(([level, levelName]) => ({
-                    case: { $eq: ['$level', parseInt(level)] },
-                    then: levelName,
-                  })),
-                  default: null,
-                },
-              },
-              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
               total: '$totalNumber',
-              instructorName: { $arrayElemAt: ['$user.name', 0] },
               price: '$price',
               discountPrice: {
                 $cond: [
@@ -643,7 +637,10 @@ class GoldFlowService {
 
     return courseHierarchy;
   }
+  //#endregion checkOrderCoursesAsync [ 確認訂單課程 ]
 
+  //#region createOrderAsync [ 新增訂單 ]
+  /** 新增訂單 */
   async createOrderAsync(
     neweBpay: IOrderParams,
     order: ICreateOrderParams,
@@ -661,7 +658,7 @@ class GoldFlowService {
     order.tradeInfo = aesEncrypted;
     order.tradeSha = shaEncrypted;
 
-    if (!aesEncrypted || !shaEncrypted ) return 0;
+    if (!aesEncrypted || !shaEncrypted) return 0;
 
     const newOrder = await Order.create(order);
     const _id = newOrder._id;
@@ -673,7 +670,7 @@ class GoldFlowService {
     if (!newOrderDetails) return 1;
 
     const _idEncrypt = this.orderIdAesEncrypt(
-      _id,
+      _id.toString(),
       orderHasKey,
       orderHasIv,
       orderSalt,
@@ -685,7 +682,10 @@ class GoldFlowService {
       ...courseHierarchy,
     };
   }
+  //#endregion createOrderAsync [ 新增訂單 ]
 
+  //#region createOrderDetailsAsync [ 新增訂單明細 ]
+  /** 新增訂單明細 */
   async createOrderDetailsAsync(_id: Types.ObjectId, courseHierarchy: ICheckCourseParameter) {
     const orderDetails = courseHierarchy.shoppingCart.map(obj => {
       return {
@@ -701,7 +701,47 @@ class GoldFlowService {
 
     return newOrderDetails;
   }
+  //#endregion createOrderDetailsAsync [ 新增訂單明細 ]
 
+  //#region postCheckOrderAsync [ 確認訂單資料 ]
+  /** 確認訂單資料 */
+  async postCheckOrderAsync(userId: Types.ObjectId, orderId: string) {
+    const _id = this.orderIdAesDecrypt(
+      orderId,
+      orderHasKey,
+      orderHasIv,
+      orderSalt,
+      orderalgorithm,
+    );
+
+    const isValidId = isValidObjectId(_id);
+
+    if (!isValidId) return 0;
+
+    const order = await Order.findOne(
+      { _id: _id, user: userId },
+      {
+        _id: 0,
+        merchantID: 1,
+        tradeSha: 1,
+        tradeInfo: 1,
+        timeStamp: 1,
+        version: 1,
+        merchantOrderNo: 1,
+        amt: 1,
+        itemDesc: 1,
+        email: 1,
+      },
+    );
+
+    if (!order) return 1;
+
+    return order;
+  }
+  //#endregion postCheckOrderAsync [ 確認訂單資料 ]
+
+  //#region orderIdAesEncrypt [ 訂單ID 加密 ]
+  /** 訂單ID 加密 */
   orderIdAesEncrypt(
     data: string,
     useKey: string,
@@ -717,7 +757,10 @@ class GoldFlowService {
 
     return encrypted + cipher.final('hex');
   }
+  //#endregion orderIdAesEncrypt [ 訂單ID 加密 ]
 
+  //#region orderIdAesDecrypt [ 訂單ID 解密 ]
+  /** 訂單ID 解密 */
   orderIdAesDecrypt(
     encryptedData: string,
     useKey: string,
@@ -734,6 +777,7 @@ class GoldFlowService {
 
     return decrypted;
   }
+  //#endregion orderIdAesDecrypt [ 訂單ID 解密 ]
 
   //#region genDataChain [ 生成資料鏈串的函式，用於將訂單物件轉換成資料鏈串。 ]
   /**

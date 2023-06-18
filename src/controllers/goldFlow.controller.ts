@@ -1,27 +1,14 @@
 import { Response, NextFunction } from 'express';
-import {
-  merchantId,
-  version,
-  goldFlowHashKey,
-  goldFlowHashIv,
-  goldFlowalgorithm,
-  orderHasKey,
-  orderHasIv,
-  orderSalt,
-  orderalgorithm,
-} from '../config/env';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
 import { IRequestBody } from '../types/handle.type';
-import { IOrderParams as IOrder } from '../types/goldFlow.type';
 import { isValidObjectId } from '../utils/mongoose.util';
 import {
   ISaveOrUpdateUserCartCourse,
   IUpdateUserCartCourse,
   ISaveOrUpdateUserCartCoupon,
   IPostCartRequest,
-  // ICreateOrderRequest,
   IPostCheckRequest,
 } from '../viewModels/controllers/goldFlow.viewModel';
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
@@ -548,29 +535,25 @@ class GoldFlowController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "成功",
+            "message": "新增成功",
             "data": {
-              "amt": 6210,
-              "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
-              "totalPrice": 7022,
+              "_id": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66",
+              "totalPrice": 25922,
               "shoppingCart": [
                 {
-                  "_id": "6482b94965829859fd1d1838",
-                  "title": "狗狗訓練入門課程",
-                  "cover": "https://thumbs.dreamstime.com/z/dog-golden-retriever-jumping-autumn-leaves-autumnal-sunlight-77861618.jpg",
-                  "level": "初階課程",
-                  "time": 135.6,
-                  "total": 53,
-                  "instructorName": "RubyTest",
-                  "price": 3148,
+                  "_id": "6485ccabb62613a5e824e4dd",
+                  "title": "健康狗狗的飼養指南",
+                  "cover": "https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                  "level": "中階課程",
+                  "time": 20.5,
+                  "total": 75,
+                  "instructorName": "林耀恒",
+                  "price": 4618,
                   "discountPrice": null,
                   "isFree": false
                 }
               ],
-              "discountedPrice": 6210,
-              "couponPrice": 812,
-              "timeStamp": 1685801564,
-              "merchantOrderNo": "da0fc2143dc2b6ca599416e07077db85b75f1800845663b969543fecd4598b43"
+              "discountedPrice": 25321
             }
           }
         }
@@ -638,10 +621,7 @@ class GoldFlowController {
           type: "object",
           required: true,
           schema: {
-            "amt": 6210,
-            "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
-            "timeStamp": 1685802800,
-            "merchantOrderNo": "ef59949668ed65c41864ea71f75050562f58f1f372b2e49fdc5b9e7d65274894"
+            "_id": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66"
           }
         }
      * #swagger.responses[200] = {
@@ -651,15 +631,16 @@ class GoldFlowController {
             "isSuccess": true,
             "message": "查詢成功",
             "data": {
-              "merchantId": "MS148918186",
-              "version": "1.5",
-              "amt": 6210,
+              "_id": "648ebbf9b3b4705f1f48e1ff",
+              "merchantOrderNo": "affa2b5a2bd3440b9e2c1687075834",
+              "tradeSha": "1119920853A0A364AD9F0E0A2C9C42201A76C06A14EA97B86A4B15167FCC3968",
+              "tradeInfo": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad774cbbaa494a19958873201a1af9bfc599373915f9c2928d76695b710b9959cc13ae9642755aa5e05c7abbf00c9bc21fab30b787938de8f9f8f5c4fb1368b7a388dd22c9778c37238f5e7b979e015cdbf6216598b359eafb93658701860a354fc313b2cc56450668e4d3dc9d7559e4d4434aa7b389f106c4d9f79428c8ca0601",
+              "merchantID": "MS148918186",
+              "version": 1.5,
+              "amt": 25321,
+              "itemDesc": "6",
               "email": "Abc1231@gmail.com",
-              "timeStamp": 1685802800,
-              "merchantOrderNo": "647b4f2f41fda7e8d1f78253",
-              "itemDesc": "6482b94965829859fd1d1838,646f7e2f4802a2dbf6b3eb84,646f7e2f4802a2dbf6b3eb85",
-              "aesEncrypted": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad7d89182aef5d12aa625ffbef1e47f6e05157613038cc5437d505aa8e6c9c1c50cbe57a61c51698d43fa32367b1bd4d3b9da0ee2d4df5f35e087cd62d3cf870dd55f4c24fba5391c90dfc7f620f19c680c0e7bdc1ce85fff671232dba401ef2bad292ae5ba31cc024f3738452fedadaf165f4363d9d3b9d3100900402c8c469e824fe341b520390ab88e5c8b68078ae8a6780dd260c7f98c1ab464f3c1f46f157a11b064bd661c72dfd41604506de7e9c7fdc6602b42cf8eaa9f1f8a3021ff2c3",
-              "shaEncrypted": "8189C432B9F7BA618F65E246FB5C4E3B09380067C23AD0B8FBD8AC1E999138D3"
+              "timeStamp": 1687075834
             }
           }
         }
@@ -683,53 +664,18 @@ class GoldFlowController {
     //#endregion [ swagger說明文件 ]
     try {
       const user = req.user;
+      const { _id } = req.body;
 
       if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      const { amt, itemDesc, timeStamp, merchantOrderNo } = req.body;
+      else if (!_id) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
 
       const goldFlowService = new GoldFlowService();
+      const result = await goldFlowService.postCheckOrderAsync(user._id, _id);
 
-      const _merchantOrderNo = goldFlowService.orderIdAesDecrypt(
-        merchantOrderNo,
-        orderHasKey,
-        orderHasIv,
-        orderSalt,
-        orderalgorithm,
-      );
+      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
 
-      const isValidId = isValidObjectId(_merchantOrderNo);
-
-      if (!isValidId) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      const order: IOrder = {
-        amt: amt,
-        email: user.email,
-        timeStamp: timeStamp,
-        merchantOrderNo: _merchantOrderNo,
-        itemDesc: itemDesc,
-      };
-
-      const aesEncrypted = goldFlowService.createMpgAesEncrypt(
-        order,
-        goldFlowHashKey,
-        goldFlowHashIv,
-        goldFlowalgorithm,
-      );
-
-      const shaEncrypted = goldFlowService.createMpgShaEncrypt(
-        aesEncrypted,
-        goldFlowHashKey,
-        goldFlowHashIv,
-      );
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
-        merchantId,
-        version,
-        ...order,
-        aesEncrypted,
-        shaEncrypted,
-      });
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
       next(err);
     }
