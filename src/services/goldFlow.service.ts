@@ -721,7 +721,7 @@ class GoldFlowService {
     const order = await Order.findOne(
       { _id: _id, user: userId },
       {
-        _id: 0,
+        _id: 1,
         merchantID: 1,
         tradeSha: 1,
         tradeInfo: 1,
