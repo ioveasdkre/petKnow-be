@@ -19,6 +19,7 @@ interface ShoppingCartItem {
   _id: string;
   title: string;
   cover: string;
+  tagNames: string[];
   level: string | null;
   time: number;
   total: number;
