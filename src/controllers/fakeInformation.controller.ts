@@ -399,7 +399,7 @@ class FakeInformationController {
           required: true,
           schema: {
             "user": "645a39c19ea91c0447216cc6",
-            "tagsNames": [
+            "tagNames": [
               "貓咪食譜"
             ],
             "cover": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA",
@@ -413,8 +413,8 @@ class FakeInformationController {
             "enrollmentCount": 0,
             "totalTime": 43200,
             "totalNumber": 55,
-            "is_free": false,
-            "is_published": true,
+            "isFree": false,
+            "isPublished": true,
             "discountDate": "2023/05/01",
             "shelfDate": "2023/05/31",
             "createdAt": "2023/01/01",
@@ -510,9 +510,13 @@ class FakeInformationController {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
       }
 
-      await CourseHierarchy.create(data);
+      const newCourseHierarchy = await CourseHierarchy.create(data);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      if (!newCourseHierarchy) {
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
+      }
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, newCourseHierarchy._id.toString());
     } catch (err) {
       next(err);
     }

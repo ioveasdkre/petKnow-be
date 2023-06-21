@@ -225,9 +225,6 @@ class GoldFlowService {
         },
       },
       {
-        $unwind: '$tagNames', // 展开 uniqueTagNames 字段
-      },
-      {
         $lookup: {
           from: 'users',
           localField: 'user',
@@ -265,6 +262,7 @@ class GoldFlowService {
               _id: '$_id',
               title: '$title',
               cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
+              tagNames: '$tagNames' ,
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -293,7 +291,6 @@ class GoldFlowService {
               isFree: '$isFree',
             },
           },
-          uniqueTagNames: { $addToSet: '$tagNames' },
           courseIds: { $push: { $toString: '$_id' } },
         },
       },
@@ -303,6 +300,8 @@ class GoldFlowService {
         },
       },
     ]);
+
+    courseHierarchy.uniqueTagNames = [...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames))];
 
     return courseHierarchy;
   }
@@ -715,13 +714,7 @@ class GoldFlowService {
   //#region postCheckOrderAsync [ 確認訂單資料 ]
   /** 確認訂單資料 */
   async postCheckOrderAsync(userId: Types.ObjectId, orderId: string) {
-    const _id = this.orderIdAesDecrypt(
-      orderId,
-      orderHasKey,
-      orderHasIv,
-      orderSalt,
-      orderalgorithm,
-    );
+    const _id = this.orderIdAesDecrypt(orderId, orderHasKey, orderHasIv, orderSalt, orderalgorithm);
 
     const isValidId = isValidObjectId(_id);
 
