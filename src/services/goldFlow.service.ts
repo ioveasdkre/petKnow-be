@@ -225,9 +225,6 @@ class GoldFlowService {
         },
       },
       {
-        $unwind: '$tagNames', // 展开 uniqueTagNames 字段
-      },
-      {
         $lookup: {
           from: 'users',
           localField: 'user',
@@ -265,6 +262,7 @@ class GoldFlowService {
               _id: '$_id',
               title: '$title',
               cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
+              tagNames: '$tagNames' ,
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -293,7 +291,6 @@ class GoldFlowService {
               isFree: '$isFree',
             },
           },
-          uniqueTagNames: { $addToSet: '$tagNames' },
           courseIds: { $push: { $toString: '$_id' } },
         },
       },
@@ -303,6 +300,8 @@ class GoldFlowService {
         },
       },
     ]);
+
+    courseHierarchy.uniqueTagNames = [...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames))];
 
     return courseHierarchy;
   }
@@ -466,29 +465,6 @@ class GoldFlowService {
 
     if (!courseHierarchy || shoppingCartCount === 0) return 0;
 
-    const [platformCoupons] = await PlatformCoupons.aggregate([
-      {
-        $match: {
-          $and: [
-            { couponCode: couponCode },
-            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
-            { isEnabled: true },
-            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          couponPrice: '$price',
-        },
-      },
-      {
-        $limit: 1,
-      },
-    ]);
-
     const itemDesc = `${shoppingCartCount}`;
     delete courseHierarchy.uniqueTagNames;
     delete courseHierarchy.courseIds;
@@ -518,6 +494,38 @@ class GoldFlowService {
       createdAt: currentDate,
       updatedAt: currentDate,
     };
+
+    if (!couponCode) {
+      neweBpay.amt = courseHierarchy.totalPrice;
+      order.amt = courseHierarchy.totalPrice;
+
+      const newOrder = await this.createOrderAsync(neweBpay, order, courseHierarchy);
+
+      return newOrder;
+    }
+
+    const [platformCoupons] = await PlatformCoupons.aggregate([
+      {
+        $match: {
+          $and: [
+            { couponCode: couponCode },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            { isEnabled: true },
+            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          couponPrice: '$price',
+        },
+      },
+      {
+        $limit: 1,
+      },
+    ]);
 
     if (!platformCoupons.couponPrice) {
       neweBpay.amt = courseHierarchy.totalPrice;
@@ -706,13 +714,7 @@ class GoldFlowService {
   //#region postCheckOrderAsync [ 確認訂單資料 ]
   /** 確認訂單資料 */
   async postCheckOrderAsync(userId: Types.ObjectId, orderId: string) {
-    const _id = this.orderIdAesDecrypt(
-      orderId,
-      orderHasKey,
-      orderHasIv,
-      orderSalt,
-      orderalgorithm,
-    );
+    const _id = this.orderIdAesDecrypt(orderId, orderHasKey, orderHasIv, orderSalt, orderalgorithm);
 
     const isValidId = isValidObjectId(_id);
 

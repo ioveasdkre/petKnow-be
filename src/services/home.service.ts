@@ -389,7 +389,7 @@ class HomeService {
 
   //#region getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
   async getVisitorCourseDetailsAsync(courseId: string) {
-    const courses = await CourseHierarchy.aggregate([
+    const [courses] = await CourseHierarchy.aggregate([
       {
         $match: {
           $and: [{ isPublished: true }, { _id: new Types.ObjectId(courseId) }],
@@ -404,38 +404,67 @@ class HomeService {
         },
       },
       {
-        $group: {
-          _id: null,
+        $project: {
+          _id: 0, // 排除 _id 欄位
+          userId: '$user._id',
+          name: '$user.name',
+          courseIntroduction: '$description',
+          instructors: '$user.instructors',
           chapters: {
-            $push: {
-              title: '$chapters.title',
-              time: { $divide: ['$chapters.totalTime', 3600] },
-              total: '$chapters.totalNumber',
-              subchapters: {
-                $map: {
-                  input: '$chapters.subchapters',
-                  as: 'subchapter',
-                  in: {
-                    _id: '$$subchapter._id',
-                    title: '$$subchapter.title',
-                    time: { $divide: ['$$subchapter.time', 3600] },
+            $map: {
+              input: '$chapters',
+              as: 'chapter',
+              in: {
+                _id: '$$chapter._id',
+                title: '$$chapter.title',
+                time: '$$chapter.totalTime',
+                total: '$$chapter.totalNumber',
+                subchapters: {
+                  $map: {
+                    input: '$$chapter.subchapters',
+                    as: 'subchapter',
+                    in: {
+                      _id: '$$subchapter._id',
+                      title: '$$subchapter.title',
+                      time: '$$subchapter.time',
+                    },
                   },
                 },
               },
             },
-          }
-        },
-      },
-      {
-        $project: {
-          _id: 0, // 排除 _id 欄位
+          },
         },
       },
     ]);
 
-    return courses;
+    if (!courses)
+      return 0;
+
+    const lecturerRelatedCourses = await this.getLecturerRelatedCoursesAsync(courses.userId);
+    
+    return {courses, lecturerRelatedCourses};
   }
   //#endregion getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
+
+    //#region getLecturerRelatedCoursesAsync [ 講師相關課程 ]
+    async getLecturerRelatedCoursesAsync(userId: Types.ObjectId) {
+      const [lecturerRelatedCourses] = await CourseHierarchy.aggregate([
+        {
+          $match: {
+            $and: [{ isPublished: true }, { user: userId }],
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
+          },
+        },
+      ]);
+  
+      return lecturerRelatedCourses;
+    }
+    //#endregion getLecturerRelatedCoursesAsync [ 講師相關課程 ]  
 }
 
 export { HomeService };
