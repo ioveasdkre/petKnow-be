@@ -74,7 +74,6 @@ class FakeInformationService {
         const price = this.generateRandomInt(10000);
         const enrollmentCount = this.generateRandomInt(100000);
         const totalTime = this.generateRandomInt(600000);
-        const totalNumber = this.generateRandomInt(100);
         const isFree = this.generateRandomInt(10) === 0 ? true : false;
         const isPopular = 0 === this.generateRandomInt(10);
         const isPublished = this.generateRandomInt(10) > 0 ? true : false;
@@ -82,6 +81,7 @@ class FakeInformationService {
         const shelfDate = this.getRandomDate(createdAt, '2023/06/31');
         const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
         const chapterArr: IChapter[] = [];
+        let totalNumber = 0;
 
         const isDiscount = this.generateRandomInt(10) < 3 ? true : false;
 
@@ -100,7 +100,7 @@ class FakeInformationService {
           const chapter_sequence = k + 1;
           const chapter_title = chapter.title;
           const chapter_totalTime = this.generateRandomInt(totalTime);
-          const chapter_totalNumber = this.generateRandomInt(totalNumber);
+          let chapter_totalNumber = 0;
 
           const subchapters = chapter.subchapters;
           for (let l = 0; l < subchapters.length; l++) {
@@ -122,6 +122,8 @@ class FakeInformationService {
               fileType,
               time: subchapter_time,
             });
+
+            chapter_totalNumber++;
           }
 
           chapterArr.push({
@@ -132,6 +134,8 @@ class FakeInformationService {
             totalNumber: chapter_totalNumber,
             subchapters: subchapterArr,
           });
+
+          totalNumber += chapter_totalTime;
         }
 
         newData.push({

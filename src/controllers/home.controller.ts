@@ -299,7 +299,7 @@ class HomeController {
       const homeService = new HomeService();
       const result = await homeService.getVisitorCourseDetailsAsync(courseId);
 
-      if (!result)
+      if (result === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
