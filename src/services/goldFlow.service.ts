@@ -466,29 +466,6 @@ class GoldFlowService {
 
     if (!courseHierarchy || shoppingCartCount === 0) return 0;
 
-    const [platformCoupons] = await PlatformCoupons.aggregate([
-      {
-        $match: {
-          $and: [
-            { couponCode: couponCode },
-            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
-            { isEnabled: true },
-            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
-            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          couponPrice: '$price',
-        },
-      },
-      {
-        $limit: 1,
-      },
-    ]);
-
     const itemDesc = `${shoppingCartCount}`;
     delete courseHierarchy.uniqueTagNames;
     delete courseHierarchy.courseIds;
@@ -518,6 +495,38 @@ class GoldFlowService {
       createdAt: currentDate,
       updatedAt: currentDate,
     };
+
+    if (!couponCode) {
+      neweBpay.amt = courseHierarchy.totalPrice;
+      order.amt = courseHierarchy.totalPrice;
+
+      const newOrder = await this.createOrderAsync(neweBpay, order, courseHierarchy);
+
+      return newOrder;
+    }
+
+    const [platformCoupons] = await PlatformCoupons.aggregate([
+      {
+        $match: {
+          $and: [
+            { couponCode: couponCode },
+            { tagNames: { $in: courseHierarchy.uniqueTagNames } },
+            { isEnabled: true },
+            { startDate: { $lte: currentDate } }, // 判斷開始時間小於等於當前時間
+            { endDate: { $gte: currentDate } }, // 判斷結束時間大於等於當前時間
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          couponPrice: '$price',
+        },
+      },
+      {
+        $limit: 1,
+      },
+    ]);
 
     if (!platformCoupons.couponPrice) {
       neweBpay.amt = courseHierarchy.totalPrice;
