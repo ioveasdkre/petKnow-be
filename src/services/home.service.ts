@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { coverUrl, coverParamsUrl } from '../config/env';
+import { coverUrl, coverParamsUrl, movieUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { ISearchCourses } from '../types/home.type';
@@ -202,7 +202,7 @@ class HomeService {
                   default: null,
                 },
               },
-              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              time: '$totalTime',
               total: '$totalNumber',
               instructorName: { $arrayElemAt: ['$user.name', 0] },
               price: '$price',
@@ -298,7 +298,7 @@ class HomeService {
                   default: null,
                 },
               },
-              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              time: '$totalTime',
               total: '$totalNumber',
               instructorName: { $arrayElemAt: ['$user.name', 0] },
               price: '$price',
@@ -366,7 +366,7 @@ class HomeService {
                   default: null,
                 },
               },
-              time: { $round: [{ $divide: ['$totalTime', 3600] }, 1] },
+              time: '$totalTime',
               total: '$totalNumber',
               instructorName: { $arrayElemAt: ['$user.name', 0] },
               price: '$price',
@@ -389,10 +389,11 @@ class HomeService {
 
   //#region getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
   async getVisitorCourseDetailsAsync(courseId: string) {
-    const [courses] = await CourseHierarchy.aggregate([
+    const _courseId = new Types.ObjectId(courseId);
+    const [course] = await CourseHierarchy.aggregate([
       {
         $match: {
-          $and: [{ isPublished: true }, { _id: new Types.ObjectId(courseId) }],
+          $and: [{ isPublished: true }, { _id: _courseId }],
         },
       },
       {
@@ -404,29 +405,35 @@ class HomeService {
         },
       },
       {
+        $unwind: '$user',
+      },
+      {
         $project: {
           _id: 0, // 排除 _id 欄位
-          userId: '$user._id',
           name: '$user.name',
           courseIntroduction: '$description',
           instructors: '$user.instructors',
+          title: '$title',
           chapters: {
             $map: {
               input: '$chapters',
               as: 'chapter',
               in: {
                 _id: '$$chapter._id',
+                sequence: '$$chapter.sequence',
                 title: '$$chapter.title',
                 time: '$$chapter.totalTime',
-                total: '$$chapter.totalNumber',
+                total: { $round: [{ $divide: ['$$chapter.totalNumber', 3600] }, 1] },
                 subchapters: {
                   $map: {
                     input: '$$chapter.subchapters',
                     as: 'subchapter',
                     in: {
                       _id: '$$subchapter._id',
+                      sequence: '$$subchapter.sequence',
                       title: '$$subchapter.title',
                       time: '$$subchapter.time',
+                      fileName: { $concat: [movieUrl, '$$subchapter.fileName'] },
                     },
                   },
                 },
@@ -437,34 +444,36 @@ class HomeService {
       },
     ]);
 
-    if (!courses)
-      return 0;
+    if (!course) return 0;
 
-    const lecturerRelatedCourses = await this.getLecturerRelatedCoursesAsync(courses.userId);
-    
-    return {courses, lecturerRelatedCourses};
+    const lecturerRelatedCourses = await this.getLecturerRelatedCoursesAsync(
+      course.userId,
+      _courseId,
+    );
+
+    return { courses: course, lecturerRelatedCourses };
   }
   //#endregion getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
 
-    //#region getLecturerRelatedCoursesAsync [ 講師相關課程 ]
-    async getLecturerRelatedCoursesAsync(userId: Types.ObjectId) {
-      const [lecturerRelatedCourses] = await CourseHierarchy.aggregate([
-        {
-          $match: {
-            $and: [{ isPublished: true }, { user: userId }],
-          },
+  //#region getLecturerRelatedCoursesAsync [ 講師相關課程 ]
+  async getLecturerRelatedCoursesAsync(userId: Types.ObjectId, courseId: Types.ObjectId) {
+    const [lecturerRelatedCourses] = await CourseHierarchy.aggregate([
+      {
+        $match: {
+          $and: [{ isPublished: true }, { user: userId }, { _id: { $ne: courseId } }],
         },
-        {
-          $project: {
-            _id: 1,
-            cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
-          },
+      },
+      {
+        $project: {
+          _id: 1,
+          cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
         },
-      ]);
-  
-      return lecturerRelatedCourses;
-    }
-    //#endregion getLecturerRelatedCoursesAsync [ 講師相關課程 ]  
+      },
+    ]);
+
+    return lecturerRelatedCourses;
+  }
+  //#endregion getLecturerRelatedCoursesAsync [ 講師相關課程 ]
 }
 
 export { HomeService };
