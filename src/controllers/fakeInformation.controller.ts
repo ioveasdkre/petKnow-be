@@ -107,168 +107,6 @@ class FakeInformationController {
                         "fileName": "807306477?h=c67a24399e&app_id=122963",
                         "fileType": 0,
                         "time": 65127
-                      },
-                      {
-                        "_id": "A000001",
-                        "sequence": 2,
-                        "title": "飼養要求",
-                        "content": null,
-                        "fileName": "807306201?h=7231d9a2da&app_id=122963",
-                        "fileType": 0,
-                        "time": 8839
-                      },
-                      {
-                        "_id": "A000002",
-                        "sequence": 3,
-                        "title": "正確使用訓練工具",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 102660
-                      }
-                    ]
-                  },
-                  {
-                    "_id": "A00001",
-                    "sequence": 2,
-                    "title": "基本指令",
-                    "totalTime": 415334,
-                    "totalNumber": 9,
-                    "subchapters": [
-                      {
-                        "_id": "A000010",
-                        "sequence": 1,
-                        "title": "坐下指令",
-                        "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
-                        "fileType": 0,
-                        "time": 222140
-                      },
-                      {
-                        "_id": "A000011",
-                        "sequence": 2,
-                        "title": "握手指令",
-                        "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
-                        "fileType": 0,
-                        "time": 151515
-                      },
-                      {
-                        "_id": "A000012",
-                        "sequence": 3,
-                        "title": "躺下指令",
-                        "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
-                        "fileType": 0,
-                        "time": 101960
-                      }
-                    ]
-                  },
-                  {
-                    "_id": "A00002",
-                    "sequence": 3,
-                    "title": "問題行為處理",
-                    "totalTime": 226280,
-                    "totalNumber": 48,
-                    "subchapters": [
-                      {
-                        "_id": "A000020",
-                        "sequence": 1,
-                        "title": "拉扯繩索問題",
-                        "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
-                        "fileType": 0,
-                        "time": 187570
-                      },
-                      {
-                        "_id": "A000021",
-                        "sequence": 2,
-                        "title": "叫吠問題",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 30376
-                      },
-                      {
-                        "_id": "A000022",
-                        "sequence": 3,
-                        "title": "咬人問題",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 17780
-                      }
-                    ]
-                  },
-                  {
-                    "_id": "A00003",
-                    "sequence": 4,
-                    "title": "社交化訓練",
-                    "totalTime": 150778,
-                    "totalNumber": 4,
-                    "subchapters": [
-                      {
-                        "_id": "A000030",
-                        "sequence": 1,
-                        "title": "狗狗間相處",
-                        "content": null,
-                        "fileName": "807306201?h=7231d9a2da&app_id=122963",
-                        "fileType": 0,
-                        "time": 99763
-                      },
-                      {
-                        "_id": "A000031",
-                        "sequence": 2,
-                        "title": "與人類相處",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 119443
-                      },
-                      {
-                        "_id": "A000032",
-                        "sequence": 3,
-                        "title": "與其他動物相處",
-                        "content": null,
-                        "fileName": "807306201?h=7231d9a2da&app_id=122963",
-                        "fileType": 0,
-                        "time": 69779
-                      }
-                    ]
-                  },
-                  {
-                    "_id": "A00004",
-                    "sequence": 5,
-                    "title": "進階技巧",
-                    "totalTime": 467105,
-                    "totalNumber": 30,
-                    "subchapters": [
-                      {
-                        "_id": "A000040",
-                        "sequence": 1,
-                        "title": "跳躍指令",
-                        "content": null,
-                        "fileName": "807306201?h=7231d9a2da&app_id=122963",
-                        "fileType": 0,
-                        "time": 90429
-                      },
-                      {
-                        "_id": "A000041",
-                        "sequence": 2,
-                        "title": "捷徑指令",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 165719
-                      },
-                      {
-                        "_id": "A000042",
-                        "sequence": 3,
-                        "title": "尋找物品指令",
-                        "content": null,
-                        "fileName": "192191?h=be09c77984&app_id=122963",
-                        "fileType": 0,
-                        "time": 342810
                       }
                     ]
                   }
@@ -384,6 +222,71 @@ class FakeInformationController {
     }
   }
   //#endregion getAllCoupons [ 取得全部標籤資料 ]
+
+  //#region getUserCourseCountGreaterThanOne [ 讀取使用者開課數大於 1 ]
+  /** 讀取使用者開課數大於 1 */
+  static async getUserCourseCountGreaterThanOne(_req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["FakeInformation - 假資料 API"]
+     * #swagger.description = "讀取使用者開課數大於 1"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "查詢成功",
+            "data": [
+              {
+                "courseIds": [
+                  "6493d9bf127ca634f0eeab5c",
+                  "6493d9c1127ca634f0eeae6d",
+                  "6493d9c2127ca634f0eeafea",
+                  "6493d9c2127ca634f0eeb177",
+                  "6493d9c4127ca634f0eeb6af",
+                  "6493d9c4127ca634f0eeb734",
+                  "6493d9c4127ca634f0eeb875",
+                  "6493d9c4127ca634f0eeb96a",
+                  "6493d9c4127ca634f0eeb9fd",
+                  "6493d9c4127ca634f0eeba68",
+                  "6493d9c5127ca634f0eebb74"
+                ],
+                "userId": "6485bc644f8b667f7929159f"
+              }
+            ]
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "Failure"
+          }
+        }
+      * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+      */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const service = new FakeInformationService();
+      const result = await service.getUserCourseCountGreaterThanOneAsync();
+
+      if (!result)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion getUserCourseCountGreaterThanOne [ 讀取使用者開課數大於 1 ]
 
   //#region createCourseHierarchys [ 新增一筆課程彙總資料 ]
   /** 新增一筆課程彙總資料 */
@@ -516,7 +419,12 @@ class FakeInformationController {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
       }
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, newCourseHierarchy._id.toString());
+      return handleResponse(
+        res,
+        HttpStatusCode.OK,
+        HttpMessage.CreateSuccess,
+        newCourseHierarchy._id.toString(),
+      );
     } catch (err) {
       next(err);
     }
