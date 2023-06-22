@@ -410,10 +410,12 @@ class HomeService {
       {
         $project: {
           _id: 0, // 排除 _id 欄位
+          userId: '$user._id',
           name: '$user.name',
           courseIntroduction: '$description',
           instructors: '$user.instructors',
           title: '$title',
+          shelfDate: '$shelfDate',
           chapters: {
             $map: {
               input: '$chapters',
@@ -451,16 +453,26 @@ class HomeService {
       _courseId,
     );
 
-    return { courses: course, lecturerRelatedCourses };
+    delete course.userId;
+
+    return { course: course, lecturerRelatedCourses };
   }
   //#endregion getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
 
   //#region getLecturerRelatedCoursesAsync [ 講師相關課程 ]
   async getLecturerRelatedCoursesAsync(userId: Types.ObjectId, courseId: Types.ObjectId) {
-    const [lecturerRelatedCourses] = await CourseHierarchy.aggregate([
+    const lecturerRelatedCourses = await CourseHierarchy.aggregate([
       {
         $match: {
           $and: [{ isPublished: true }, { user: userId }, { _id: { $ne: courseId } }],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
         },
       },
       {
