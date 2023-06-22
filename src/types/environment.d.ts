@@ -9,6 +9,7 @@ declare global {
       MONGODB_URL: string;
       COVERPARAMS_URL: string;
       COVER_URL: string;
+      MOVIE_URL: string;
       ENV: 'test' | 'dev' | 'prod';
       JWT_SECRET: string;
       MERCHANTID: string;

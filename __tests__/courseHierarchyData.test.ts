@@ -167,17 +167,250 @@ const petCovers = [
   'photo-1623387641168-d9803ddd3f35',
 ];
 
-const fileNames: string[] = [
-  '807306477?h=c67a24399e&app_id=122963',
-  '807306201?h=7231d9a2da&app_id=122963',
-  '192191?h=be09c77984&app_id=122963',
+const dogFileNames: { id: string; time: number }[] = [
+  {
+    id: '45272625',
+    time: 219,
+  },
+  {
+    id: '40413733',
+    time: 98,
+  },
+  {
+    id: '32436181',
+    time: 60,
+  },
+  {
+    id: '192191',
+    time: 43,
+  },
+  {
+    id: '24106008',
+    time: 204,
+  },
+  {
+    id: '408190778',
+    time: 8,
+  },
+  {
+    id: '507507932',
+    time: 16,
+  },
+  {
+    id: '569667333',
+    time: 34,
+  },
+  {
+    id: '13539564',
+    time: 16,
+  },
+  {
+    id: '18043585',
+    time: 266,
+  },
+  {
+    id: '553706103',
+    time: 35,
+  },
+  {
+    id: '779909530',
+    time: 62,
+  },
+  {
+    id: '817863657',
+    time: 26,
+  },
+  {
+    id: '172936805',
+    time: 18,
+  },
+  {
+    id: '103125103',
+    time: 45,
+  },
+  {
+    id: '114316500',
+    time: 244,
+  },
+];
+
+const catFileNames: { id: string; time: number }[] = [
+  {
+    id: '10985679',
+    time: 258,
+  },
+  {
+    id: '75332972',
+    time: 121,
+  },
+  {
+    id: '89380851',
+    time: 8,
+  },
+  {
+    id: '658176837',
+    time: 162,
+  },
+  {
+    id: '135680918',
+    time: 211,
+  },
+  {
+    id: '139142769',
+    time: 60,
+  },
+  {
+    id: '179519510',
+    time: 12,
+  },
+  {
+    id: '783267876',
+    time: 12,
+  },
+  {
+    id: '70055264',
+    time: 25,
+  },
+  {
+    id: '402479720',
+    time: 6,
+  },
+  {
+    id: '124785259',
+    time: 54,
+  },
+  {
+    id: '149949764',
+    time: 200,
+  },
+  {
+    id: '10271609',
+    time: 85,
+  },
+  {
+    id: '783372818',
+    time: 104,
+  },
+  {
+    id: '793678108',
+    time: 61,
+  },
+  {
+    id: '295237897',
+    time: 21,
+  },
+];
+
+const petFileNames: { id: string; time: number }[] = [
+  {
+    id: '300565039',
+    time: 30,
+  },
+  {
+    id: '114960135',
+    time: 29,
+  },
+  {
+    id: '624938974',
+    time: 32,
+  },
+  {
+    id: '92823193',
+    time: 119,
+  },
+  {
+    id: '357888074',
+    time: 59,
+  },
+  {
+    id: '715678375',
+    time: 40,
+  },
+  {
+    id: '32823310',
+    time: 630,
+  },
+  {
+    id: '126758112',
+    time: 691,
+  },
+  {
+    id: '134203700',
+    time: 206,
+  },
+  {
+    id: '8327538',
+    time: 127,
+  },
+  {
+    id: '144604926',
+    time: 123,
+  },
+  {
+    id: '25335454',
+    time: 46,
+  },
+  {
+    id: '353594450',
+    time: 100,
+  },
+  {
+    id: '24480876',
+    time: 63,
+  },
+  {
+    id: '673384815',
+    time: 19,
+  },
+  {
+    id: '6223784',
+    time: 251,
+  },
+  {
+    id: '631506102',
+    time: 96,
+  },
+  {
+    id: '69582864',
+    time: 179,
+  },
+  {
+    id: '28260330',
+    time: 47,
+  },
+  {
+    id: '506067866',
+    time: 61,
+  },
+  {
+    id: '118268390',
+    time: 83,
+  },
+  {
+    id: '62084943',
+    time: 161,
+  },
+  {
+    id: '507273049',
+    time: 90,
+  },
+  {
+    id: '253442215',
+    time: 233,
+  },
+  {
+    id: '351545976',
+    time: 59,
+  }
 ];
 
 const courseHierarchys = {
   dogCovers,
   catCovers,
   petCovers,
-  fileNames,
+  dogFileNames,
+  catFileNames,
+  petFileNames,
   dagData: [dogTrainings, dogBreeding, dogBreed, dogGames, dogHealthCheckTips, dogEating],
   catData: [
     catRecipes,

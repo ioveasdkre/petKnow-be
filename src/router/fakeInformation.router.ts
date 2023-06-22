@@ -7,6 +7,7 @@ router
   .get('/v1/fakeInformation/getAllUserId', controller.getAllUserId)
   .get('/v1/fakeInformation/getAllCourseHierarchys', controller.getAllCourseHierarchys)
   .get('/v1/fakeInformation/getAllCoupons', controller.getAllCoupons)
+  .get('/v1/fakeInformation/getUserCourseCountGreaterThanOne', controller.getUserCourseCountGreaterThanOne)
   .get('/v1/fakeInformation/generateCourseHierarchysData', controller.generateCourseHierarchysData)
   .get('/v1/fakeInformation/generateCouponsData', controller.generateCouponsData)
   .get('/v1/fakeInformation/generateCourseTagData', controller.generateCourseTagData)

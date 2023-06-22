@@ -38,7 +38,7 @@ class FakeInformationService {
     users: string[],
     data: courseHierarchyType[][],
     covers: string[],
-    fileNames: string[],
+    fileNames: { id: string; time: number }[],
     v: number,
   ) {
     const coversLength = covers.length;
@@ -55,6 +55,8 @@ class FakeInformationService {
       for (let j = 0; j < dataIndex.length; j++) {
         let discountPrice;
         let discountDate;
+        let totalTime = 0;
+        let totalNumber = 0;
 
         const courseHierarchy = dataIndex[j];
         tagNameArr.push(...courseHierarchy.tag);
@@ -73,7 +75,6 @@ class FakeInformationService {
         const level = this.generateRandomInt(4);
         const price = this.generateRandomInt(10000);
         const enrollmentCount = this.generateRandomInt(100000);
-        const totalTime = this.generateRandomInt(600000);
         const isFree = this.generateRandomInt(10) === 0 ? true : false;
         const isPopular = 0 === this.generateRandomInt(10);
         const isPublished = this.generateRandomInt(10) > 0 ? true : false;
@@ -81,7 +82,6 @@ class FakeInformationService {
         const shelfDate = this.getRandomDate(createdAt, '2023/06/31');
         const updatedAt = this.getRandomDate(createdAt, '2023/06/31');
         const chapterArr: IChapter[] = [];
-        let totalNumber = 0;
 
         const isDiscount = this.generateRandomInt(10) < 3 ? true : false;
 
@@ -93,14 +93,15 @@ class FakeInformationService {
 
         const chapters = courseHierarchy.chapters;
         for (let k = 0; k < chapters.length; k++) {
+          let chapter_totalTime = 0;
+          let chapter_totalNumber = 0;
+
           const subchapterArr: ISubchapter[] = [];
           const chapter = chapters[k];
 
           const chapter_id = `${a_z[i]}00${v}${j}${k}`;
           const chapter_sequence = k + 1;
           const chapter_title = chapter.title;
-          const chapter_totalTime = this.generateRandomInt(totalTime);
-          let chapter_totalNumber = 0;
 
           const subchapters = chapter.subchapters;
           for (let l = 0; l < subchapters.length; l++) {
@@ -110,9 +111,9 @@ class FakeInformationService {
             const subchapter_id = `${a_z[i]}00${v}${j}${k}${l}`;
             const subchapter_sequence = l + 1;
             const subchapter_title = subchapter.title;
-            const fileName = fileNames[fileNameIndex];
+            const fileName = fileNames[fileNameIndex].id;
             const fileType = 0;
-            const subchapter_time = this.generateRandomInt(chapter_totalTime);
+            const subchapter_time = fileNames[fileNameIndex].time;
 
             subchapterArr.push({
               _id: subchapter_id,
@@ -123,6 +124,7 @@ class FakeInformationService {
               time: subchapter_time,
             });
 
+            chapter_totalTime += subchapter_time;
             chapter_totalNumber++;
           }
 
@@ -135,7 +137,8 @@ class FakeInformationService {
             subchapters: subchapterArr,
           });
 
-          totalNumber += chapter_totalTime;
+          totalTime += chapter_totalTime;
+          totalNumber += chapter_totalNumber;
         }
 
         newData.push({
@@ -178,9 +181,70 @@ class FakeInformationService {
     return couponCode;
   }
 
+  async getUserCourseCountGreaterThanOneAsync() {
+    const result = await CourseHierarchy.aggregate([
+      {
+        $match: {
+          isPublished: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $group: {
+          _id: '$user._id',
+          courseIds: { $push: '$_id' },
+          totalCourses: { $sum: 1 },
+        },
+      },
+      {
+        $match: {
+          totalCourses: { $gt: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: '$_id',
+          courseIds: 1,
+        },
+      },
+      {
+        $sort: {
+          userId: 1,
+        },
+      },
+      {
+        $limit: 20,
+      },
+    ]);
+    
+    if (result.length === 0) return false;
+
+    return result;
+  }
+
   async courseHierarchyManyData() {
-    const { dogCovers, catCovers, petCovers, fileNames, dagData, catData, petData } =
-      courseHierarchys;
+    const {
+      dogCovers,
+      catCovers,
+      petCovers,
+      dogFileNames,
+      catFileNames,
+      petFileNames,
+      dagData,
+      catData,
+      petData,
+    } = courseHierarchys;
     const newData: ICourse[] = [];
 
     const users: string[] = await User.distinct('_id');
@@ -189,18 +253,18 @@ class FakeInformationService {
 
     if (!deleteCourseHierarchy.acknowledged) return false;
 
-    for (let i = 0; i < 31; i++) {
+    for (let i = 0; i < 91; i++) {
       if (i % 3 === 0)
         newData.push(
-          ...this.generateRandomCourseHierarchy(users, dagData, dogCovers, fileNames, i),
+          ...this.generateRandomCourseHierarchy(users, dagData, dogCovers, dogFileNames, i),
         );
       else if (i % 3 === 1)
         newData.push(
-          ...this.generateRandomCourseHierarchy(users, catData, catCovers, fileNames, i),
+          ...this.generateRandomCourseHierarchy(users, catData, catCovers, catFileNames, i),
         );
       else if (i % 3 === 2)
         newData.push(
-          ...this.generateRandomCourseHierarchy(users, petData, petCovers, fileNames, i),
+          ...this.generateRandomCourseHierarchy(users, petData, petCovers, petFileNames, i),
         );
     }
 
