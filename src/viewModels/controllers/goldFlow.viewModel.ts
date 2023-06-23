@@ -14,11 +14,15 @@ interface IPostCheckRequest {
   _id: string;
 }
 
+interface IPostNotify {
+  TradeInfo: string;
+}
+
 export {
   ICreateCartCourse as ISaveOrUpdateUserCartCourse,
   ICreateCartCourse as IUpdateUserCartCourse,
   ICreateCartCoupon as ISaveOrUpdateUserCartCoupon,
   ICourseIdsAndCouponCodeRequest as IPostCartRequest,
-  ICourseIdsAndCouponCodeRequest as ICreateOrderRequest,
   IPostCheckRequest,
+  IPostNotify,
 };

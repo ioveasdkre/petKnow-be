@@ -35,6 +35,7 @@ router
     verifyJwtToken,
     controller.createOrder,
   )
-  .post('/v1/goldFlow/checkOrder', verifyJwtToken<IPostCheckRequest>, controller.postCheckOrder);
+  .post('/v1/goldFlow/checkOrder', verifyJwtToken<IPostCheckRequest>, controller.postCheckOrder)
+  .post('/v1/goldFlow/notify', controller.postNotify);
 
 export { router as goldFlowRouter };
