@@ -337,10 +337,13 @@ class GoldFlowController {
       const currentDate = new Date();
       const goldFlowService = new GoldFlowService();
       const shoppingCart = await goldFlowService.getUserCartAsync(user._id, currentDate);
-
-      if (!shoppingCart) return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
-
       const youMightLike = await goldFlowService.getYouMightLike(currentDate);
+
+      if (!shoppingCart)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+          shoppingCart: [],
+          youMightLike,
+        });
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
         ...shoppingCart,
@@ -437,9 +440,13 @@ class GoldFlowController {
 
       const currentDate = new Date();
       const goldFlowService = new GoldFlowService();
+      const youMightLike = await goldFlowService.getYouMightLike(currentDate);
 
-      if (!courseIds || courseIds.length === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      if (courseIds.length === 0)
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
+          shoppingCart: [],
+          youMightLike,
+        });
 
       const courseHierarchy = await goldFlowService.getCartAsync(
         courseIds,
@@ -448,11 +455,12 @@ class GoldFlowController {
       );
 
       if (!courseHierarchy)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+        return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
+          shoppingCart: [],
+          youMightLike,
+        });
 
-      const youMightLike = await goldFlowService.getYouMightLike(currentDate);
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, {
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, {
         ...courseHierarchy,
         youMightLike,
       });
@@ -733,10 +741,9 @@ class GoldFlowController {
 
       if (result === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-      else if (result === 1)
-        return handleResponse(res, HttpStatusCode.BadRequest, '結帳完成失敗');
+      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '結帳完成失敗');
       else if (result === 2)
-      return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
+        return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
     } catch (err) {
