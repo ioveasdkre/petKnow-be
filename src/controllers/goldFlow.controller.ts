@@ -10,6 +10,7 @@ import {
   ISaveOrUpdateUserCartCoupon,
   IPostCartRequest,
   IPostCheckRequest,
+  IPostNotify,
 } from '../viewModels/controllers/goldFlow.viewModel';
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
@@ -516,11 +517,7 @@ class GoldFlowController {
 
   //#region createOrder [ 新增訂單 ]
   /** 新增訂單 */
-  static async createOrder(
-    req: IRequestJwtBody,
-    res: Response,
-    next: NextFunction,
-  ) {
+  static async createOrder(req: IRequestJwtBody, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -582,10 +579,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.InvalidCredentials);
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.orderProcessingAsync(
-        user._id,
-        user.email,
-      );
+      const result = await goldFlowService.orderProcessingAsync(user._id, user.email);
 
       if (result === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
@@ -672,8 +666,10 @@ class GoldFlowController {
       const goldFlowService = new GoldFlowService();
       const result = await goldFlowService.postCheckOrderAsync(user._id, _id);
 
-      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
+      if (result === 0)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
@@ -681,6 +677,73 @@ class GoldFlowController {
     }
   }
   //#endregion postCheckOrder [ 讀取確認訂單資料 ]
+
+  //#region postNotify [ 結帳完成 ]
+  /** 結帳完成 */
+  static async postNotify(req: IRequestBody<IPostNotify>, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "結帳完成"
+     * #swagger.security = [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "TradeInfo": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "成功",
+          }
+        }
+     * #swagger.responses[400] = {
+          description: "請求錯誤",
+          schema: {
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "錯誤的請求"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema: {
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const { TradeInfo } = req.body;
+
+      const goldFlowService = new GoldFlowService();
+      const result = await goldFlowService.postNotifyAsync(TradeInfo);
+
+      if (result === 0)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, '結帳完成失敗');
+      else if (result === 2)
+      return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion postNotify [ 結帳完成 ]
 }
 
 export { GoldFlowController };
