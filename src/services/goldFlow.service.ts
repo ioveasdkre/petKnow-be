@@ -262,7 +262,7 @@ class GoldFlowService {
               _id: '$_id',
               title: '$title',
               cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
-              tagNames: '$tagNames' ,
+              tagNames: '$tagNames',
               level: {
                 $switch: {
                   branches: Object.entries(Level).map(([level, levelName]) => ({
@@ -301,7 +301,9 @@ class GoldFlowService {
       },
     ]);
 
-    courseHierarchy.uniqueTagNames = [...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames))];
+    courseHierarchy.uniqueTagNames = [
+      ...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames)),
+    ];
 
     return courseHierarchy;
   }
@@ -874,6 +876,39 @@ class GoldFlowService {
     return JSON.parse(result);
   }
   //#endregion createMpgAesDecrypt [ 建立 MpgAesDecrypt，用於對交易資訊進行 AES 解密。 ]
+
+  //#region postNotifyAsync [ 結帳完成 ]
+  /** 結帳完成 */
+  async postNotifyAsync(tradeInfo: string) {
+    const info = this.createMpgAesDecrypt(
+      tradeInfo,
+      goldFlowHashKey,
+      goldFlowHashIv,
+      goldFlowalgorithm,
+    );
+
+    const order = await Order.findOne({ merchantOrderNo: info.Result.MerchantOrderNo });
+
+    if (!order) return 0;
+
+    const result = await Order.findByIdAndUpdate(
+      order._id,
+      {
+        isPayment: true,
+        updatedAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (!result) return 1;
+
+    const state = ShoppingCart.deleteOne({ user: result.user });
+
+    if (!state) return 2;
+
+    return result;
+  }
+  //#endregion postNotifyAsync [ 結帳完成 ]
 }
 
 export { GoldFlowService };
