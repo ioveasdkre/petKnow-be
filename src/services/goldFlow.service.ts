@@ -301,9 +301,11 @@ class GoldFlowService {
       },
     ]);
 
-    courseHierarchy.uniqueTagNames = [
-      ...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames)),
-    ];
+    if (courseHierarchy?.uniqueTagNames) {
+      courseHierarchy.uniqueTagNames = [
+        ...new Set(courseHierarchy.shoppingCart.flatMap(item => item.tagNames)),
+      ];
+    }
 
     return courseHierarchy;
   }
@@ -468,9 +470,6 @@ class GoldFlowService {
     if (!courseHierarchy || shoppingCartCount === 0) return 0;
 
     const itemDesc = `${shoppingCartCount}`;
-    delete courseHierarchy.uniqueTagNames;
-    delete courseHierarchy.courseIds;
-    delete courseHierarchy.courseIdsStr;
 
     const uuid = uuidv4();
     const withoutHyphens = uuid.replace(/-/g, '');
@@ -528,6 +527,10 @@ class GoldFlowService {
         $limit: 1,
       },
     ]);
+
+    delete courseHierarchy.uniqueTagNames;
+    delete courseHierarchy.courseIds;
+    delete courseHierarchy.courseIdsStr;
 
     if (!platformCoupons.couponPrice) {
       neweBpay.amt = courseHierarchy.totalPrice;
