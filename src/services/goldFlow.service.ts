@@ -291,6 +291,7 @@ class GoldFlowService {
               isFree: '$isFree',
             },
           },
+          uniqueTagNames: { $addToSet: '$tagNames' },
           courseIds: { $push: { $toString: '$_id' } },
         },
       },
