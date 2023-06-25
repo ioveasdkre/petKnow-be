@@ -906,7 +906,7 @@ class GoldFlowService {
 
     if (!result) return 1;
 
-    const state = ShoppingCart.deleteOne({ user: result.user });
+    const state = await ShoppingCart.deleteOne({ user: result.user });
 
     if (!state) return 2;
 
