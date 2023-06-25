@@ -479,6 +479,7 @@ class HomeService {
         $project: {
           _id: 1,
           cover: { $concat: [coverUrl, '$cover', coverParamsUrl] },
+          title: '$title',
         },
       },
     ]);
