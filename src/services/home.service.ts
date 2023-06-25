@@ -412,6 +412,7 @@ class HomeService {
           _id: 0, // 排除 _id 欄位
           userId: '$user._id',
           name: '$user.name',
+          cover: '$cover',
           courseIntroduction: '$description',
           instructors: '$user.instructors',
           title: '$title',
