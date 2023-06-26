@@ -891,23 +891,20 @@ class GoldFlowService {
       goldFlowalgorithm,
     );
 
-    const order = await Order.findOne({ merchantOrderNo: info.Result.MerchantOrderNo });
+    const merchantOrderNo = info.Result.MerchantOrderNo
 
-    if (!order) return 0;
-
-    const result = await Order.findByIdAndUpdate(
-      order._id,
+    const result = await Order.findOneAndUpdate(
+      { merchantOrderNo: merchantOrderNo },
       {
         $set: { isPayment: true, updatedAt: new Date() },
       },
-      { new: true },
     );
 
-    if (!result) return 1;
+    if (!result) return 0;
 
     const state = await ShoppingCart.deleteOne({ user: result.user });
 
-    if (!state) return 2;
+    if (!state) return 1;
 
     return result;
   }
