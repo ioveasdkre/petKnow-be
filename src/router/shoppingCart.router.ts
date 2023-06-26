@@ -10,4 +10,6 @@ router
   .post(verifyJwtToken, controller.postShoppingCart)
   .delete(controller.deleteShoppingCarts);
 
+router.route('/v1/shoppingCart/:userId').get(controller.getShoppingCartUser);
+
 export { router as shoppingCartRouter };
