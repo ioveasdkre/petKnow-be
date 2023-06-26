@@ -501,7 +501,7 @@ class GoldFlowService {
       delete courseHierarchy.uniqueTagNames;
       delete courseHierarchy.courseIds;
       delete courseHierarchy.courseIdsStr;
-  
+
       neweBpay.amt = courseHierarchy.totalPrice;
       order.amt = courseHierarchy.totalPrice;
 
@@ -895,22 +895,29 @@ class GoldFlowService {
       goldFlowalgorithm,
     );
 
+    console.log('info:', info);
+
     const merchantOrderNo = info.Result.MerchantOrderNo;
 
-    const result = await Order.findOneAndUpdate(
+    console.log('merchantOrderNo:', merchantOrderNo);
+
+    const putOrder = await Order.findOneAndUpdate(
       { merchantOrderNo: merchantOrderNo },
       {
         $set: { isPayment: true, updatedAt: new Date() },
       },
     );
 
-    if (!result) return 0;
+    console.log('putOrder:', putOrder);
 
-    const state = await ShoppingCart.deleteOne({ user: result.user });
+    if (!putOrder) return 0;
 
-    if (!state) return 1;
+    const deleteShoppingCart = await ShoppingCart.deleteOne({ user: putOrder.user });
+    console.log('deleteShoppingCart:', deleteShoppingCart);
 
-    return result;
+    if (!deleteShoppingCart) return 1;
+
+    return putOrder;
   }
   //#endregion postNotifyAsync [ 結帳完成 ]
 }
