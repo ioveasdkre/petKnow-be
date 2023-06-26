@@ -729,10 +729,15 @@ class GoldFlowController {
     */
     //#endregion [ swagger說明文件 ]
     try {
+      console.log('----------Notify Start----------');
+      console.log('req.body:', req.body);
       const { TradeInfo } = req.body;
+      console.log('TradeInfo:', TradeInfo);
 
       const goldFlowService = new GoldFlowService();
       const result = await goldFlowService.postNotifyAsync(TradeInfo);
+      console.log('result:', result);
+      console.log('----------Notify End----------');
 
       if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
       else if (result === 1)
@@ -740,6 +745,7 @@ class GoldFlowController {
 
       return handleResponse(res, HttpStatusCode.OK, '付款完成');
     } catch (err) {
+      console.log('----------Notify End----------');
       next(err);
     }
   }
