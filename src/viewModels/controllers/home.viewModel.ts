@@ -4,6 +4,4 @@ interface IGetSearchRequest extends ParsedQs {
   q: string;
 }
 
-export {
-  IGetSearchRequest,
-};
+export { IGetSearchRequest };

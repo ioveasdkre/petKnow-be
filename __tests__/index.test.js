@@ -35,10 +35,10 @@
 //       )
 //     }
 //   })
-  
+
 // });
 describe('math', () => {
-	test('math', async () => {
-    expect(3*3).toBe(9)
-  })
+  test('math', async () => {
+    expect(3 * 3).toBe(9);
+  });
 });

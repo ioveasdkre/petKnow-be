@@ -43,7 +43,7 @@ const verifyJwtToken = async <T = void>(
   } catch (err) {
     next(err);
   }
-}
+};
 
 const verifyObjectIds = (
   req: IRequestBody<IVerifyObjectIdsRequest>,

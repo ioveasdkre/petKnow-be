@@ -401,7 +401,7 @@ const petFileNames: { id: string; time: number }[] = [
   {
     id: '351545976',
     time: 59,
-  }
+  },
 ];
 
 const courseHierarchys = {

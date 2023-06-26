@@ -693,11 +693,6 @@ class GoldFlowController {
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
      * #swagger.description = "結帳完成"
-     * #swagger.security = [
-          {
-            "apiKeyAuth": []
-          }
-        ]
      * #swagger.parameters["body"] = {
           description: "資料格式",
           in: "body",
@@ -739,9 +734,9 @@ class GoldFlowController {
       const goldFlowService = new GoldFlowService();
       const result = await goldFlowService.postNotifyAsync(TradeInfo);
 
-      if (result === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
-      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
+      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
 
       return handleResponse(res, HttpStatusCode.OK, '付款完成');
     } catch (err) {
