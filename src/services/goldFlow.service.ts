@@ -498,6 +498,10 @@ class GoldFlowService {
     };
 
     if (!couponCode) {
+      delete courseHierarchy.uniqueTagNames;
+      delete courseHierarchy.courseIds;
+      delete courseHierarchy.courseIdsStr;
+  
       neweBpay.amt = courseHierarchy.totalPrice;
       order.amt = courseHierarchy.totalPrice;
 
@@ -891,7 +895,7 @@ class GoldFlowService {
       goldFlowalgorithm,
     );
 
-    const merchantOrderNo = info.Result.MerchantOrderNo
+    const merchantOrderNo = info.Result.MerchantOrderNo;
 
     const result = await Order.findOneAndUpdate(
       { merchantOrderNo: merchantOrderNo },

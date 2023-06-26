@@ -227,7 +227,7 @@ class FakeInformationService {
         $limit: 20,
       },
     ]);
-    
+
     if (result.length === 0) return false;
 
     return result;
