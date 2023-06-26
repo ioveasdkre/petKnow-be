@@ -164,7 +164,7 @@ class ShoppingCartController {
   //#region deleteShoppingCarts [ 刪除所有資料 ]
   /** 刪除所有資料 */
   static async deleteShoppingCarts(
-    _req: IRequestJwtBody,
+    _req: Request,
     res: Response,
     next: NextFunction,
   ) {
