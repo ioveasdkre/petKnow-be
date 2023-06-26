@@ -84,7 +84,7 @@ class HomeController {
       next(err);
     }
   }
-  //#endregion getIndex [ 首頁 ]+
+  //#endregion getIndex [ 首頁 ]
 
   //#region getSearch [ 搜尋關鍵字 ]
   /** 搜尋關鍵字 */
