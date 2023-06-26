@@ -731,7 +731,7 @@ class GoldFlowController {
     try {
       console.log('----------Notify Start----------');
       console.log('req.body:', req.body);
-      const { TradeInfo } = req.body;
+      const TradeInfo = req.body.TradeInfo;
       console.log('TradeInfo:', TradeInfo);
 
       const goldFlowService = new GoldFlowService();
