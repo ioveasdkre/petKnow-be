@@ -1,20 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import { ShoppingCart } from '../connections/mongoDB';
-import { IShoppingCart, IShoppingCartModel } from '../models/shoppingCart.model';
+import { Order } from '../connections/mongoDB';
+import { IOrder, IOrderModel } from '../models/order.model';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { CRUDService } from '../services/shares/crud.service';
-import { IPostShoppingCart } from '../viewModels/controllers/shoppingCart.viewModel';
-import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
-class ShoppingCartController {
-  //#region getShoppingCarts [ 讀取購物車資料表所有資料 ]
-  /** 讀取購物車資料表所有資料 */
-  static async getShoppingCarts(_req: Request, res: Response, next: NextFunction) {
+class OrderController {
+  //#region getOrders [ 讀取訂單資料表所有資料 ]
+  /** 讀取訂單資料表所有資料 */
+  static async getOrders(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
-     * #swagger.description = "讀取購物車資料表所有資料"
+     * #swagger.tags = ["Order - 訂單資料表 API"]
+     * #swagger.description = "讀取訂單資料表所有資料"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -55,8 +53,8 @@ class ShoppingCartController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const _CRUDService = new CRUDService<IShoppingCartModel>(ShoppingCart);
-      const result: IShoppingCart[] = await _CRUDService.getAll();
+      const _CRUDService = new CRUDService<IOrderModel>(Order);
+      const result: IOrder[] = await _CRUDService.getAll();
 
       if (result.length === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.NotFound);
@@ -66,37 +64,15 @@ class ShoppingCartController {
       next(err);
     }
   }
-  //#endregion getShoppingCarts [ 讀取購物車資料表所有資料 ]
+  //#endregion getOrders [ 讀取訂單資料表所有資料 ]
 
-  //#region postShoppingCart [ 新增一筆購物車資料 ]
-  /** 新增一筆購物車資料 */
-  static async postShoppingCart(
-    req: IRequestJwtBody<IPostShoppingCart>,
-    res: Response,
-    next: NextFunction,
-  ) {
+  //#region getOrder [ 讀取一筆訂單資料 ]
+  /** 讀取一筆訂單資料 */
+  static async getOrder(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
-     * #swagger.description = "新增一筆購物車資料"
-     * #swagger.security = [
-          {
-            "apiKeyAuth": []
-          }
-        ]
-     * #swagger.parameters["body"] = {
-          description: "資料格式",
-          in: "body",
-          type: "object",
-          required: true,
-          schema: {
-            "courses": [
-              "6482b94965829859fd1d1838",
-              "646f7e2f4802a2dbf6b3eb84",
-              "646f7e2f4802a2dbf6b3eb85"
-            ]
-          }
-        }
+     * #swagger.tags = ["Order - 訂單資料表 API"]
+     * #swagger.description = "讀取一筆訂單資料"
      * #swagger.responses[200] = {
           description: "成功",
           schema: {
@@ -135,22 +111,10 @@ class ShoppingCartController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      const user = req.user;
+      const orderId = req.params.orderId;
 
-      if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      const { courses } = req.body;
-
-      if (!courses || courses.length === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-
-      const shoppingCart = {
-        user: user._id,
-        courses,
-      };
-
-      const _CRUDService = new CRUDService<IShoppingCartModel>(ShoppingCart);
-      const result = await _CRUDService.create(shoppingCart);
+      const _CRUDService = new CRUDService<IOrderModel>(Order);
+      const result = await _CRUDService.getById(orderId);
 
       if (!result) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
 
@@ -159,19 +123,15 @@ class ShoppingCartController {
       next(err);
     }
   }
-  //#endregion postShoppingCart [ 新增一筆購物車資料 ]
+  //#endregion getOrder [ 讀取一筆訂單資料 ]
 
-  //#region deleteShoppingCarts [ 刪除所有資料 ]
-  /** 刪除所有資料 */
-  static async deleteShoppingCarts(
-    _req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  //#region deleteOrders [ 刪除訂單資料表全部資料 ]
+  /** 刪除訂單資料表全部資料 */
+  static async deleteOrders(_req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
-     * #swagger.tags = ["ShoppingCart - 購物車資料表 API"]
-     * #swagger.description = "刪除所有資料"
+     * #swagger.tags = ["Order - 訂單資料表 API"]
+     * #swagger.description = "刪除訂單資料表全部資料"
      * #swagger.responses[200] = {
           description: "刪除成功",
           schema: {
@@ -199,14 +159,14 @@ class ShoppingCartController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      await ShoppingCart.deleteMany();
+      await Order.deleteMany();
 
       return handleResponse(res, HttpStatusCode.OK, HttpMessage.DeleteSuccess);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion deleteShoppingCarts [ 刪除所有資料 ]
+  //#endregion deleteOrders [ 刪除訂單資料表全部資料 ]
 }
 
-export { ShoppingCartController };
+export { OrderController };
