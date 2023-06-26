@@ -740,12 +740,10 @@ class GoldFlowController {
       const result = await goldFlowService.postNotifyAsync(TradeInfo);
 
       if (result === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
-      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '結帳完成失敗');
-      else if (result === 2)
-        return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
+        return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
+      else if (result === 1) return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success);
+      return handleResponse(res, HttpStatusCode.OK, '付款完成');
     } catch (err) {
       next(err);
     }
