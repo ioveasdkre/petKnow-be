@@ -862,7 +862,7 @@ class GoldFlowService {
    * @throws 如果 HashKey 或 HashIV 為空，則拋出錯誤
    */
   createMpgAesDecrypt(
-    TradeInfo: string,
+    TradeInfo: any,
     useKey: string,
     useIv: string,
     algorithm: string = 'aes-256-cbc',
@@ -887,7 +887,7 @@ class GoldFlowService {
 
   //#region postNotifyAsync [ 結帳完成 ]
   /** 結帳完成 */
-  async postNotifyAsync(tradeInfo: string) {
+  async postNotifyAsync(tradeInfo: any) {
     const info = this.createMpgAesDecrypt(
       tradeInfo,
       goldFlowHashKey,

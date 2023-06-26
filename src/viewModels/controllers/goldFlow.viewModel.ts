@@ -15,7 +15,7 @@ interface IPostCheckRequest {
 }
 
 interface IPostNotify {
-  TradeInfo: string;
+  TradeInfo: any;
 }
 
 export {
