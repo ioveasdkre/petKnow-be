@@ -898,8 +898,7 @@ class GoldFlowService {
     const result = await Order.findByIdAndUpdate(
       order._id,
       {
-        isPayment: true,
-        updatedAt: new Date(),
+        $set: { isPayment: true, updatedAt: new Date() },
       },
       { new: true },
     );
