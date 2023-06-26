@@ -83,7 +83,7 @@ class OrderController {
           schema: {
             "statusCode": 200,
             "isSuccess": true,
-            "message": "新增成功",
+            "message": "查詢成功",
             "data": {
               "_id": "6498f4304a003ff8a09f6ee3",
               "user": "6485bc644f8b667f792915a0",
@@ -126,14 +126,83 @@ class OrderController {
       const _CRUDService = new CRUDService<IOrderModel>(Order);
       const result = await _CRUDService.getById(orderId);
 
-      if (!result) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.CreateFailure);
+      if (!result)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.CreateSuccess, result);
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
       next(err);
     }
   }
   //#endregion getOrder [ 讀取一筆訂單資料 ]
+
+  //#region putOrder [ 更新一筆訂單資料 ]
+  /** 更新一筆訂單資料 */
+  static async putOrder(req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["Order - 訂單資料表 API"]
+     * #swagger.description = "更新一筆訂單資料"
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "更新成功",
+            "data": {
+              "_id": "6498f4304a003ff8a09f6ee3",
+              "user": "6485bc644f8b667f792915a0",
+              "merchantOrderNo": "db10418b113f4452a70e1687745584",
+              "tradeSha": "88C4A692A80A962CCE63587328DCA2B63CBF1790256FB542ED85E2DE884841DF",
+              "tradeInfo": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad2827ac2c63616c1edc28239c9804d7742189530fb5e900ca584d1d012b78d0f64d84968e9edca2cb0ee879af2eac497d2f47bc635d10d04fc21dee3b9d2b090056849a24f0fb95f4abeac7aa0f016ca5147b6cc737190293363186288ce62864a8394b2b6947ef076a8138b3e7203b4a12163d5c8f5443db6781a2b944083de5",
+              "merchantID": "MS148918186",
+              "version": 1.5,
+              "amt": 539,
+              "itemDesc": "1",
+              "email": "Abc1231@gmail.com",
+              "timeStamp": 1687745584,
+              "isPayment": false,
+              "createdAt": "2023-06-26T02:13:04.233Z",
+              "updatedAt": "2023-06-26T02:13:04.233Z"
+            }
+          }
+        }
+      * #swagger.responses[400] = {
+          description: "錯誤的請求",
+          schema:{
+            "success": false,
+            "statusCode": 400,
+            "message": "錯誤的請求"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema:{
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      const orderId = req.params.orderId;
+
+      const _CRUDService = new CRUDService<IOrderModel>(Order);
+      const result = await _CRUDService.update(orderId, {
+        isPayment: true,
+        updatedAt: new Date(),
+      });
+
+      if (!result)
+        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.RetrieveFailure);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  //#endregion putOrder [ 更新一筆訂單資料 ]
 
   //#region deleteOrders [ 刪除訂單資料表全部資料 ]
   /** 刪除訂單資料表全部資料 */
