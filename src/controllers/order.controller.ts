@@ -21,15 +21,20 @@ class OrderController {
             "message": "查詢成功",
             "data": [
               {
-                "_id": "647d509a14f1d0f929617f93",
-                "user": "6475494ecc27da782677290f",
-                "courses": [
-                  "6482b94965829859fd1d1838",
-                  "646f7e2f4802a2dbf6b3eb84",
-                  "646f7e2f4802a2dbf6b3eb85"
-                ],
-                "createdAt": "2023-06-05T03:02:46.521Z",
-                "updatedAt": "2023-06-05T03:02:46.521Z"
+                "_id": "6498f00f8f3dfbb1e9b842ca",
+                "user": "6485bc644f8b667f792915a0",
+                "merchantOrderNo": "4bdce725ae324d9985f91687744528",
+                "tradeSha": "733D398860DB2C5E95D915C1ABE1D5A2C4AD753953FB8DCB709AB98229E6BC97",
+                "tradeInfo": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad0cb395b214736ab8b7f375800c2d635266882173d1ba8ded78ee545c8ebb62c5416c8c06cb4c0dbcc938d3101d11fbdeb1f3fba303001e9b083d1c60702118f01cabed799a593c10bc818e5c78c455d326963e86f863055e2511eb716453a790773615c4b72a511121edf97226553cfb5b717189cc879d1bf5b272fa36673895",
+                "merchantID": "MS148918186",
+                "version": 1.5,
+                "amt": 539,
+                "itemDesc": "1",
+                "email": "Abc1231@gmail.com",
+                "timeStamp": 1687744528,
+                "isPayment": false,
+                "createdAt": "2023-06-26T01:55:27.571Z",
+                "updatedAt": "2023-06-26T01:55:27.571Z"
               }
             ]
           }
@@ -80,15 +85,20 @@ class OrderController {
             "isSuccess": true,
             "message": "新增成功",
             "data": {
-              "user": "6475494ecc27da782677290f",
-              "courses": [
-                "6482b94965829859fd1d1838",
-                "646f7e2f4802a2dbf6b3eb84",
-                "646f7e2f4802a2dbf6b3eb85"
-              ],
-              "createdAt": "2023-06-05T03:07:37.811Z",
-              "updatedAt": "2023-06-05T03:07:37.811Z",
-              "_id": "647d519e664f577d916827dd"
+              "_id": "6498f4304a003ff8a09f6ee3",
+              "user": "6485bc644f8b667f792915a0",
+              "merchantOrderNo": "db10418b113f4452a70e1687745584",
+              "tradeSha": "88C4A692A80A962CCE63587328DCA2B63CBF1790256FB542ED85E2DE884841DF",
+              "tradeInfo": "b4b3ec4a74bcbe88533ab5f0a554e57dfaaec301317e0d366e39d191d825d786ffcb1f8de6698b361a9069dcd2cea6ad2827ac2c63616c1edc28239c9804d7742189530fb5e900ca584d1d012b78d0f64d84968e9edca2cb0ee879af2eac497d2f47bc635d10d04fc21dee3b9d2b090056849a24f0fb95f4abeac7aa0f016ca5147b6cc737190293363186288ce62864a8394b2b6947ef076a8138b3e7203b4a12163d5c8f5443db6781a2b944083de5",
+              "merchantID": "MS148918186",
+              "version": 1.5,
+              "amt": 539,
+              "itemDesc": "1",
+              "email": "Abc1231@gmail.com",
+              "timeStamp": 1687745584,
+              "isPayment": false,
+              "createdAt": "2023-06-26T02:13:04.233Z",
+              "updatedAt": "2023-06-26T02:13:04.233Z"
             }
           }
         }
