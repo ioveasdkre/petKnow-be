@@ -68,7 +68,7 @@ class CourseTagController {
     try {
       const _CRUDService = new CRUDService<ICourseTagModel>(CourseTag);
       const result: ICourseTag[] = await _CRUDService.getAll();
-      
+
       if (result.length === 0)
         return handleResponse(res, HttpStatusCode.NotFound, HttpMessage.NotFound);
 

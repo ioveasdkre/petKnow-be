@@ -23,24 +23,24 @@ interface ItemList {
 let items: ItemList = {
   1: {
     id: 1,
-    name: "Play with the cats",
+    name: 'Play with the cats',
     price: 599,
-    description: "Tasty",
-    image: "https://cdn.auth0.com/blog/whatabyte/burger-sm.png",
+    description: 'Tasty',
+    image: 'https://cdn.auth0.com/blog/whatabyte/burger-sm.png',
   },
   2: {
     id: 2,
-    name: "Cleaning cat sands",
+    name: 'Cleaning cat sands',
     price: 299,
-    description: "Cheesy",
-    image: "https://cdn.auth0.com/blog/whatabyte/pizza-sm.png",
+    description: 'Cheesy',
+    image: 'https://cdn.auth0.com/blog/whatabyte/pizza-sm.png',
   },
   3: {
     id: 3,
-    name: "Feed the cats",
+    name: 'Feed the cats',
     price: 199,
-    description: "Informative",
-    image: "https://cdn.auth0.com/blog/whatabyte/tea-sm.png",
+    description: 'Informative',
+    image: 'https://cdn.auth0.com/blog/whatabyte/tea-sm.png',
   },
 };
 
@@ -53,37 +53,34 @@ const findAll = async () => Object.values(items);
 const find = async (id: number) => items[id];
 
 const create = async (newItem: any) => {
-	const id = new Date().valueOf();
+  const id = new Date().valueOf();
 
-	items[id] = {
-		id,
-		...newItem,
-	};
+  items[id] = {
+    id,
+    ...newItem,
+  };
 
-	return items[id];
+  return items[id];
 };
 
-const update = async (
-	id: number,
-	itemUpdate: any
-) => {
-	const item = await find(id);
+const update = async (id: number, itemUpdate: any) => {
+  const item = await find(id);
 
-	if (!item) {
-		return null;
-	}
+  if (!item) {
+    return null;
+  }
 
-	items[id] = { id, ...itemUpdate };
+  items[id] = { id, ...itemUpdate };
 
-	return items[id];
+  return items[id];
 };
 
 const remove = async (id: number) => {
- 	const item = await find(id);
+  const item = await find(id);
 
-	if (!item) {
-		return null;
-	}
+  if (!item) {
+    return null;
+  }
 
-	delete items[id];
+  delete items[id];
 };
