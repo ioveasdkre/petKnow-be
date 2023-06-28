@@ -10,7 +10,6 @@ import {
   ISaveOrUpdateUserCartCoupon,
   IPostCartRequest,
   IPostCheckRequest,
-  IPostNotify,
 } from '../viewModels/controllers/goldFlow.viewModel';
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
