@@ -887,9 +887,9 @@ class GoldFlowService {
 
   //#region postNotifyAsync [ 結帳完成 ]
   /** 結帳完成 */
-  async postNotifyAsync(tradeInfo: any) {
+  async postNotifyAsync(orderNotify: any) {
     const info = this.createMpgAesDecrypt(
-      tradeInfo,
+      orderNotify.TradeInfo,
       goldFlowHashKey,
       goldFlowHashIv,
       goldFlowalgorithm,

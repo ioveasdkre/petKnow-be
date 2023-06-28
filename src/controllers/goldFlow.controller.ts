@@ -729,12 +729,11 @@ class GoldFlowController {
     //#endregion [ swagger說明文件 ]
     try {
       console.log('----------Notify Start----------');
+      const orderNotify = req.body;
       console.log('req.body:', req.body);
-      const TradeInfo = req.body.TradeInfo;
-      console.log('TradeInfo:', TradeInfo);
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.postNotifyAsync(TradeInfo);
+      const result = await goldFlowService.postNotifyAsync(orderNotify);
       console.log('result:', result);
       console.log('----------Notify End----------');
 
