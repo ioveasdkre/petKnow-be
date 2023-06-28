@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
@@ -688,7 +688,7 @@ class GoldFlowController {
 
   //#region postNotify [ 結帳完成 ]
   /** 結帳完成 */
-  static async postNotify(req: IRequestBody<IPostNotify>, res: Response, next: NextFunction) {
+  static async postNotify(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
