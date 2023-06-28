@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import {
   coverUrl,
@@ -839,7 +839,7 @@ class GoldFlowService {
    * @param aesEncrypt AES 加密結果
    * @returns SHA-256 雜湊加密後的結果
    */
-  createMpgShaEncrypt(aesEncrypt: string, useKey: string, useIv: string) {
+  createMpgShaEncrypt(aesEncrypt: any, useKey: string, useIv: string) {
     // 對應文件 P18：使用 sha256 加密
     // $hashs="HashKey=".$key."&".$edata1."&HashIV=".$iv;
 
