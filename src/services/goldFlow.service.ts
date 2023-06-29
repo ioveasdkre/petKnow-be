@@ -885,8 +885,8 @@ class GoldFlowService {
   }
   //#endregion createMpgAesDecrypt [ 建立 MpgAesDecrypt，用於對交易資訊進行 AES 解密。 ]
 
-  //#region postNotifyAsync [ 結帳完成 ]
-  /** 結帳完成 */
+  //#region postNotifyAsync [ 結帳完成 - 請求傳給後端 ]
+  /** 結帳完成 - 請求傳給後端 */
   async postNotifyAsync(orderNotify: any) {
     const info = this.createMpgAesDecrypt(
       orderNotify.TradeInfo,
@@ -919,7 +919,7 @@ class GoldFlowService {
 
     return putOrder;
   }
-  //#endregion postNotifyAsync [ 結帳完成 ]
+  //#endregion postNotifyAsync [ 結帳完成 - 請求傳給後端 ]
 }
 
 export { GoldFlowService };
