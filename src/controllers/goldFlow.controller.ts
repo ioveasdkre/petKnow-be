@@ -685,13 +685,77 @@ class GoldFlowController {
   }
   //#endregion postCheckOrder [ 讀取確認訂單資料 ]
 
-  //#region postNotify [ 結帳完成 ]
-  /** 結帳完成 */
+  //#region postNotify [ 結帳完成 - 請求傳給後端 ]
+  /** 結帳完成 - 請求傳給後端 */
   static async postNotify(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "結帳完成"
+     * #swagger.description = "結帳完成 - 請求傳給後端"
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "TradeInfo": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "付款完成",
+          }
+        }
+     * #swagger.responses[400] = {
+          description: "請求錯誤",
+          schema: {
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "錯誤的請求"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema: {
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      console.log('----------Notify Start----------');
+      const orderNotify = req.body;
+      console.log('req.body:', orderNotify);
+
+      const goldFlowService = new GoldFlowService();
+      const result = await goldFlowService.postNotifyAsync(orderNotify);
+      console.log('result:', result);
+      console.log('----------Notify End----------');
+
+      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
+      else if (result === 1)
+        return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
+
+      return handleResponse(res, HttpStatusCode.OK, '付款完成');
+    } catch (err) {
+      console.log('----------Notify End----------');
+      next(err);
+    }
+  }
+  //#endregion postNotify [ 結帳完成 - 請求傳給後端 ]
+
+    //#region postReturn [ 結帳完成 - 請求傳給前端 ]
+  /** 結帳完成 - 請求傳給前端 */
+  static async postReturn(req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "結帳完成 - 請求傳給前端"
      * #swagger.parameters["body"] = {
           description: "資料格式",
           in: "body",
@@ -728,26 +792,17 @@ class GoldFlowController {
     */
     //#endregion [ swagger說明文件 ]
     try {
-      console.log('----------Notify Start----------');
-      const orderNotify = req.body;
-      console.log('req.body:', req.body);
+      console.log('----------Return Start----------');
+      console.log('Return req.body:', req.body);
+      console.log('----------Return End----------');
 
-      const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.postNotifyAsync(orderNotify);
-      console.log('result:', result);
-      console.log('----------Notify End----------');
-
-      if (result === 0) return handleResponse(res, HttpStatusCode.BadRequest, '找不到訂單');
-      else if (result === 1)
-        return handleResponse(res, HttpStatusCode.BadRequest, '刪除購物車資料失敗');
-
-      return handleResponse(res, HttpStatusCode.OK, '付款完成');
+      return handleResponse(res, HttpStatusCode.OK, '完成');
     } catch (err) {
-      console.log('----------Notify End----------');
+      console.log('----------Return End----------');
       next(err);
     }
   }
-  //#endregion postNotify [ 結帳完成 ]
+  //#endregion postReturn [ 結帳完成 - 請求傳給前端 ]
 }
 
 export { GoldFlowController };
