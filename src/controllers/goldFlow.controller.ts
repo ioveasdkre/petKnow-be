@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { GoldFlowService } from '../services/goldFlow.service';
@@ -685,65 +685,9 @@ class GoldFlowController {
   }
   //#endregion postCheckOrder [ 讀取確認訂單資料 ]
 
-  //#region postReturn [ 結帳完成 - 請求傳給前端 ]
-  /** 結帳完成 - 請求傳給前端 */
-  static async postReturn(req: Request, res: Response, next: NextFunction) {
-    //#region [ swagger說明文件 ]
-    /**
-     * #swagger.tags = ["GoldFlow - 金流 API"]
-     * #swagger.description = "結帳完成 - 請求傳給前端"
-     * #swagger.parameters["body"] = {
-          description: "資料格式",
-          in: "body",
-          type: "object",
-          required: true,
-          schema: {
-            "TradeInfo": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66"
-          }
-        }
-     * #swagger.responses[200] = {
-          description: "成功",
-          schema: {
-            "statusCode": 200,
-            "isSuccess": true,
-            "message": "成功",
-          }
-        }
-     * #swagger.responses[400] = {
-          description: "請求錯誤",
-          schema: {
-            "statusCode": 400,
-            "isSuccess": false,
-            "message": "錯誤的請求"
-          }
-        }
-     * #swagger.responses[500] = {
-          description: "伺服器發生錯誤",
-          schema: {
-            "statusCode": 500,
-            "isSuccess": false,
-            "message": "系統發生錯誤，請聯繫系統管理員"
-          }
-        }
-    */
-    //#endregion [ swagger說明文件 ]
-    try {
-      console.log('----------Return Start----------');
-      console.log('Return req.body:', req.body);
-      console.log('----------Return End----------');
-
-      return handleResponse(res, HttpStatusCode.OK, '完成');
-    } catch (err) {
-      console.log('----------Return End----------');
-      next(err);
-    }
-  }
-  //#endregion postReturn [ 結帳完成 - 請求傳給前端 ]
-}
-
   //#region postNotify [ 結帳完成 - 請求傳給後端 ]
   /** 結帳完成 - 請求傳給後端 */
-  const orderNotify: RequestHandler = async(req: Request, res: Response, next: NextFunction) => {
+  static async postNotify(req: Request, res: Response, next: NextFunction) {
     //#region [ swagger說明文件 ]
     /**
      * #swagger.tags = ["GoldFlow - 金流 API"]
@@ -805,5 +749,60 @@ class GoldFlowController {
   }
   //#endregion postNotify [ 結帳完成 - 請求傳給後端 ]
 
+  //#region postReturn [ 結帳完成 - 請求傳給前端 ]
+  /** 結帳完成 - 請求傳給前端 */
+  static async postReturn(req: Request, res: Response, next: NextFunction) {
+    //#region [ swagger說明文件 ]
+    /**
+     * #swagger.tags = ["GoldFlow - 金流 API"]
+     * #swagger.description = "結帳完成 - 請求傳給前端"
+     * #swagger.parameters["body"] = {
+          description: "資料格式",
+          in: "body",
+          type: "object",
+          required: true,
+          schema: {
+            "TradeInfo": "8409b223943367ba2b13484e2b71b3a39aa931f95012d41b4c6da3249bfa5e66"
+          }
+        }
+     * #swagger.responses[200] = {
+          description: "成功",
+          schema: {
+            "statusCode": 200,
+            "isSuccess": true,
+            "message": "成功",
+          }
+        }
+     * #swagger.responses[400] = {
+          description: "請求錯誤",
+          schema: {
+            "statusCode": 400,
+            "isSuccess": false,
+            "message": "錯誤的請求"
+          }
+        }
+     * #swagger.responses[500] = {
+          description: "伺服器發生錯誤",
+          schema: {
+            "statusCode": 500,
+            "isSuccess": false,
+            "message": "系統發生錯誤，請聯繫系統管理員"
+          }
+        }
+    */
+    //#endregion [ swagger說明文件 ]
+    try {
+      console.log('----------Return Start----------');
+      console.log('Return req.body:', req.body);
+      console.log('----------Return End----------');
 
-export { GoldFlowController, orderNotify };
+      return handleResponse(res, HttpStatusCode.OK, '完成');
+    } catch (err) {
+      console.log('----------Return End----------');
+      next(err);
+    }
+  }
+  //#endregion postReturn [ 結帳完成 - 請求傳給前端 ]
+}
+
+export { GoldFlowController };
