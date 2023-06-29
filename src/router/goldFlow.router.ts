@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { GoldFlowController as controller } from '../controllers/goldFlow.controller';
+import { GoldFlowController as controller, orderNotify } from '../controllers/goldFlow.controller';
 import { verifyJwtToken, verifyObjectIds } from '../middlewares/verifyType.middewaes';
 import {
   ISaveOrUpdateUserCartCourse,
@@ -36,7 +36,7 @@ router
     controller.createOrder,
   )
   .post('/v1/goldFlow/checkOrder', verifyJwtToken<IPostCheckRequest>, controller.postCheckOrder)
-  .post('/v1/goldFlow/notify', controller.postNotify)
+  .post('/v1/goldFlow/notify', orderNotify)
   .post('/v1/goldFlow/return', controller.postReturn);
 
 export { router as goldFlowRouter };
