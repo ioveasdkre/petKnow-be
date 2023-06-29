@@ -45,6 +45,7 @@ interface IPlatformCoupon {
 
 interface ICreateOrderParams {
   user: Types.ObjectId;
+  userName: string;
   merchantOrderNo: string;
   tradeSha?: string;
   tradeInfo?: string;

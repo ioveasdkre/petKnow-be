@@ -2,6 +2,7 @@ import { Types, Schema, Document } from 'mongoose';
 
 interface IOrder {
   user: Types.ObjectId;
+  userName: string;
   merchantOrderNo: string;
   tradeSha: string;
   tradeInfo: string;
@@ -25,6 +26,10 @@ const orderSchema = new Schema<IOrderModel>(
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: [true, '請填寫必填欄位'],
+    },
+    userName: {
+      type: String,
       required: [true, '請填寫必填欄位'],
     },
     merchantOrderNo: {

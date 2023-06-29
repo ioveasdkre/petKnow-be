@@ -586,7 +586,7 @@ class GoldFlowController {
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.InvalidCredentials);
 
       const goldFlowService = new GoldFlowService();
-      const result = await goldFlowService.orderProcessingAsync(user._id, user.email);
+      const result = await goldFlowService.orderProcessingAsync(user._id, user.name, user.email);
 
       if (result === 0)
         return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
