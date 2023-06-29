@@ -457,7 +457,7 @@ class GoldFlowService {
 
   //#region orderProcessingAsync [ 訂單處理 ]
   /** 訂單處理 */
-  async orderProcessingAsync(userId: Types.ObjectId, email: string) {
+  async orderProcessingAsync(userId: Types.ObjectId, userName: string, email: string) {
     const shoppingCart = await this.getUserCartCourseIdsAsync(userId);
 
     if (!shoppingCart) return 0;
@@ -487,6 +487,7 @@ class GoldFlowService {
 
     const order: ICreateOrderParams = {
       user: userId,
+      userName: userName,
       merchantOrderNo: orderId,
       merchantID: merchantId,
       version: version,
@@ -734,6 +735,7 @@ class GoldFlowService {
       { _id: _id, user: userId },
       {
         _id: 1,
+        userName: 1,
         merchantID: 1,
         tradeSha: 1,
         tradeInfo: 1,
