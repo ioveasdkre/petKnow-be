@@ -730,7 +730,6 @@ class GoldFlowController {
     try {
       console.log('----------Notify Start----------');
       const orderNotify = req.body;
-      console.log('req:', req);
       console.log('req.body:', orderNotify);
 
       if (!Object.prototype.hasOwnProperty.call(req.body, 'TradeInfo')) throw {  message: '付款失敗，請聯絡渦潮客服人員' }
