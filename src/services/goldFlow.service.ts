@@ -896,12 +896,7 @@ class GoldFlowService {
       goldFlowHashIv,
       goldFlowalgorithm,
     );
-
-    console.log('info:', info);
-
     const merchantOrderNo = info.Result.MerchantOrderNo;
-
-    console.log('merchantOrderNo:', merchantOrderNo);
 
     const putOrder = await Order.findOneAndUpdate(
       { merchantOrderNo: merchantOrderNo },
@@ -910,12 +905,9 @@ class GoldFlowService {
       },
     );
 
-    console.log('putOrder:', putOrder);
-
     if (!putOrder) return 0;
 
     const deleteShoppingCart = await ShoppingCart.deleteOne({ user: putOrder.user });
-    console.log('deleteShoppingCart:', deleteShoppingCart);
 
     if (!deleteShoppingCart) return 1;
 

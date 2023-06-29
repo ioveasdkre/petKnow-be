@@ -15,6 +15,13 @@ if (env !== 'prod') {
   apiRouter.use(fakeInformationRouter);
 }
 
-apiRouter.use(authRouter, courseTagRouter, goldFlowRouter, homeRouter, orderRouter, shoppingCartRouter);
+apiRouter.use(
+  authRouter,
+  courseTagRouter,
+  goldFlowRouter,
+  homeRouter,
+  orderRouter,
+  shoppingCartRouter,
+);
 
 export { apiRouter, itemsRouter };
