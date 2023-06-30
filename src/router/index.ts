@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { env } from '../config/env';
 import { authRouter } from './auth.router';
+import { backstageRouter } from './backstage.router';
 import { courseTagRouter } from './courseTag.router';
 import { fakeInformationRouter } from './fakeInformation.router';
 import { goldFlowRouter } from './goldFlow.router';
@@ -17,6 +18,7 @@ if (env !== 'prod') {
 
 apiRouter.use(
   authRouter,
+  backstageRouter,
   courseTagRouter,
   goldFlowRouter,
   homeRouter,

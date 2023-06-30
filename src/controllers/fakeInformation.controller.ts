@@ -104,7 +104,7 @@ class FakeInformationController {
                         "sequence": 1,
                         "title": "犬種介紹",
                         "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
+                        "fileName": "32436181",
                         "fileType": 0,
                         "time": 65127
                       }
@@ -306,7 +306,7 @@ class FakeInformationController {
               "貓咪食譜"
             ],
             "cover": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA",
-            "promoVideo": "https://example.com/videos/promo_video.mp4",
+            "promoVideo": "32436181",
             "title": "成為寵物訓練達人:寵物訓練入門基礎課程",
             "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
             "description": "<p>在這堂課中，我們將介紹狗狗的基本養育需求，幫助您了解如何照顧一隻健康快樂的狗狗。</p>\n<ul>\n  <li>狗狗的飲食需求：選擇適合的狗糧種類和餵食方式。</li>\n  <li>適合的住所環境：提供舒適的睡覺空間和適合運動的戶外區域。</li>\n  <li>定期醫療護理：疫苗接種、定期驅蟲和常見疾病預防。</li>\n  <li>適度的運動和遊戲：維持狗狗的身體健康和心理活躍。</li>\n</ul>\n<p>透過這些基本養育需求的認識，您將能夠提供一個健康快樂的生活環境給您的狗狗。</p>",
@@ -335,7 +335,7 @@ class FakeInformationController {
                     "sequence": 1,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   },
@@ -344,7 +344,7 @@ class FakeInformationController {
                     "sequence": 2,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   }
@@ -362,7 +362,7 @@ class FakeInformationController {
                     "sequence": 1,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   },
@@ -371,7 +371,7 @@ class FakeInformationController {
                     "sequence": 2,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   }

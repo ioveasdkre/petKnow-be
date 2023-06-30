@@ -1,12 +1,13 @@
 import { Response, NextFunction } from 'express';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
+import { BackstageService } from '../services/backstage.service';
 import { IRequestJwtBody } from '../viewModels/middlewares/verifyType.viewModel';
 
 class BackstageController {
-  //#region postMyClassroom [ 使用者 後台 - 我的課堂 ]
+  //#region getMyClassroom [ 使用者 後台 - 我的課堂 ]
   /** 使用者 後台 - 我的課堂 */
-  static async postMyClassroom(
+  static async getMyClassroom(
     req: IRequestJwtBody,
     res: Response,
     next: NextFunction,
@@ -41,12 +42,17 @@ class BackstageController {
     try {
       const user = req.user;
 
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess);
+      if (!user) return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.BadRequest);
+
+      const backstageService = new BackstageService();
+      const result = await backstageService.getMyClassroomAsync(user._id);
+
+      return handleResponse(res, HttpStatusCode.OK, HttpMessage.RetrieveSuccess, result);
     } catch (err) {
       next(err);
     }
   }
-  //#endregion postMyClassroom [ 使用者 後台 - 我的課堂 ]
+  //#endregion getMyClassroom [ 使用者 後台 - 我的課堂 ]
 }
 
 export { BackstageController };
