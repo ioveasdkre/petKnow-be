@@ -24,27 +24,17 @@ class BackstageService {
       {
         $project: {
           _id: 0,
-          courseIds: '$orderDetails._id',
+          courseIds: '$orderDetails.CourseHierarchys',
         },
       },
     ]);
 
     const courseIds = [...new Set(purchasedCourses.flatMap(item => item.courseIds))];
 
-    const courseHierarchys = await CourseHierarchy.aggregate([
-      {
-        $match: {
-          _id: { $in: courseIds.map(id => new Types.ObjectId(id)) },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          courseIds: '$orderDetails._id',
-        },
-      },
-    ]);
-
+    const courseHierarchys = await CourseHierarchy.find({
+      _id: { $in: courseIds.map(id => new Types.ObjectId(id)) }
+    });
+    
     return courseHierarchys;
   }
   //#endregion getMyClassroomAsync [ 使用者 後台 - 我的課堂 ]
