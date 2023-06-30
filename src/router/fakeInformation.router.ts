@@ -6,7 +6,6 @@ const router: Router = express.Router();
 router
   .get('/v1/fakeInformation/getAllUserId', controller.getAllUserId)
   .get('/v1/fakeInformation/getAllCourseHierarchys', controller.getAllCourseHierarchys)
-  .get('/v1/fakeInformation/getAllCoupons', controller.getAllCoupons)
   .get(
     '/v1/fakeInformation/getUserCourseCountGreaterThanOne',
     controller.getUserCourseCountGreaterThanOne,

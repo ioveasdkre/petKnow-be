@@ -8,6 +8,7 @@ import { goldFlowRouter } from './goldFlow.router';
 import { homeRouter } from './home.router';
 import { itemsRouter } from './items.router';
 import { orderRouter } from './order.router';
+import { platformCouponsRouter } from './platformCoupons.router';
 import { shoppingCartRouter } from './shoppingCart.router';
 
 const apiRouter = Router();
@@ -23,6 +24,7 @@ apiRouter.use(
   goldFlowRouter,
   homeRouter,
   orderRouter,
+  platformCouponsRouter,
   shoppingCartRouter,
 );
 

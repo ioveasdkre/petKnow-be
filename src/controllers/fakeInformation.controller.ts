@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
+import { CourseHierarchy, User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { FakeInformationService } from '../services/fakeInformation.service';
@@ -145,83 +145,6 @@ class FakeInformationController {
     }
   }
   //#endregion getAllCourseHierarchys [ 取得全部課程彙總資料 ]
-
-  //#region getAllCoupons [ 取得全部標籤資料 ]
-  /** 取得全部標籤資料 */
-  static async getAllCoupons(_req: Request, res: Response, next: NextFunction) {
-    //#region [ swagger說明文件 ]
-    /**
-     * #swagger.tags = ["FakeInformation - 假資料 API"]
-     * #swagger.description = "取得全部標籤資料"
-     * #swagger.responses[200] = {
-          description: "成功",
-          schema: {
-            "statusCode": 200,
-            "isSuccess": true,
-            "message": "Success",
-            "data": [
-              {
-                "_id": "646d8478f3bdeca0cd4c4557",
-                "tagNames": [
-                  "寵物溝通與信任建立",
-                  "寵物溝通"
-                ],
-                "couponCode": "EYg0XZk7",
-                "discountPrice": 894,
-                "isEnabled": true,
-                "startDate": "2023-03-27T12:47:24.679Z",
-                "endDate": "2023-05-03T07:42:44.990Z",
-                "createdAt": "2022-09-20T04:33:11.913Z",
-                "updatedAt": "2023-02-02T18:02:08.482Z"
-              },
-              {
-                "_id": "646d8478f3bdeca0cd4c4558",
-                "tagNames": [
-                  "貓咪食譜",
-                  "寵物健康照護",
-                  "貓咪的解悶遊戲"
-                ],
-                "couponCode": "jPO0UZ8A",
-                "discountPrice": 665,
-                "isEnabled": true,
-                "startDate": "2023-03-16T06:16:34.664Z",
-                "endDate": "2023-06-30T15:19:27.333Z",
-                "createdAt": "2022-07-15T02:54:35.417Z",
-                "updatedAt": "2022-12-21T15:00:47.966Z"
-              }
-            ]
-          }
-        }
-      * #swagger.responses[400] = {
-          description: "錯誤的請求",
-          schema:{
-            "statusCode": 400,
-            "isSuccess": false,
-            "message": "Failure"
-          }
-        }
-      * #swagger.responses[500] = {
-          description: "伺服器發生錯誤",
-          schema:{
-            "statusCode": 500,
-            "isSuccess": false,
-            "message": "系統發生錯誤，請聯繫系統管理員"
-          }
-        }
-      */
-    //#endregion [ swagger說明文件 ]
-    try {
-      const platformCoupons = await PlatformCoupons.find();
-
-      if (platformCoupons.length === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, platformCoupons);
-    } catch (err) {
-      next(err);
-    }
-  }
-  //#endregion getAllCoupons [ 取得全部標籤資料 ]
 
   //#region getUserCourseCountGreaterThanOne [ 讀取使用者開課數大於 1 ]
   /** 讀取使用者開課數大於 1 */
