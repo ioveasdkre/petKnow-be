@@ -389,6 +389,7 @@ class HomeService {
 
   //#region getVisitorCourseDetailsAsync [ 訪客 課程介紹 ]
   async getVisitorCourseDetailsAsync(courseId: string) {
+    const currentDate = new Date();
     const _courseId = new Types.ObjectId(courseId);
     const [course] = await CourseHierarchy.aggregate([
       {
@@ -417,6 +418,20 @@ class HomeService {
           instructors: '$user.instructors',
           title: '$title',
           shelfDate: '$shelfDate',
+          price: '$price',
+          discountPrice: {
+            $cond: [
+              {
+                $and: [
+                  { $ifNull: ['$discountDate', false] }, // 判斷特價日期不為空
+                  { $gte: ['$discountDate', currentDate] }, // 判斷特價日期大於等於今天
+                ],
+              },
+              '$discountPrice',
+              null,
+            ],
+          },
+          isFree: '$isFree',
           chapters: {
             $map: {
               input: '$chapters',
@@ -426,7 +441,7 @@ class HomeService {
                 sequence: '$$chapter.sequence',
                 title: '$$chapter.title',
                 time: '$$chapter.totalTime',
-                total: { $round: [{ $divide: ['$$chapter.totalNumber', 3600] }, 1] },
+                total: '$$chapter.totalNumber',
                 subchapters: {
                   $map: {
                     input: '$$chapter.subchapters',
