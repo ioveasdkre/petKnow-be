@@ -221,25 +221,29 @@ class HomeController {
             "message": "查詢成功",
             "data": {
               "course": {
-                "name": "曾詩涵",
-                "courseIntroduction": "<p>尿布訓練是狗狗的基礎訓練之一，它可以幫助您的狗狗建立適當的排泄習慣。</p>\n<ul>\n  <li>選擇適合的尿布訓練方法：包括使用尿布墊片、尿布盆等不同方式。</li>\n  <li>建立排泄地點：訓練狗狗在指定的區域內進行排泄。</li>\n  <li>正確回饋和糾正方法：適時給予獎勵和糾正以加強尿布訓練效果。</li>\n</ul>\n<p>透過尿布訓練，您的狗狗將學會在指定的地點排泄，減少室內意外，並建立良好的衛生習慣。</p>",
-                "instructors": "<div>\n  <h3>講師：Sarah Thompson</h3>\n  <p>Sarah Thompson 是一位專注於狗狗基本指令訓練的專家。她以其溫和且有效的訓練方法聞名，並且擁有協助許多狗狗主人建立良好關係的豐富經驗。</p>\n  <p>在這堂課中，Sarah將教導您如何訓練狗狗基本的指令，並與您分享培養狗狗良好行為的技巧。她將提供個人化的建議，幫助您解決訓練中的困惑和挑戰。</p>\n</div>",
-                "title": "狗狗健康檢查技巧指南",
-                "shelfDate": "2023-02-12T02:24:53.237Z",
+                "name": "楊佩城",
+                "cover": "https://images.unsplash.com/photo-1592924728350-f7d4fd5d1655?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                "courseIntroduction": "<p>在這堂課中，我們將分享一些基本的狗狗照顧技巧，讓您能夠更好地照顧和保護您的狗狗。</p>\n<ul>\n  <li>毛髮護理：適當的梳理和洗澡方法，以保持狗狗的毛髮乾淨和健康。</li>\n  <li>耳朵和牙齒清潔：保持狗狗耳朵和牙齒的衛生，預防感染和口腔問題。</li>\n  <li>安全和急救知識：了解常見的狗狗安全風險和基本的急救處理方法。</li>\n</ul>\n<p>透過這些基本的照顧技巧，您將成為一位優秀的狗狗主人，為您的狗狗提供最好的照顧。</p>",
+                "instructors": "<div>\n  <h3>講師：Michael Johnson</h3>\n  <p>Michael Johnson 是一位專注於狗狗社交化訓練的專家。他擁有多年的狗狗訓練經驗，並且曾與各種品種的狗狗一起工作。他的熱情和耐心使他成為一位受歡迎的講師。</p>\n  <p>在這堂課中，Michael將教授您如何幫助狗狗建立良好的社交技巧和行為。他將分享實用的訓練方法和技巧，讓您的狗狗能夠在各種社交場景中自信地表現。</p>\n</div>",
+                "title": "狗狗訓練入門課程",
+                "shelfDate": "2023-03-23T08:19:40.919Z",
+                "price": 1985,
+                "discountPrice": 1651,
+                "isFree": false,
                 "chapters": [
                   {
-                    "_id": "E003000",
+                    "_id": "A004550",
                     "sequence": 1,
-                    "title": "外觀與行為觀察",
-                    "time": 334,
-                    "total": 0,
+                    "title": "基礎訓練",
+                    "time": 308,
+                    "total": 3,
                     "subchapters": [
                       {
-                        "_id": "E0030000",
+                        "_id": "A0045500",
                         "sequence": 1,
-                        "title": "毛髮與皮膚檢查",
-                        "time": 60,
-                        "fileName": "32436181"
+                        "title": "正確使用獎勵和懲罰",
+                        "time": 26,
+                        "fileName": "817863657"
                       }
                     ]
                   }
@@ -247,8 +251,9 @@ class HomeController {
               },
               "lecturerRelatedCourses": [
                 {
-                  "_id": "6493d9bf127ca634f0eeab5c",
-                  "cover": "https://images.unsplash.com/photo-1574063413132-354db9f190fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                  "_id": "6493d9be127ca634f0eea7db",
+                  "cover": "https://images.unsplash.com/photo-1518056914555-de1d7f0b3967?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                  "title": "狗狗健康檢查與日常護理"
                 }
               ]
             }
