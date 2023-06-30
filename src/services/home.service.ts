@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { coverUrl, coverParamsUrl, movieUrl } from '../config/env';
+import { coverUrl, coverParamsUrl } from '../config/env';
 import { CourseHierarchy, CourseTag } from '../connections/mongoDB';
 import { Level } from '../enums/courseHierarchy.enums';
 import { ISearchCourses } from '../types/home.type';
@@ -436,7 +436,7 @@ class HomeService {
                       sequence: '$$subchapter.sequence',
                       title: '$$subchapter.title',
                       time: '$$subchapter.time',
-                      fileName: { $concat: [movieUrl, '$$subchapter.fileName'] },
+                      fileName: '$$subchapter.fileName',
                     },
                   },
                 },

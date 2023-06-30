@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, Document } from 'mongoose';
 
 interface IPlatformCoupons {
   tagNames: string[];
@@ -10,6 +10,8 @@ interface IPlatformCoupons {
   createdAt: Date;
   updatedAt: Date;
 }
+
+interface IPlatformCouponsModel extends IPlatformCoupons, Document {}
 
 const platformCouponsSchema = new Schema<IPlatformCoupons>(
   {
@@ -51,4 +53,4 @@ const platformCouponsSchema = new Schema<IPlatformCoupons>(
   { versionKey: false },
 );
 
-export { platformCouponsSchema, IPlatformCoupons };
+export { platformCouponsSchema, IPlatformCouponsModel, IPlatformCoupons };

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CourseHierarchy, PlatformCoupons, User } from '../connections/mongoDB';
+import { CourseHierarchy, User } from '../connections/mongoDB';
 import { HttpStatusCode, HttpMessage } from '../enums/handle.enum';
 import { handleResponse } from '../helpers/handle.helper';
 import { FakeInformationService } from '../services/fakeInformation.service';
@@ -104,7 +104,7 @@ class FakeInformationController {
                         "sequence": 1,
                         "title": "犬種介紹",
                         "content": null,
-                        "fileName": "807306477?h=c67a24399e&app_id=122963",
+                        "fileName": "32436181",
                         "fileType": 0,
                         "time": 65127
                       }
@@ -145,83 +145,6 @@ class FakeInformationController {
     }
   }
   //#endregion getAllCourseHierarchys [ 取得全部課程彙總資料 ]
-
-  //#region getAllCoupons [ 取得全部標籤資料 ]
-  /** 取得全部標籤資料 */
-  static async getAllCoupons(_req: Request, res: Response, next: NextFunction) {
-    //#region [ swagger說明文件 ]
-    /**
-     * #swagger.tags = ["FakeInformation - 假資料 API"]
-     * #swagger.description = "取得全部標籤資料"
-     * #swagger.responses[200] = {
-          description: "成功",
-          schema: {
-            "statusCode": 200,
-            "isSuccess": true,
-            "message": "Success",
-            "data": [
-              {
-                "_id": "646d8478f3bdeca0cd4c4557",
-                "tagNames": [
-                  "寵物溝通與信任建立",
-                  "寵物溝通"
-                ],
-                "couponCode": "EYg0XZk7",
-                "discountPrice": 894,
-                "isEnabled": true,
-                "startDate": "2023-03-27T12:47:24.679Z",
-                "endDate": "2023-05-03T07:42:44.990Z",
-                "createdAt": "2022-09-20T04:33:11.913Z",
-                "updatedAt": "2023-02-02T18:02:08.482Z"
-              },
-              {
-                "_id": "646d8478f3bdeca0cd4c4558",
-                "tagNames": [
-                  "貓咪食譜",
-                  "寵物健康照護",
-                  "貓咪的解悶遊戲"
-                ],
-                "couponCode": "jPO0UZ8A",
-                "discountPrice": 665,
-                "isEnabled": true,
-                "startDate": "2023-03-16T06:16:34.664Z",
-                "endDate": "2023-06-30T15:19:27.333Z",
-                "createdAt": "2022-07-15T02:54:35.417Z",
-                "updatedAt": "2022-12-21T15:00:47.966Z"
-              }
-            ]
-          }
-        }
-      * #swagger.responses[400] = {
-          description: "錯誤的請求",
-          schema:{
-            "statusCode": 400,
-            "isSuccess": false,
-            "message": "Failure"
-          }
-        }
-      * #swagger.responses[500] = {
-          description: "伺服器發生錯誤",
-          schema:{
-            "statusCode": 500,
-            "isSuccess": false,
-            "message": "系統發生錯誤，請聯繫系統管理員"
-          }
-        }
-      */
-    //#endregion [ swagger說明文件 ]
-    try {
-      const platformCoupons = await PlatformCoupons.find();
-
-      if (platformCoupons.length === 0)
-        return handleResponse(res, HttpStatusCode.BadRequest, HttpMessage.Failure);
-
-      return handleResponse(res, HttpStatusCode.OK, HttpMessage.Success, platformCoupons);
-    } catch (err) {
-      next(err);
-    }
-  }
-  //#endregion getAllCoupons [ 取得全部標籤資料 ]
 
   //#region getUserCourseCountGreaterThanOne [ 讀取使用者開課數大於 1 ]
   /** 讀取使用者開課數大於 1 */
@@ -306,7 +229,7 @@ class FakeInformationController {
               "貓咪食譜"
             ],
             "cover": "https://fastly.picsum.photos/id/249/200/300.jpg?hmac=HXJz3fKmXquFNHrfyd1yRHUYx9SheA_j2gbbya_4mlA",
-            "promoVideo": "https://example.com/videos/promo_video.mp4",
+            "promoVideo": "32436181",
             "title": "成為寵物訓練達人:寵物訓練入門基礎課程",
             "shortDescription": "這堂課將教您如何照顧狗狗的健康和護理需求。我們將探討常見的健康問題預防、疫苗接種和定期檢查的重要性，以確保您的狗狗保持健康和快樂。",
             "description": "<p>在這堂課中，我們將介紹狗狗的基本養育需求，幫助您了解如何照顧一隻健康快樂的狗狗。</p>\n<ul>\n  <li>狗狗的飲食需求：選擇適合的狗糧種類和餵食方式。</li>\n  <li>適合的住所環境：提供舒適的睡覺空間和適合運動的戶外區域。</li>\n  <li>定期醫療護理：疫苗接種、定期驅蟲和常見疾病預防。</li>\n  <li>適度的運動和遊戲：維持狗狗的身體健康和心理活躍。</li>\n</ul>\n<p>透過這些基本養育需求的認識，您將能夠提供一個健康快樂的生活環境給您的狗狗。</p>",
@@ -335,7 +258,7 @@ class FakeInformationController {
                     "sequence": 1,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   },
@@ -344,7 +267,7 @@ class FakeInformationController {
                     "sequence": 2,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   }
@@ -362,7 +285,7 @@ class FakeInformationController {
                     "sequence": 1,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   },
@@ -371,7 +294,7 @@ class FakeInformationController {
                     "sequence": 2,
                     "title": "環境探索引導",
                     "content": null,
-                    "fileName": "https://example.com/videos/promo_video.mp4",
+                    "fileName": "32436181",
                     "fileType": 0,
                     "time": 600
                   }

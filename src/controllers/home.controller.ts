@@ -239,7 +239,7 @@ class HomeController {
                         "sequence": 1,
                         "title": "毛髮與皮膚檢查",
                         "time": 60,
-                        "fileName": "https://vimeo.com/32436181"
+                        "fileName": "32436181"
                       }
                     ]
                   }
