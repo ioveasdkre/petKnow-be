@@ -1,11 +1,12 @@
 import { Types } from 'mongoose';
-import { Order } from '../connections/mongoDB';
+import { CourseHierarchy, Order } from '../connections/mongoDB';
+import { IMyClassroomResult } from '../types/backstage.type';
 
 class BackstageService {
-  //#region getMyClassroomAsync [ 首頁 ]
-  /** 首頁 */
+  //#region getMyClassroomAsync [ 使用者 後台 - 我的課堂 ]
+  /** 使用者 後台 - 我的課堂 */
   async getMyClassroomAsync(user: Types.ObjectId) {
-    const purchasedCourses = await Order.aggregate([
+    const purchasedCourses = await Order.aggregate<IMyClassroomResult>([
       {
         $match: {
           user: user,
@@ -22,14 +23,31 @@ class BackstageService {
       },
       {
         $project: {
+          _id: 0,
           courseIds: '$orderDetails._id',
         },
       },
     ]);
 
-    return purchasedCourses;
+    const courseIds = [...new Set(purchasedCourses.flatMap(item => item.courseIds))];
+
+    const courseHierarchys = await CourseHierarchy.aggregate([
+      {
+        $match: {
+          _id: { $in: courseIds.map(id => new Types.ObjectId(id)) },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          courseIds: '$orderDetails._id',
+        },
+      },
+    ]);
+
+    return courseHierarchys;
   }
-  //#endregion getMyClassroomAsync [ 首頁 ]
+  //#endregion getMyClassroomAsync [ 使用者 後台 - 我的課堂 ]
 }
 
 export { BackstageService };
