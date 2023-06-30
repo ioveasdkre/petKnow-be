@@ -20,22 +20,18 @@ const verifyJwtToken = async <T = void>(
   try {
     let auth = req.get('authorization') || (' ' as string);
 
+    if (!auth) return handleResponse(res, HttpStatusCode.BadRequest, '請登入帳密');
+    
     const tokenPrefix = 'Bearer ';
-    if (auth.startsWith(tokenPrefix)) {
-      auth = auth.slice(tokenPrefix.length);
-    }
+    if (auth.startsWith(tokenPrefix)) auth = auth.slice(tokenPrefix.length);
 
     const claims = jwt.verify(auth, jwtSecret) as JwtPayload;
 
-    if (!claims) {
-      return handleResponse(res, HttpStatusCode.BadRequest, '請登入帳密');
-    }
+    if (!claims) return handleResponse(res, HttpStatusCode.BadRequest, '請登入帳密');
 
     const user = await User.findById(claims._id);
 
-    if (!user) {
-      return handleResponse(res, HttpStatusCode.BadRequest, 'user 查詢不到資料');
-    }
+    if (!user) return handleResponse(res, HttpStatusCode.BadRequest, 'user 查詢不到資料');
 
     req.user = user;
 
