@@ -709,6 +709,7 @@ class GoldFlowService {
     const orderDetails = courseHierarchy.shoppingCart.map(obj => {
       return {
         order: _id,
+        course: obj._id,
         title: obj.title,
         price: obj.price,
         discountPrice: obj.discountPrice,
